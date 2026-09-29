@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-demo-mode="elder">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老人模式演示 - 适老化网络安全保护</title>
+    <style>
+        :root {
+            --primary-color: #4338ca;
+            --danger-color: #dc2626;
+            --warning-color: #f59e0b;
+            --safe-color: #16a34a;
+            --bg-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* ========= 干扰元素样式（需要被插件清理）========= */
+        
+        /* 侧边广告栏 */
+        .side-ad {
+            position: fixed;
+            right: 0;
+            top: 20%;
+            width: 180px;
+            background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%);
+            padding: 12px;
+            border-radius: 8px 0 0 8px;
+            box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+            z-index: 100;
+            animation: adSlideIn 0.5s ease;
+        }
+
+        @keyframes adSlideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .side-ad h4 {
+            font-size: 12px;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .side-ad .ad-item {
+            background: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            color: #374151;
+            cursor: pointer;
+            border: 1px solid #fbbf24;
+        }
+
+        /* 顶部滚动广告条 */
+        .top-scrolling-ad {
+            background: linear-gradient(90deg, #ef4444 0%, #f97316 50%, #eab308 100%);
+            color: white;
+            padding: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            animation: scrollAd 15s linear infinite;
+        }
+
+        @keyframes scrollAd {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* 闪烁按钮 */
+        .flash-button {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            animation: flash 1s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        /* 推荐内容区域 */
+        .recommend-section {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        .recommend-section h4 {
+            font-size: 13px;
+            color: #374151;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .recommend-section h4::before {
+            content: '🔥';
+        }
+
+        .recommend-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .recommend-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* 彩色营销区域 */
+        .marketing-banner {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+            color: white;
+            text-align: center;
+        }
+
+        .marketing-banner h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .marketing-banner p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* 虚假客服浮窗 */
+        .fake-service-float {
+            position: fixed;
+            bottom: 20px;
+            right: 220px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            z-index: 99;
+            border: 2px solid #3b82f6;
+            animation: floatUp 0.3s ease;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .fake-service-float .avatar {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .fake-service-float .name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .fake-service-float .msg {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .fake-service-float .btn {
+            width: 100%;
+            padding: 8px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        /* 自动轮播区域 */
+        .carousel-area {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .carousel-title {
+            font-size: 13px;
+            color: #374151;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .carousel-items {
+            display: flex;
+            gap: 12px;
+            animation: carouselScroll 20s linear infinite;
+        }
+
+        @keyframes carouselScroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .carousel-item {
+            flex-shrink: 0;
+            width: 120px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .carousel-item img {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .carousel-item .title {
+            font-size: 11px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        /* ========= 主要内容样式 ========= */
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 16px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* 风险卡片 */
+        .risk-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-left: 4px solid #dc2626;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .risk-card.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .risk-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .risk-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .risk-icon.danger {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .risk-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .risk-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .risk-content {
+            color: #4b5563;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .risk-tips {
+            background: rgba(245, 158, 11, 0.08);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .risk-tips h4 {
+            color: #f59e0b;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .risk-tips ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .risk-tips li {
+            padding: 4px 0;
+            font-size: 12px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .risk-tips li::before {
+            content: '⚠️';
+            font-size: 10px;
+        }
+
+        /* 安全提示 */
+        .safe-card {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .safe-card h3 {
+            color: #16a34a;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .safe-card h3::before {
+            content: '✅';
+        }
+
+        .safe-card ul {
+            list-style: none;
+            padding-left: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+        }
+
+        .safe-card li {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
+            font-size: 12px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .safe-card li::before {
+            content: '💡';
+            font-size: 10px;
+        }
+
+        /* 演示说明面板 */
+        .demo-panel {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .demo-panel h3 {
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-panel h3::before {
+            content: '🛡️';
+        }
+
+        .protection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .protection-item {
+            background: #fff;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+
+        .protection-item .icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .protection-item .title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .protection-item .desc {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .philosophy-section {
+            background: linear-gradient(135deg, rgba(67, 56, 202, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .philosophy-section h4 {
+            font-size: 13px;
+            color: #4338ca;
+            margin-bottom: 10px;
+        }
+
+        .philosophy-section p {
+            font-size: 12px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 24px;
+        }
+
+        /* ========= 老人模式激活后的样式（由插件添加）========= */
+        .elder-mode body {
+            font-size: 16px !important;
+            line-height: 1.8 !important;
+        }
+
+        .elder-mode .container {
+            max-width: 900px !important;
+            padding: 24px !important;
+        }
+
+        .elder-mode .header h1 {
+            font-size: 28px !important;
+        }
+
+        .elder-mode .risk-title {
+            font-size: 22px !important;
+        }
+
+        .elder-mode .risk-content {
+            font-size: 18px !important;
+        }
+
+        .elder-mode .risk-word {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.4) 0%, rgba(239, 68, 68, 0.6) 100%) !important;
+            color: #dc2626 !important;
+            padding: 4px 10px !important;
+            border-radius: 6px !important;
+            font-weight: 700 !important;
+            border: 2px solid #ef4444 !important;
+            animation: riskPulse 2s infinite !important;
+        }
+
+        @keyframes riskPulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.7); }
+        }
+
+        /* 页面简化：隐藏干扰元素 */
+        .elder-mode.simplify .side-ad,
+        .elder-mode.simplify .top-scrolling-ad,
+        .elder-mode.simplify .flash-button,
+        .elder-mode.simplify .recommend-section,
+        .elder-mode.simplify .marketing-banner,
+        .elder-mode.simplify .fake-service-float,
+        .elder-mode.simplify .carousel-area {
+            display: none !important;
+        }
+
+        /* 页面聚焦效果 */
+        .elder-mode.simplify .risk-card {
+            background: rgba(255, 255, 255, 0.98) !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+            transform: scale(1.02);
+        }
+
+        /* 老人模式风险弹窗 */
+        .elder-risk-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .elder-risk-modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .elder-risk-modal {
+            background: #fff;
+            border-radius: 20px;
+            padding: 36px;
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            border: 4px solid #ef4444;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .elder-risk-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ef4444, #f97316, #ef4444);
+            border-radius: 20px 20px 0 0;
+            animation: borderGlow 2s infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .elder-modal-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.25) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 48px;
+            animation: iconPulse 1.5s infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .elder-modal-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 16px;
+        }
+
+        .elder-modal-desc {
+            font-size: 20px;
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .elder-modal-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .elder-modal-warning p {
+            color: #f59e0b;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .elder-modal-warning ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .elder-modal-warning li {
+            padding: 8px 0;
+            font-size: 16px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .elder-modal-warning li::before {
+            content: '⚠️';
+            font-size: 16px;
+        }
+
+        .elder-modal-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .elder-modal-btn {
+            padding: 16px 36px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+        }
+
+        .elder-modal-btn.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .elder-modal-btn.danger:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+        }
+
+        .elder-modal-btn.safe {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .elder-modal-btn.safe:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部滚动广告条 -->
+    <div class="top-scrolling-ad" data-elder-remove>
+        🎉 限时特惠！老年人专属理财产品，年化收益30%！点击立即抢购 →
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>网络安全警示</h1>
+            <p>保护您的财产安全，警惕各类诈骗</p>
+        </div>
+
+        <!-- 彩色营销区域 -->
+        <div class="marketing-banner" data-elder-remove>
+            <h3>🎁 新用户专享福利</h3>
+            <p>注册即送100元红包，邀请好友再得50元！</p>
+            <button class="flash-button" data-elder-remove>立即领取</button>
+        </div>
+
+        <!-- 诈骗案例演示 -->
+        <div class="demo-section">
+            <!-- 转账诈骗 -->
+            <div class="risk-card" data-risk-type="transfer">
+                <div class="risk-header">
+                    <div class="risk-icon danger">💳</div>
+                    <h3 class="risk-title">转账诈骗</h3>
+                </div>
+                <div class="risk-content">
+                    <p>您好，我是您孩子的班主任李老师，孩子在学校突然生病需要紧急手术，急需缴纳手术费。请您立即将5万元转到以下账户：</p>
+                    <p>账户名：张XX</p>
+                    <p><span class="risk-word">银行卡</span>号：622848XXXXXX1234</p>
+                    <p>请务必在30分钟内完成<span class="risk-word">转账</span>，否则将错过最佳治疗时机！需要提供<span class="risk-word">验证码</span>请及时告诉我。</p>
+                </div>
+                <div class="risk-tips">
+                    <h4>⚠️ 风险提示</h4>
+                    <ul>
+                        <li>陌生人要求转账需警惕</li>
+                        <li>涉及银行卡信息需谨慎</li>
+                        <li>建议先联系家人确认</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 假客服诈骗 -->
+            <div class="risk-card warning" data-risk-type="fake-service">
+                <div class="risk-header">
+                    <div class="risk-icon warning">☎️</div>
+                    <h3 class="risk-title">假客服诈骗</h3>
+                </div>
+                <div class="risk-content">
+                    <p>尊敬的用户，您的账户存在安全风险，需要立即进行身份验证。请点击下方链接完成验证，否则账户将被冻结。</p>
+                    <p>验证链接：https://xxx-bank.com/verify</p>
+                    <p>请输入您的<span class="risk-word">银行卡</span>号和<span class="risk-word">密码</span>进行身份验证。</p>
+                </div>
+                <div class="risk-tips">
+                    <h4>⚠️ 风险提示</h4>
+                    <ul>
+                        <li>官方客服不会要求提供密码</li>
+                        <li>不要点击陌生链接</li>
+                        <li>建议直接拨打官方客服电话</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 虚假中奖诈骗 -->
+            <div class="risk-card" data-risk-type="fake-lottery">
+                <div class="risk-header">
+                    <div class="risk-icon danger">🎁</div>
+                    <h3 class="risk-title">虚假中奖诈骗</h3>
+                </div>
+                <div class="risk-content">
+                    <p>恭喜您！您已获得《中国好声音》场外抽奖二等奖，奖金58万元！</p>
+                    <p>请先缴纳个人所得税5.8万元到指定账户：</p>
+                    <p>账户名：李XX</p>
+                    <p><span class="risk-word">银行卡</span>号：621700XXXXXX5678</p>
+                    <p>缴纳后请联系<span class="risk-word">客服</span>提供<span class="risk-word">验证码</span>领取奖金。</p>
+                </div>
+                <div class="risk-tips">
+                    <h4>⚠️ 风险提示</h4>
+                    <ul>
+                        <li>中奖需要先交钱的都是骗局</li>
+                        <li>官方活动不会通过短信通知</li>
+                        <li>不要轻易相信中奖信息</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 金融诱导诈骗 -->
+            <div class="risk-card warning" data-risk-type="finance-scam">
+                <div class="risk-header">
+                    <div class="risk-icon warning">💰</div>
+                    <h3 class="risk-title">金融诱导诈骗</h3>
+                </div>
+                <div class="risk-content">
+                    <p>阿姨您好，我是小王，最近发现一个特别好的投资项目，年化收益30%，保本保息！</p>
+                    <p>您只要投入10万元，三个月就能回本，半年翻倍！很多叔叔阿姨都已经赚到钱了。</p>
+                    <p>现在注册还送VIP会员，赶紧把您的<span class="risk-word">银行卡</span>号告诉我，我帮您开户！</p>
+                </div>
+                <div class="risk-tips">
+                    <h4>⚠️ 风险提示</h4>
+                    <ul>
+                        <li>高收益往往伴随高风险</li>
+                        <li>陌生投资需谨慎</li>
+                        <li>建议通过正规渠道投资</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自动轮播区域 -->
+        <div class="carousel-area" data-elder-remove>
+            <div class="carousel-title">🔥 热门推荐</div>
+            <div class="carousel-items">
+                <div class="carousel-item"><img src=""><div class="title">保健品特惠</div></div>
+                <div class="carousel-item"><img src=""><div class="title">理财神器</div></div>
+                <div class="carousel-item"><img src=""><div class="title">健康讲座</div></div>
+                <div class="carousel-item"><img src=""><div class="title">旅游优惠</div></div>
+                <div class="carousel-item"><img src=""><div class="title">保险特惠</div></div>
+                <div class="carousel-item"><img src=""><div class="title">保健品特惠</div></div>
+                <div class="carousel-item"><img src=""><div class="title">理财神器</div></div>
+                <div class="carousel-item"><img src=""><div class="title">健康讲座</div></div>
+            </div>
+        </div>
+
+        <!-- 推荐内容区域 -->
+        <div class="recommend-section" data-elder-remove>
+            <h4>猜你喜欢</h4>
+            <div class="recommend-grid">
+                <div class="recommend-item">👉 点击领取养老金补贴</div>
+                <div class="recommend-item">👉 免费健康体检预约</div>
+                <div class="recommend-item">👉 老年交友社区</div>
+                <div class="recommend-item">👉 低价旅游团报名</div>
+                <div class="recommend-item">👉 智能手环特价</div>
+                <div class="recommend-item">👉 养生茶限时折扣</div>
+            </div>
+        </div>
+
+        <!-- 安全提示 -->
+        <div class="safe-card">
+            <h3>老人上网安全小贴士</h3>
+            <ul>
+                <li>不轻易相信陌生人</li>
+                <li>不随意点击陌生链接</li>
+                <li>不透露银行卡密码</li>
+                <li>转账前先确认</li>
+                <li>遇到疑问及时求助</li>
+            </ul>
+        </div>
+
+        <!-- 演示说明面板 -->
+        <div class="demo-panel">
+            <h3>老人模式保护机制</h3>
+            <div class="protection-grid">
+                <div class="protection-item">
+                    <div class="icon">🔤</div>
+                    <div class="title">大字体增强</div>
+                    <div class="desc">字体放大1.35倍</div>
+                </div>
+                <div class="protection-item">
+                    <div class="icon">⚠️</div>
+                    <div class="title">风险关键词高亮</div>
+                    <div class="desc">自动识别危险词汇</div>
+                </div>
+                <div class="protection-item">
+                    <div class="icon">🧹</div>
+                    <div class="title">页面简化</div>
+                    <div class="desc">清理干扰内容</div>
+                </div>
+                <div class="protection-item">
+                    <div class="icon">🚨</div>
+                    <div class="title">风险弹窗提醒</div>
+                    <div class="desc">智能识别诈骗内容</div>
+                </div>
+                <div class="protection-item">
+                    <div class="icon">🎯</div>
+                    <div class="title">诈骗内容识别</div>
+                    <div class="desc">精准检测风险</div>
+                </div>
+                <div class="protection-item">
+                    <div class="icon">🚫</div>
+                    <div class="title">干扰信息过滤</div>
+                    <div class="desc">屏蔽广告弹窗</div>
+                </div>
+            </div>
+
+            <div class="philosophy-section">
+                <h4>📖 适老化设计理念</h4>
+                <p>针对老年用户特点，降低误触风险、提升风险识别能力、减少视觉干扰，让老年人也能安全、便捷地享受互联网服务。</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>净网护航 · 守护老人上网安全</p>
+        </div>
+    </div>
+
+    <!-- 侧边广告栏 -->
+    <div class="side-ad" data-elder-remove>
+        <h4>📢 广告推荐</h4>
+        <div class="ad-item">🎁 免费领手机</div>
+        <div class="ad-item">💊 特效药促销</div>
+        <div class="ad-item">🏠 低价购房</div>
+        <div class="ad-item">💰 高息理财</div>
+    </div>
+
+    <!-- 虚假客服浮窗 -->
+    <div class="fake-service-float" data-elder-remove>
+        <div class="avatar">🤖</div>
+        <div class="name">智能客服小美</div>
+        <div class="msg">您有一笔退款待领取，点击查询</div>
+        <button class="btn">立即领取</button>
+    </div>
+
+    <!-- 老人模式风险弹窗（由插件控制显示） -->
+    <div class="elder-risk-modal-overlay" id="elderRiskModal">
+        <div class="elder-risk-modal">
+            <div class="elder-modal-icon">🚨</div>
+            <h3 class="elder-modal-title">⚠️ 风险警告</h3>
+            <p class="elder-modal-desc">检测到疑似诈骗内容，请勿轻易转账。</p>
+            <div class="elder-modal-warning">
+                <p>⚠️ 温馨提示：</p>
+                <ul>
+                    <li>警惕转账、验证码等敏感操作</li>
+                    <li>不要轻易透露银行卡信息</li>
+                    <li>建议与家人确认后再操作</li>
+                    <li>遇到疑问请拨打96110咨询</li>
+                </ul>
+            </div>
+            <div class="elder-modal-buttons">
+                <button class="elder-modal-btn safe" id="elderModalStay">继续浏览</button>
+                <button class="elder-modal-btn danger" id="elderModalLeave">立即离开</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 弹窗关闭逻辑
+        document.getElementById('elderModalStay')?.addEventListener('click', () => {
+            document.getElementById('elderRiskModal').classList.remove('active');
+        });
+
+        document.getElementById('elderModalLeave')?.addEventListener('click', () => {
+            window.close();
+        });
+    </script>
+</body>
+</html>

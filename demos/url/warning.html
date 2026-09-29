@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ 访问警告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: bgPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes bgPulse {
+            0%, 100% { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%); }
+            50% { background: linear-gradient(135deg, #2d1f4e 0%, #3d358b 50%, #2d1f4e 100%); }
+        }
+        
+        .warning-container {
+            background: linear-gradient(145deg, rgba(30, 27, 75, 0.95), rgba(15, 13, 40, 0.98));
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            box-shadow: 0 25px 60px rgba(239, 68, 68, 0.3), 0 0 0 1px rgba(239, 68, 68, 0.2);
+            animation: warningAppear 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes warningAppear {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .warning-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 32px;
+            animation: iconPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.6);
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 40px rgba(239, 68, 68, 0.6);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 60px rgba(239, 68, 68, 0.8);
+            }
+        }
+        
+        .warning-title {
+            color: #ef4444;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .warning-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .url-display {
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .url-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        
+        .url-value {
+            font-family: monospace;
+            font-size: 16px;
+            color: #fca5a5;
+            word-break: break-all;
+            text-align: left;
+        }
+        
+        .risk-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .risk-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .risk-item-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .risk-item-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ef4444;
+        }
+        
+        .risk-item-value.safe {
+            color: #22c55e;
+        }
+        
+        .risk-item-value.medium {
+            color: #f59e0b;
+        }
+        
+        .risk-reason {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+        
+        .risk-reason-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .risk-reason-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .back-link {
+            margin-top: 24px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .failed-state {
+            opacity: 0.7;
+        }
+        
+        .failed-icon {
+            background: linear-gradient(135deg, #6b7280, #9ca3af) !important;
+            animation: none !important;
+        }
+        
+        .failed-title {
+            color: #9ca3af !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-container" id="warning-container">
+        <div class="warning-icon" id="warning-icon">🚨</div>
+        <h1 class="warning-title" id="warning-title">访问被拒绝</h1>
+        <p class="warning-subtitle" id="warning-subtitle">检测到您尝试访问的网站存在安全风险</p>
+        
+        <div class="url-display">
+            <div class="url-label">目标网址</div>
+            <div class="url-value" id="url-value">Loading...</div>
+        </div>
+        
+        <div class="risk-info">
+            <div class="risk-item">
+                <div class="risk-item-label">风险等级</div>
+                <div class="risk-item-value" id="risk-level">---</div>
+            </div>
+            <div class="risk-item">
+                <div class="risk-item-label">风险评分</div>
+                <div class="risk-item-value" id="risk-score">---</div>
+            </div>
+        </div>
+        
+        <div class="risk-reason">
+            <div class="risk-reason-label">风险原因</div>
+            <div class="risk-reason-text" id="risk-reason">检测中...</div>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn btn-danger" onclick="goBack()">返回安全页面</button>
+            <button class="btn btn-secondary" onclick="proceedAnyway()">继续访问（不推荐）</button>
+        </div>
+        
+        <div class="back-link" onclick="goBack()">← 返回URL检测演示</div>
+    </div>
+    
+    <script>
+        // 获取风险检测结果
+        const riskResult = localStorage.getItem('urlRiskResult');
+        const checkedUrl = localStorage.getItem('urlChecked');
+        
+        function loadRiskInfo() {
+            if (!riskResult || !checkedUrl) {
+                // 没有检测结果，显示错误状态
+                document.getElementById('warning-container').classList.add('failed-state');
+                document.getElementById('warning-icon').classList.add('failed-icon');
+                document.getElementById('warning-icon').textContent = '❌';
+                document.getElementById('warning-title').classList.add('failed-title');
+                document.getElementById('warning-title').textContent = '检测失败';
+                document.getElementById('warning-subtitle').textContent = '无法获取风险检测结果';
+                document.getElementById('url-value').textContent = '未知';
+                document.getElementById('risk-level').textContent = '未知';
+                document.getElementById('risk-score').textContent = '---';
+                document.getElementById('risk-reason').textContent = '请返回演示页面重新检测';
+                return;
+            }
+            
+            const result = JSON.parse(riskResult);
+            
+            // 更新UI
+            document.getElementById('url-value').textContent = checkedUrl;
+            document.getElementById('risk-level').textContent = getRiskLabel(result.risk);
+            document.getElementById('risk-score').textContent = `${Math.round(result.score * 100)}%`;
+            document.getElementById('risk-reason').textContent = result.reason || '检测到风险内容';
+            
+            // 设置风险等级颜色
+            const riskLevelEl = document.getElementById('risk-level');
+            riskLevelEl.className = `risk-item-value ${result.risk}`;
+            
+            // 根据风险等级调整图标
+            const iconEl = document.getElementById('warning-icon');
+            if (result.risk === 'safe') {
+                iconEl.textContent = '✅';
+                iconEl.style.background = 'linear-gradient(135deg, #16a34a, #22c55e)';
+                iconEl.style.boxShadow = '0 0 40px rgba(34, 197, 94, 0.6)';
+                document.getElementById('warning-title').textContent = '安全';
+                document.getElementById('warning-title').style.color = '#22c55e';
+                document.getElementById('warning-subtitle').textContent = '该网站安全可信';
+                document.querySelector('.btn-danger').textContent = '关闭';
+            } else if (result.risk === 'medium') {
+                iconEl.textContent = '⚠️';
+                iconEl.style.background = 'linear-gradient(135deg, #d97706, #f59e0b)';
+                iconEl.style.boxShadow = '0 0 40px rgba(245, 158, 11, 0.6)';
+                document.getElementById('warning-title').textContent = '中等风险';
+                document.getElementById('warning-title').style.color = '#f59e0b';
+                document.getElementById('warning-subtitle').textContent = '该网站存在潜在风险';
+            }
+        }
+        
+        function getRiskLabel(risk) {
+            const labels = {
+                'high': '高风险',
+                'medium': '中风险',
+                'low': '低风险',
+                'safe': '安全'
+            };
+            return labels[risk] || risk;
+        }
+        
+        function goBack() {
+            localStorage.removeItem('urlRiskResult');
+            localStorage.removeItem('urlChecked');
+            window.location.href = 'url_demo.html';
+        }
+        
+        function proceedAnyway() {
+            // 获取目标URL
+            const targetUrl = localStorage.getItem('urlChecked');
+            if (!targetUrl) {
+                alert('无法获取目标URL');
+                return;
+            }
+            
+            // 显示确认对话框
+            const confirmMessage = `⚠️ 警告：您即将访问高风险网站！\n\n目标地址: ${targetUrl}\n\n风险提示：\n• 该网站可能存在安全风险\n• 可能导致个人信息泄露\n• 可能包含恶意软件\n\n确定要继续访问吗？`;
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // 清除本地存储
+            localStorage.removeItem('urlRiskResult');
+            localStorage.removeItem('urlChecked');
+            
+            // 真正跳转到目标URL（添加http://前缀）
+            const fullUrl = targetUrl.startsWith('http') ? targetUrl : `http://${targetUrl}`;
+            window.location.href = fullUrl;
+        }
+        
+        // 页面加载时显示风险信息
+        loadRiskInfo();
+    </script>
+</body>
+</html>

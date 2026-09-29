@@ -1,0 +1,167 @@
+# Python bytecode and interpreter caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+/venv312/
+
+# Python test, coverage, and analysis caches
+.pytest_cache/
+.hypothesis/
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+junit.xml
+.testmondata
+.benchmarks/
+test-results/
+playwright-report/
+blob-report/
+
+# Flask local runtime data and caches
+instance/
+.flaskenv
+.flask_session/
+flask_session/
+.webassets-cache/
+*.pid
+
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# Editors, IDEs, and local file history
+.history/
+.vscode/
+.idea/
+.vs/
+*.code-workspace
+
+# Logs
+*.log
+*.log.*
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local databases, journals, and database backups
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+*.dump
+*.dmp
+*.sql.gz
+*.sql.zip
+*.backup.sql
+*.dump.sql
+*_backup.sql
+*-backup.sql
+*_dump.sql
+*-dump.sql
+/backup.sql
+/dump.sql
+/backup/
+/backups/
+/database-backups/
+/mysql-data/
+.mysql_history
+
+# Front-end dependencies and generated build output
+node_modules/
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.svelte-kit/
+*.tsbuildinfo
+
+# Edge/Chromium extension development profiles and packages
+/.edge-profile/
+/edge-profile/
+/edge-user-data/
+/.msedge-profile/
+/msedge-profile/
+/msedge-user-data/
+/extension/**/.edge-profile/
+/extension/**/edge-profile/
+/extension/**/edge-user-data/
+/extension/**/.msedge-profile/
+/extension/**/msedge-profile/
+/extension/**/msedge-user-data/
+/extension/**/User Data/
+/extension/**/*.crx
+/extension/**/*.pem
+
+# Temporary and editor-generated files
+.tmp/
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.orig
+*.rej
+*~
+
+# Operating-system metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100/
+.Trashes/
+
+# Prevent accidental recommit of nested/legacy extension copies.
+/extension/adchacha/
+/extension/SmartGuard-NetGuard/
+
+# Safeguards: competition demos, documentation, and test pages
+!/demos/**/*.html
+!/demos/**/*.css
+!/demos/**/*.js
+!/tests/browser/*.html
+!/tests/backend/*.py
+!/tests/extension/*.js
+!/docs/AI_DEMO_GUIDE.md
+!/README.md
+!/requirements.txt
+!/**/*[Tt][Ee][Ss][Tt]*.md
+
+# Edge generated extension metadata
+/extension/_metadata/
+
+# Local database backups
+/database/backup/

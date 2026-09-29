@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非学习网站已拦截</title>
+    <link rel="stylesheet" href="blocked.css">
+</head>
+<body>
+    <div class="blocked-container">
+        <div class="blocked-card learning">
+            <!-- 图标区域 -->
+            <div class="icon-section learning">
+                <div class="icon">📚</div>
+            </div>
+
+            <!-- 标题区域 -->
+            <h1 class="blocked-title">非学习网站已拦截</h1>
+            
+            <!-- 原因说明 -->
+            <div class="reason-section">
+                <div class="reason-badge learning">
+                    📖 学习模式
+                </div>
+                <p class="reason-text">
+                    学习模式已开启，仅允许访问白名单内的学习网站。
+                </p>
+            </div>
+
+            <!-- 被拦截的网址 -->
+            <div class="url-section">
+                <span class="url-label">被拦截的网址：</span>
+                <span class="url-value" id="blocked-url">...</span>
+            </div>
+
+            <!-- 保护提示 -->
+            <div class="protection-hint">
+                <div class="hint-icon">🎓</div>
+                <p>学习模式保护已开启，专注学习更高效</p>
+            </div>
+
+            <!-- 推荐学习网站 -->
+            <div class="recommend-section">
+                <p class="recommend-title">📌 推荐学习网站</p>
+                <div class="recommend-list">
+                    <a href="https://www.khanacademy.org" target="_blank" class="recommend-link">
+                        🎯 Khan Academy
+                    </a>
+                    <a href="https://www.coursera.org" target="_blank" class="recommend-link">
+                        🎓 Coursera
+                    </a>
+                    <a href="https://www.edx.org" target="_blank" class="recommend-link">
+                        📚 edX
+                    </a>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="go-back">
+                    ← 返回上一页
+                </button>
+                <button class="btn btn-secondary" id="go-home">
+                    🏠 前往首页
+                </button>
+            </div>
+
+            <!-- 家长提示 -->
+            <div class="parent-tip">
+                <p>💡 家长可在插件设置中调整学习白名单</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="blocked.js"></script>
+</body>
+</html>

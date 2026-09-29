@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💀 暴力游戏</title>
+    <meta name="data-danger-type" content="violence">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 50%, #000000 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 20px 40px;
+            border-bottom: 2px solid #ef4444;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .warning-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .warning-text {
+            color: #ef4444;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .main-content {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-showcase {
+            background: rgba(239, 68, 68, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .game-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ef4444;
+            margin-bottom: 10px;
+        }
+
+        .game-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .game-trailer {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            border: 2px solid #ef4444;
+        }
+
+        .trailer-icon {
+            font-size: 80px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        .game-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .game-btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-btn.red {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .game-btn.red:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5);
+        }
+
+        .game-btn.black {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-btn.black:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .features-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            border-top: 1px solid rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <span>💀</span>
+            <span>暗黑战场</span>
+        </div>
+    </div>
+
+    <div class="warning-banner">
+        <div class="warning-text">⚠️ 本游戏包含暴力、血腥内容，未满18岁禁止游玩 ⚠️</div>
+    </div>
+
+    <div class="main-content">
+        <div class="game-showcase">
+            <h1 class="game-title">血刃狂杀</h1>
+            <p class="game-subtitle">沉浸式暴力射击体验 · 极致血腥战斗</p>
+            
+            <div class="game-trailer">
+                <div class="trailer-icon">💀</div>
+            </div>
+
+            <div class="game-buttons">
+                <button class="game-btn red">🔫 立即购买 ¥299</button>
+                <button class="game-btn black">📽️ 观看预告片</button>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <div class="feature-card">
+                <div class="feature-icon">🔪</div>
+                <div class="feature-title">真实血腥特效</div>
+                <div class="feature-desc">超逼真的血液飞溅效果，体验最真实的暴力美学</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💥</div>
+                <div class="feature-title">极致破坏</div>
+                <div class="feature-desc">摧毁一切阻挡你的敌人，享受破坏的快感</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🩸</div>
+                <div class="feature-title">残酷击杀</div>
+                <div class="feature-desc">多种残忍击杀方式，满足你的暴力欲望</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔥</div>
+                <div class="feature-title">战火纷飞</div>
+                <div class="feature-desc">大规模战场，体验前所未有的杀戮盛宴</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>⚠️ 18岁以上成人游戏</p>
+        <p style="margin-top: 10px;">游戏内容纯属虚构，请勿模仿</p>
+    </div>
+</body>
+</html>

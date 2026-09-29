@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-demo-mode="dashboard">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>净网护航 · 后台统计演示系统</title>
+    <link rel="stylesheet" href="dashboard_demo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- 背景动画 -->
+    <div class="background-animation">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo">
+                    <span class="logo-icon">📊</span>
+                    <span class="logo-text">后台统计系统</span>
+                </div>
+                <div class="tagline">实时监控 · 数据可视化 · 安全分析</div>
+            </div>
+            <div class="header-info">
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    <span>实时运行中</span>
+                </div>
+                <div class="refresh-btn" onclick="refreshData()">
+                    🔄 刷新数据
+                </div>
+            </div>
+        </header>
+
+        <!-- 页面标题 -->
+        <section class="hero-section">
+            <h1 class="main-title">完整安全平台</h1>
+            <p class="main-subtitle">全方位守护您的网络安全体验</p>
+            <div class="divider"></div>
+        </section>
+
+        <!-- 统计卡片区域 -->
+        <section class="stats-grid">
+            <!-- AI检测次数 -->
+            <div class="stat-card ai-stat">
+                <div class="stat-icon">🤖</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="ai-count">0</div>
+                    <div class="stat-label">AI检测次数</div>
+                </div>
+                <div class="stat-trend positive" id="ai-trend">+0%</div>
+            </div>
+
+            <!-- URL检测次数 -->
+            <div class="stat-card url-stat">
+                <div class="stat-icon">🔗</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="url-count">0</div>
+                    <div class="stat-label">URL检测次数</div>
+                </div>
+                <div class="stat-trend positive" id="url-trend">+0%</div>
+            </div>
+
+            <!-- 高风险拦截 -->
+            <div class="stat-card high-risk-stat">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="high-risk-count">0</div>
+                    <div class="stat-label">高风险拦截</div>
+                </div>
+                <div class="stat-trend negative" id="high-risk-trend">-0%</div>
+            </div>
+
+            <!-- 广告拦截 -->
+            <div class="stat-card ad-stat">
+                <div class="stat-icon">🚫</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="ad-count">0</div>
+                    <div class="stat-label">广告拦截次数</div>
+                </div>
+                <div class="stat-trend positive" id="ad-trend">+0%</div>
+            </div>
+
+            <!-- 儿童模式拦截 -->
+            <div class="stat-card child-stat">
+                <div class="stat-icon">👶</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="child-block-count">0</div>
+                    <div class="stat-label">儿童模式拦截</div>
+                </div>
+                <div class="stat-trend positive" id="child-trend">+0%</div>
+            </div>
+
+            <!-- 老人模式提醒 -->
+            <div class="stat-card elder-stat">
+                <div class="stat-icon">👴</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="elder-warn-count">0</div>
+                    <div class="stat-label">老人模式提醒</div>
+                </div>
+                <div class="stat-trend positive" id="elder-trend">+0%</div>
+            </div>
+
+            <!-- 今日风险总数 -->
+            <div class="stat-card today-risk-stat">
+                <div class="stat-icon">📉</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="today-risk-count">0</div>
+                    <div class="stat-label">今日风险总数</div>
+                </div>
+                <div class="stat-trend negative" id="today-trend">+0%</div>
+            </div>
+
+            <!-- 中风险检测 -->
+            <div class="stat-card medium-risk-stat">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="medium-risk-count">0</div>
+                    <div class="stat-label">中风险检测</div>
+                </div>
+                <div class="stat-trend warning" id="medium-trend">+0%</div>
+            </div>
+        </section>
+
+        <!-- 图表区域 -->
+        <section class="charts-section">
+            <!-- 风险趋势图 -->
+            <div class="chart-card">
+                <div class="card-header">
+                    <h3 class="card-title">📈 风险趋势图</h3>
+                    <div class="time-filter">
+                        <button class="filter-btn active" onclick="changeTimeRange('7d')">7天</button>
+                        <button class="filter-btn" onclick="changeTimeRange('30d')">30天</button>
+                        <button class="filter-btn" onclick="changeTimeRange('90d')">90天</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="riskTrendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 风险分布饼图 -->
+            <div class="chart-card">
+                <div class="card-header">
+                    <h3 class="card-title">📊 风险等级分布</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="riskDistributionChart"></canvas>
+                </div>
+                <div class="legend-info" id="legend-info">
+                </div>
+            </div>
+        </section>
+
+        <!-- 风险日志区域 -->
+        <section class="logs-section">
+            <div class="logs-header">
+                <h3 class="section-title">📋 风险日志</h3>
+                <div class="logs-filter">
+                    <select id="log-filter" onchange="filterLogs()">
+                        <option value="all">全部类型</option>
+                        <option value="AI检测">AI检测</option>
+                        <option value="URL检测">URL检测</option>
+                        <option value="广告拦截">广告拦截</option>
+                        <option value="儿童模式">儿童模式</option>
+                        <option value="老人模式">老人模式</option>
+                    </select>
+                </div>
+            </div>
+            <div class="logs-container">
+                <table class="logs-table">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>类型</th>
+                            <th>风险等级</th>
+                            <th>URL</th>
+                            <th>风险原因</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs-body">
+                    </tbody>
+                </table>
+                <div class="empty-logs" id="empty-logs" style="display: none;">
+                    <div class="empty-icon">📝</div>
+                    <p>暂无风险日志记录</p>
+                </div>
+            </div>
+            <div class="logs-footer">
+                <span class="logs-count">显示 <span id="logs-start">1</span>-<span id="logs-end">10</span> 条，共 <span id="total-logs">0</span> 条记录</span>
+                <div class="pagination">
+                    <button class="page-btn" id="prev-page" disabled>上一页</button>
+                    <span class="page-info">第 <strong id="current-page">1</strong> / <strong id="total-pages">1</strong> 页</span>
+                    <button class="page-btn" id="next-page" disabled>下一页</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部信息 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>净网护航 · 后台统计演示系统</p>
+                <p class="version">Version 2.0 | 大学生创新赛参赛作品</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="dashboard_demo.js"></script>
+</body>
+</html>

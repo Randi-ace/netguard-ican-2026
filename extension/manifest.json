@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "智能广告拦截 + 儿童模式",
+  "version": "2.4.1",
+  "description": "广告拦截（普通/强力）+ 儿童安全浏览（内容过滤/学习模式/时长提醒）",
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "tabs",
+    "alarms",
+    "idle",
+    "notifications",
+    "webNavigation",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "file:///*",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "netguard_ad_rules",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["api-config.js", "extension-api.js", "ad-detector.js", "content.js"],
+      "css": ["ad-hide.css"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["blocked.html", "blocked.css", "blocked.js", "study-blocked.html", "warning.html", "warning.js", "popup.css", "elder-mode.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

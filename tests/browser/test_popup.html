@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>弹窗测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        h2 {
+            color: #374151;
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .test-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+        .btn-high {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        .btn-high:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+        }
+        .btn-medium {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+        .btn-medium:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        }
+        .btn-safe {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .btn-safe:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+        }
+        .btn-close {
+            background: #6b7280;
+            color: white;
+        }
+        .btn-close:hover {
+            background: #4b5563;
+        }
+        .info-box {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 13px;
+            color: #4b5563;
+            margin-top: 16px;
+        }
+        .test-content {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .test-content p {
+            margin: 0 0 12px 0;
+            color: #374151;
+        }
+        .test-content p:last-child {
+            margin-bottom: 0;
+        }
+        iframe {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 净网护航 - 风险弹窗测试</h1>
+
+    <div class="test-section">
+        <h2>⚠️ 测试高风险内容</h2>
+        <button class="test-btn btn-high" onclick="triggerHighRisk()">显示高风险弹窗</button>
+        <button class="test-btn btn-medium" onclick="triggerMediumRisk()">显示中风险弹窗</button>
+        <button class="test-btn btn-safe" onclick="triggerSafe()">显示安全（不弹窗）</button>
+        <button class="test-btn btn-close" onclick="closeAllPopups()">关闭弹窗</button>
+        
+        <div class="info-box">
+            <strong>测试说明：</strong><br>
+            - 高风险（high）：赌博、刷单、转账、验证码等<br>
+            - 中风险（medium）：客服、理财、兼职等<br>
+            - 安全（safe）：普通文本，不显示弹窗
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📝 模拟风险内容</h2>
+        <div class="test-content">
+            <p><strong>高风险文本示例：</strong>欢迎来到我们的在线赌博网站，赌球赢大奖，注册即送100元！请立即转账至我们的账户获取更多优惠。</p>
+            <p><strong>中风险文本示例：</strong>客服热线：400-xxx-xxxx，如有问题请联系我们的客服人员进行退款处理。</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 测试链接区域</h2>
+        <p>以下链接包含风险关键词，测试老人模式的风险高亮功能：</p>
+        <a href="#" onclick="alert('测试链接')">🎁 免费领取红包</a> | 
+        <a href="#" onclick="alert('测试链接')">💰 立即转账</a> | 
+        <a href="#" onclick="alert('测试链接')">📞 客服中心</a> | 
+        <a href="#" onclick="alert('测试链接')">🎮 赌博游戏</a>
+    </div>
+
+    <script>
+        // 模拟弹窗触发（测试用）
+        function triggerHighRisk() {
+            if (window.netguardShowRiskPopup) {
+                window.netguardShowRiskPopup({
+                    risk: 'high',
+                    score: 0.95,
+                    reason: '检测到赌博相关内容',
+                    source: '测试'
+                });
+            } else {
+                alert('弹窗函数未加载，请确保插件已安装并启用');
+            }
+        }
+
+        function triggerMediumRisk() {
+            if (window.netguardShowRiskPopup) {
+                window.netguardShowRiskPopup({
+                    risk: 'medium',
+                    score: 0.65,
+                    reason: '检测到客服相关内容，需谨慎',
+                    source: '测试'
+                });
+            } else {
+                alert('弹窗函数未加载，请确保插件已安装并启用');
+            }
+        }
+
+        function triggerSafe() {
+            if (window.netguardShowRiskPopup) {
+                window.netguardShowRiskPopup({
+                    risk: 'safe',
+                    score: 0.05,
+                    reason: '未发现风险',
+                    source: '测试'
+                });
+                alert('安全内容，不应显示弹窗');
+            } else {
+                alert('弹窗函数未加载');
+            }
+        }
+
+        function closeAllPopups() {
+            const popup = document.getElementById('netguard-risk-popup');
+            if (popup) {
+                popup.remove();
+                alert('弹窗已关闭');
+            } else {
+                alert('没有找到弹窗');
+            }
+        }
+    </script>
+</body>
+</html>

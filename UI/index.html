@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-netguard-page="official-ui">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>净网护航 · 智能广告拦截与安全防护平台</title>
+  <meta name="description" content="智能广告拦截、AI 风险识别、家庭保护多模式一体化安全平台" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+
+  <!-- 风险弹窗 -->
+  <div id="risk-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="risk-modal-title" hidden>
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__panel modal__panel--risk">
+      <button type="button" class="modal__close" data-close-modal aria-label="关闭">×</button>
+      <div class="modal__icon-wrap">
+        <span class="pulse-ring"></span>
+        <svg class="modal__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 9v4m0 4h.01M10.3 3.3L2.7 17.7c-.8 1.4.2 3.3 1.9 3.3h15.8c1.7 0 2.7-1.9 1.9-3.3L13.7 3.3c-.8-1.4-2.8-1.4-3.6 0z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 id="risk-modal-title" class="modal__title">安全提醒说明</h2>
+      <p class="modal__text" id="risk-modal-body">实时风险信息请以最近安全事件与风险日志为准。</p>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" data-close-modal>稍后处理</button>
+        <button type="button" class="btn btn--primary" id="risk-modal-confirm">知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全局搜索 -->
+  <div id="search-pop" class="search-pop" hidden>
+    <div class="search-pop__backdrop" data-close-search></div>
+    <div class="search-pop__panel">
+      <div class="search-pop__head">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <input type="search" class="search-pop__input" placeholder="搜索功能、日志、域名..." autocomplete="off" />
+      </div>
+      <p class="search-pop__hint">试试输入「家庭」「日志」「模式」</p>
+    </div>
+  </div>
+
+  <!-- 登录 -->
+  <div id="login-modal" class="modal modal--auth" role="dialog" aria-modal="true" aria-labelledby="login-modal-title" hidden>
+    <div class="modal__backdrop" data-close-auth></div>
+    <div class="modal__panel modal__panel--sm">
+      <button type="button" class="modal__close" data-close-auth aria-label="关闭">×</button>
+      <h2 id="login-modal-title" class="modal__title">登录</h2>
+      <p class="modal__hint">请使用已绑定手机号的净网护航账户登录。</p>
+      <form id="login-form" class="auth-form">
+        <label class="field">
+          <span class="field__label">手机号</span>
+          <input class="input" name="login-phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="11 位中国大陆手机号" maxlength="11" required />
+        </label>
+        <label class="field">
+          <span class="field__label">密码</span>
+          <span class="pwd-wrap">
+            <input class="input" id="login-password" type="password" autocomplete="current-password" placeholder="请输入密码" required />
+            <button type="button" class="pwd-toggle" data-pwd-toggle="login-password" aria-label="显示或隐藏密码" title="显示/隐藏">👁</button>
+          </span>
+        </label>
+        <button type="submit" class="btn btn--primary btn--block">登录</button>
+      </form>
+      <p class="auth-switch">还没有账号？<button type="button" class="link-btn" id="open-register-from-login">去注册</button></p>
+    </div>
+  </div>
+
+  <!-- 注册 -->
+  <div id="register-modal" class="modal modal--auth" role="dialog" aria-modal="true" aria-labelledby="register-modal-title" hidden>
+    <div class="modal__backdrop" data-close-auth></div>
+    <div class="modal__panel modal__panel--md">
+      <button type="button" class="modal__close" data-close-auth aria-label="关闭">×</button>
+      <h2 id="register-modal-title" class="modal__title">注册</h2>
+      <p class="modal__hint">任意方式均需<strong>绑定手机号</strong>，并通过<strong>短信验证码</strong>校验（以下为前端演示流程）。</p>
+
+      <div class="reg-shared glass-card glass-card--tight">
+        <label class="field field--inline">
+          <span class="field__label">手机号</span>
+          <input class="input" id="reg-phone" type="tel" inputmode="numeric" maxlength="11" placeholder="用于登录与安全验证" required />
+        </label>
+        <div class="sms-row">
+          <label class="field field--grow">
+            <span class="field__label">短信验证码</span>
+            <input class="input" id="reg-sms-code" type="text" inputmode="numeric" maxlength="6" placeholder="6 位数字" autocomplete="one-time-code" />
+          </label>
+          <button type="button" class="btn btn--outline" id="reg-send-sms">发送验证码</button>
+        </div>
+        <p class="muted small" id="reg-sms-tip">验证码将发送至你的手机（演示不会真实发送）。</p>
+      </div>
+
+      <div class="reg-tabs" role="tablist" aria-label="注册方式">
+        <button type="button" class="reg-tab is-active" role="tab" aria-selected="true" data-reg-tab="wechat">微信快捷注册</button>
+        <button type="button" class="reg-tab" role="tab" aria-selected="false" data-reg-tab="sms">手机号短信注册</button>
+        <button type="button" class="reg-tab" role="tab" aria-selected="false" data-reg-tab="pwd">手机号密码注册</button>
+      </div>
+
+      <div class="reg-panels">
+        <div class="reg-panel is-visible" id="reg-panel-wechat" role="tabpanel" data-reg-panel="wechat">
+          <div class="wechat-mock">
+            <div class="wechat-mock__qr" aria-hidden="true">微信扫码</div>
+            <p class="muted small">使用微信扫码完成授权后，仍需验证上方手机号与短信码以完成绑定。</p>
+          </div>
+          <label class="field">
+            <span class="field__label">微信昵称（可选）</span>
+            <input class="input" type="text" placeholder="用于展示" />
+          </label>
+          <button type="button" class="btn btn--primary btn--block" data-reg-submit="wechat">完成注册并绑定手机</button>
+        </div>
+        <div class="reg-panel" id="reg-panel-sms" role="tabpanel" data-reg-panel="sms" hidden>
+          <label class="field">
+            <span class="field__label">昵称</span>
+            <input class="input" id="reg-nick-sms" type="text" placeholder="2–20 个字符" minlength="2" maxlength="20" />
+          </label>
+          <label class="field">
+            <span class="field__label">设置登录密码</span>
+            <span class="pwd-wrap">
+              <input class="input" id="reg-sms-password" type="password" autocomplete="new-password" placeholder="至少 8 位" minlength="8" />
+              <button type="button" class="pwd-toggle" data-pwd-toggle="reg-sms-password" aria-label="显示或隐藏密码">👁</button>
+            </span>
+          </label>
+          <label class="field">
+            <span class="field__label">确认密码</span>
+            <span class="pwd-wrap">
+              <input class="input" id="reg-sms-password2" type="password" autocomplete="new-password" placeholder="再次输入" minlength="8" />
+              <button type="button" class="pwd-toggle" data-pwd-toggle="reg-sms-password2" aria-label="显示或隐藏密码">👁</button>
+            </span>
+          </label>
+          <button type="button" class="btn btn--primary btn--block" data-reg-submit="sms">短信方式注册</button>
+        </div>
+        <div class="reg-panel" id="reg-panel-pwd" role="tabpanel" data-reg-panel="pwd" hidden>
+          <label class="field">
+            <span class="field__label">昵称</span>
+            <input class="input" id="reg-nick-pwd" type="text" placeholder="2–20 个字符" minlength="2" maxlength="20" />
+          </label>
+          <label class="field">
+            <span class="field__label">设置密码</span>
+            <span class="pwd-wrap">
+              <input class="input" id="reg-pwd-password" type="password" autocomplete="new-password" placeholder="至少 8 位" minlength="8" />
+              <button type="button" class="pwd-toggle" data-pwd-toggle="reg-pwd-password" aria-label="显示或隐藏密码">👁</button>
+            </span>
+          </label>
+          <label class="field">
+            <span class="field__label">确认密码</span>
+            <span class="pwd-wrap">
+              <input class="input" id="reg-pwd-password2" type="password" autocomplete="new-password" placeholder="再次输入" minlength="8" />
+              <button type="button" class="pwd-toggle" data-pwd-toggle="reg-pwd-password2" aria-label="显示或隐藏密码">👁</button>
+            </span>
+          </label>
+          <button type="button" class="btn btn--primary btn--block" data-reg-submit="pwd">密码方式注册</button>
+        </div>
+      </div>
+      <p class="auth-switch">已有账号？<button type="button" class="link-btn" id="open-login-from-register">去登录</button></p>
+    </div>
+  </div>
+
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a href="#" class="brand" data-nav="home" aria-label="返回首页">
+        <span class="brand__logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="32" height="32" fill="none"><defs><linearGradient id="lg" x1="4" y1="28" x2="28" y2="4"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs><path d="M16 4l10 6v12L16 28 6 22V10L16 4z" stroke="url(#lg)" stroke-width="1.6"/><path d="M16 10v12M10 13l12 6M22 13l-12 6" stroke="url(#lg)" stroke-width="1.2" opacity=".6"/></svg>
+        </span>
+        <span class="brand__text">
+          <span class="brand__name">净网护航</span>
+          <span class="brand__tag">智能安全防护</span>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="主导航">
+        <button type="button" class="site-nav__link is-active" data-nav="home">首页</button>
+        <button type="button" class="site-nav__link" data-nav="pricing">价格</button>
+        <button type="button" class="site-nav__link" data-nav="about">关于</button>
+        <button type="button" class="site-nav__link" data-nav="dashboard">个人中心</button>
+      </nav>
+
+      <div class="site-header__actions">
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="切换明暗模式" title="主题">
+          <span class="theme-toggle__sun" aria-hidden="true">☀</span>
+          <span class="theme-toggle__moon" aria-hidden="true">☾</span>
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btn-login">登录</button>
+        <button type="button" class="btn btn--primary btn--sm" id="btn-register">注册</button>
+        <button type="button" class="icon-btn" id="btn-global-search" aria-label="搜索">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" class="avatar-btn" data-nav="dashboard" aria-label="进入个人中心">
+          <img id="header-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=shield" alt="" width="36" height="36" class="avatar-img" />
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" id="main">
+    <!-- 官网首页 -->
+    <section class="view view--home is-visible" id="view-home" data-view="home">
+      <div class="hero">
+        <div class="hero__badge"><span class="ai-scan-mini" aria-hidden="true"></span> AI 实时防护引擎已就绪</div>
+        <h1 class="hero__title">净网护航<br /><span class="text-gradient">智能广告拦截与安全防护平台</span></h1>
+        <p class="hero__lead">将广告拦截、AI 风险识别与家庭多模式保护融合为一套可感知、可量化、可行动的安全体验。</p>
+        <div class="hero__cta">
+          <button type="button" class="btn btn--primary btn--lg" data-nav="dashboard">开始体验</button>
+          <button type="button" class="btn btn--outline btn--lg" data-scroll="#home-features">查看功能</button>
+        </div>
+        <div class="hero__stats row-stats">
+          <div class="stat-pill"><strong>12.4M+</strong><span>日均拦截</span></div>
+          <div class="stat-pill"><strong>99.2%</strong><span>风险识别</span></div>
+          <div class="stat-pill"><strong>4 模式</strong><span>家庭适配</span></div>
+        </div>
+      </div>
+
+      <div class="section container" id="home-intro">
+        <h2 class="section__title">平台能力</h2>
+        <p class="section__subtitle">从「看见威胁」到「自动处置」，全链路守护每一次浏览。</p>
+        <div class="intro-grid">
+          <article class="glass-card intro-item"><h3>智能广告拦截</h3><p>规则 + 行为识别双引擎，低误杀、高覆盖。</p></article>
+          <article class="glass-card intro-item"><h3>AI 风险识别</h3><p>语义与视觉多模态模型，识别钓鱼与诈骗话术。</p></article>
+          <article class="glass-card intro-item"><h3>恶意网址检测</h3><p>实时信誉库 + 沙箱特征比对，毫秒级响应。</p></article>
+          <article class="glass-card intro-item"><h3>诈骗内容提醒</h3><p>对可疑表单、转账与隐私索取即时弹窗提示。</p></article>
+          <article class="glass-card intro-item"><h3>家庭保护模式</h3><p>儿童 / 老人场景化策略，一键切换全家策略。</p></article>
+          <article class="glass-card intro-item"><h3>个性化防护</h3><p>按站点、按成员、按时间段细粒度策略编排。</p></article>
+        </div>
+      </div>
+
+      <div class="section container" id="home-features">
+        <h2 class="section__title">核心功能</h2>
+        <div class="feature-grid">
+          <article class="feature-card"><div class="feature-card__icon">🛡</div><h3>广告拦截</h3><p>跨设备同步规则，支持细粒度白名单。</p></article>
+          <article class="feature-card"><div class="feature-card__icon">🤖</div><h3>AI 风险识别</h3><p>页面级语义扫描，可疑行为即时评分。</p></article>
+          <article class="feature-card"><div class="feature-card__icon">🏠</div><h3>家庭保护</h3><p>成员分组策略，家长总览风险态势。</p></article>
+          <article class="feature-card"><div class="feature-card__icon">🎨</div><h3>儿童模式</h3><p>学习优先、娱乐限额、时长提醒一体化。</p></article>
+          <article class="feature-card"><div class="feature-card__icon">👴</div><h3>老人模式</h3><p>大字体、高对比、风险红色强提示。</p></article>
+          <article class="feature-card"><div class="feature-card__icon">📊</div><h3>数据分析</h3><p>拦截趋势、AI 命中分布与报告导出。</p></article>
+        </div>
+      </div>
+
+      <div class="section section--tint container">
+        <h2 class="section__title">平台优势</h2>
+        <div class="advantage-row">
+          <div class="advantage-card"><span class="advantage-card__k">实时检测</span><span class="advantage-card__v">边缘节点 + 本地轻量模型</span></div>
+          <div class="advantage-card"><span class="advantage-card__k">AI 分析</span><span class="advantage-card__v">多模态融合评分体系</span></div>
+          <div class="advantage-card"><span class="advantage-card__k">智能防护</span><span class="advantage-card__v">策略编排自动化</span></div>
+          <div class="advantage-card"><span class="advantage-card__k">多模式适配</span><span class="advantage-card__v">普通 / 严格 / 老人 / 儿童</span></div>
+        </div>
+      </div>
+
+      <div class="section container" id="home-metrics">
+        <h2 class="section__title">实时态势</h2>
+        <div class="metrics-grid">
+          <div class="metric-card"><span class="metric-card__label">广告拦截数量</span><span class="metric-card__value" data-stat="stat-ad" data-counter="0">0</span><span class="metric-card__delta positive">实时更新</span></div>
+          <div class="metric-card"><span class="metric-card__label">URL 检测次数</span><span class="metric-card__value" data-stat="stat-url" data-counter="0">0</span><span class="metric-card__delta">实时更新</span></div>
+          <div class="metric-card"><span class="metric-card__label">AI 检测次数</span><span class="metric-card__value" data-stat="stat-ai" data-counter="0">0</span><span class="metric-card__delta">实时更新</span></div>
+          <div class="metric-card"><span class="metric-card__label">高风险拦截</span><span class="metric-card__value" data-stat="stat-high" data-counter="0">0</span><span class="metric-card__delta positive">安全防护中</span></div>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        <div class="site-footer__inner container">
+          <div class="site-footer__brand">
+            <strong>净网护航</strong>
+            <p>企业级体验的消费级安全产品演示前端。</p>
+          </div>
+          <div class="site-footer__cols">
+            <div><h4>产品</h4><a href="#" data-nav="pricing">定价</a><a href="#" data-nav="about">关于我们</a><a href="#" data-nav="dashboard">控制台</a></div>
+            <div><h4>项目</h4><span>净网护航</span><span>智能广告拦截与安全防护平台</span><span>第一阶段 Web 交付版</span></div>
+            <div><h4>合规</h4><span>隐私政策</span><span>服务条款</span><span>安全白皮书</span></div>
+          </div>
+        </div>
+        <div class="site-footer__bar">© 2026 净网护航</div>
+      </footer>
+    </section>
+
+    <!-- 价格 -->
+    <section class="view view--pricing" id="view-pricing" data-view="pricing" hidden>
+      <div class="page-head container">
+        <h1 class="page-head__title">选择适合你的计划</h1>
+        <p class="page-head__lead">透明计费，随时升级。家庭版含多成员与模式编排。</p>
+      </div>
+      <div class="pricing-grid container">
+        <article class="price-card">
+          <h2 class="price-card__name">普通版</h2>
+          <p class="price-card__price">¥0<span>/月</span></p>
+          <ul class="price-card__list">
+            <li>基础广告拦截</li>
+            <li>1 台设备</li>
+            <li>本地规则库</li>
+            <li>— AI 深度检测</li>
+          </ul>
+          <button type="button" class="btn btn--outline btn--block">开始体验</button>
+        </article>
+        <article class="price-card price-card--featured">
+          <div class="price-card__ribbon">推荐</div>
+          <h2 class="price-card__name">高级版</h2>
+          <p class="price-card__price">¥29<span>/月</span></p>
+          <ul class="price-card__list">
+            <li>全量广告 + 跟踪器拦截</li>
+            <li>5 台设备</li>
+            <li><strong>AI 风险识别</strong>（页面级）</li>
+            <li>恶意网址检测</li>
+            <li>报告导出 PDF</li>
+          </ul>
+          <button type="button" class="btn btn--primary btn--block">立即订阅</button>
+          <button type="button" class="btn btn--ghost btn--block btn--sm-mt">开始体验</button>
+        </article>
+        <article class="price-card">
+          <h2 class="price-card__name">家庭版</h2>
+          <p class="price-card__price">¥59<span>/月</span></p>
+          <ul class="price-card__list">
+            <li>高级版全部能力</li>
+            <li>10 台设备</li>
+            <li><strong>家庭保护</strong> · 儿童 / 老人模式</li>
+            <li>家长控制台与风险推送</li>
+            <li>专属客服</li>
+          </ul>
+          <button type="button" class="btn btn--primary btn--block">立即订阅</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- 关于 -->
+    <section class="view view--about" id="view-about" data-view="about" hidden>
+      <div class="about-hero container">
+        <div class="about-hero__text">
+          <h1>关于净网护航</h1>
+          <p>我们相信安全产品不该是「黑盒开关」，而应是可理解、可配置、可协作的家庭数字基础设施。</p>
+        </div>
+        <div class="about-hero__art glass-card" aria-hidden="true">
+          <div class="about-orbit"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="about-sections container">
+        <section class="about-block glass-card">
+          <div class="about-block__icon">📡</div>
+          <h2>平台介绍</h2>
+          <p>净网护航将 DNS / 浏览器扩展 / 本地代理能力抽象为统一控制台，面向个人与家庭提供一致的安全策略。</p>
+        </section>
+        <section class="about-block glass-card">
+          <div class="about-block__icon">🧭</div>
+          <h2>产品背景</h2>
+          <p>广告与诈骗形态快速演化，传统规则难以覆盖长尾威胁。我们以 AI 评分 + 专家规则双轨并行，降低误杀同时提升召回。</p>
+        </section>
+        <section class="about-block glass-card">
+          <div class="about-block__icon">⚙️</div>
+          <h2>技术说明</h2>
+          <p>端侧轻量推理、云端大模型复核、差分隐私聚合统计——三层架构兼顾性能与隐私。</p>
+        </section>
+        <section class="about-block glass-card">
+          <div class="about-block__icon">👥</div>
+          <h2>团队介绍</h2>
+          <p>核心成员来自浏览器内核、威胁情报与体验设计背景，坚持「安全可感知」的产品哲学。</p>
+        </section>
+        <section class="about-block glass-card">
+          <div class="about-block__icon">💡</div>
+          <h2>产品理念</h2>
+          <p>默认安全、渐进披露、关键时刻强提示——让用户信任系统，而不是恐惧弹窗。</p>
+        </section>
+        <section class="about-block glass-card">
+          <div class="about-block__icon">🛰️</div>
+          <h2>AI 安全防护</h2>
+          <p>多模态模型识别钓鱼视觉模板、表单劫持与紧急话术；与全局信誉库交叉验证，生成可解释的风险标签。</p>
+        </section>
+      </div>
+    </section>
+
+    <!-- 个人中心 -->
+    <section class="view view--dashboard" id="view-dashboard" data-view="dashboard" hidden>
+      <aside class="dash-sidebar" aria-label="个人中心菜单">
+        <div class="dash-user">
+          <img id="dash-user-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=shield" alt="" class="dash-user__avatar" width="48" height="48" />
+          <div class="dash-user__meta">
+            <div class="dash-user__name" id="dash-user-name">林悦 · Pro</div>
+            <div class="dash-user__status" id="dash-protect-status">保护设置会通过后端与浏览器扩展自动同步</div>
+          </div>
+        </div>
+        <nav class="dash-nav" aria-label="控制台">
+          <button type="button" class="dash-nav__item is-active" data-dash="dash-home">首页</button>
+          <button type="button" class="dash-nav__item" data-dash="dash-logs">风险日志</button>
+          <button type="button" class="dash-nav__item" data-dash="dash-reports">安全概览</button>
+          <button type="button" class="dash-nav__item" data-dash="dash-family">家庭管理</button>
+          <button type="button" class="dash-nav__item" data-dash="dash-modes">模式选择</button>
+          <button type="button" class="dash-nav__item" data-dash="dash-sub">订阅详情</button>
+          <button type="button" class="dash-nav__item" data-dash="dash-analytics">数据分析</button>
+          <button type="button" class="dash-nav__item" data-dash="dash-settings">个人设置</button>
+        </nav>
+      </aside>
+
+      <div class="dash-main">
+        <div class="dash-topbar">
+          <div class="dash-topbar__title" id="dash-page-title">控制台首页</div>
+          <div class="dash-topbar__actions">
+            <button type="button" class="icon-btn has-tooltip" id="btn-viz" aria-label="可视化简报开发中" title="可视化简报开发中，暂未开放" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h16M8 15l3-3 3 2 4-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="tooltip">可视化简报（开发中）</span>
+            </button>
+            <button type="button" class="icon-btn has-tooltip" id="btn-notify" aria-label="通知" hidden>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22a2 2 0 002-2H10a2 2 0 002 2zm6-6V11a6 6 0 10-12 0v5l-2 2h16l-2-2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              <span class="tooltip">消息与告警</span>
+            </button>
+            <button type="button" class="icon-btn has-tooltip" id="btn-dash-search" aria-label="搜索">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span class="tooltip">搜索控制台</span>
+            </button>
+            <button type="button" class="icon-btn has-tooltip" id="btn-dash-settings" aria-label="快捷设置">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" stroke="currentColor" stroke-width="1.4"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.05.05a2 2 0 01-2.83 2.83l-.05-.05a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1 1.55V21a2 2 0 01-4 0v-.09a1.7 1.7 0 00-1-1.55 1.7 1.7 0 00-1.87.34l-.05.05a2 2 0 01-2.83-2.83l.05-.05a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.55-1H3a2 2 0 010-4h.09a1.7 1.7 0 001.55-1 1.7 1.7 0 00-.34-1.87l-.05-.05a2 2 0 012.83-2.83l.05.05a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001-1.55V3a2 2 0 014 0v.09a1.7 1.7 0 001 1.55h.09a1.7 1.7 0 001.87-.34l.05-.05a2 2 0 012.83 2.83l-.05.05a1.7 1.7 0 00-.34 1.87V9c.26.604.852.997 1.55 1H21a2 2 0 010 4h-.09a1.7 1.7 0 00-1.55 1z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+              <span class="tooltip">偏好设置</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="dash-pages">
+          <!-- 控制台首页 -->
+          <div class="dash-page is-visible" id="dash-home" data-dash-page="dash-home">
+            <div class="dash-welcome glass-card">
+              <h2>下午好，<span id="dash-welcome-name">林悦</span></h2>
+              <p>以下统计来自后端正式记录。AI 引擎已完成 <strong id="dash-welcome-ai-count">—</strong> 次页面评估。</p>
+              <div class="ai-scan-bar" aria-hidden="true"><div class="ai-scan-bar__line"></div></div>
+            </div>
+            <div class="metrics-grid" aria-label="Dashboard 核心统计">
+              <div class="metric-card"><span class="metric-card__label">今日风险数量</span><span class="metric-card__value" id="dash-today-risk">—</span><span class="metric-card__delta">实时数据</span></div>
+              <div class="metric-card"><span class="metric-card__label">广告拦截数量</span><span class="metric-card__value" id="dash-ad-block">—</span><span class="metric-card__delta">累计拦截</span></div>
+              <div class="metric-card"><span class="metric-card__label">AI 检测数量</span><span class="metric-card__value" id="dash-ai-check">—</span><span class="metric-card__delta">累计检测</span></div>
+              <div class="metric-card"><span class="metric-card__label">URL 检测数量</span><span class="metric-card__value" id="dash-url-check">—</span><span class="metric-card__delta">累计检测</span></div>
+              <div class="metric-card"><span class="metric-card__label">高风险数量</span><span class="metric-card__value" id="dash-high-risk">—</span><span class="metric-card__delta">累计发现</span></div>
+            </div>
+            <p class="muted small" id="dash-overview-status" role="status" hidden></p>
+            <div class="dash-grid-2">
+              <div class="glass-card">
+                <h3 class="card-title">当前安全状态</h3>
+                <div class="security-meter">
+                  <div class="security-meter__score">尚未计算</div>
+                  <div class="security-meter__bar"><span style="width:0%"></span></div>
+                  <p class="muted">暂无安全评分数据；安全评分算法尚未开放。</p>
+                </div>
+              </div>
+              <div class="glass-card">
+                <h3 class="card-title">AI 快速扫描</h3>
+                <form class="settings-form" id="ai-scan-form">
+                  <label class="field">
+                    <span class="field__label">URL</span>
+                    <input class="input" id="ai-scan-url" type="url" maxlength="4096" placeholder="https://example.com" required />
+                  </label>
+                  <label class="field">
+                    <span class="field__label">文本内容（可选）</span>
+                    <textarea class="input" id="ai-scan-content" rows="3" maxlength="3000" placeholder="粘贴需要检测的页面文字"></textarea>
+                  </label>
+                  <button type="submit" class="btn btn--primary btn--sm" id="btn-ai-scan">运行快速扫描</button>
+                </form>
+                <p class="muted small" id="ai-scan-status" role="status" hidden></p>
+                <div id="ai-scan-result" hidden>
+                  <p>风险等级：<strong id="ai-scan-risk-level"></strong></p>
+                  <p>风险分数：<span id="ai-scan-score"></span></p>
+                  <p>风险原因：<span id="ai-scan-reason"></span></p>
+                </div>
+              </div>
+            </div>
+            <div class="glass-card">
+              <h3 class="card-title">最近安全事件</h3>
+              <p class="muted small">展示最近的 AI 检测、URL 检测与广告拦截事件。</p>
+              <p class="muted small" id="recent-security-events-state" role="status">加载中…</p>
+              <div class="mini-table-wrap">
+                <table class="mini-table" id="recent-security-events-table" hidden>
+                  <thead><tr><th>类型</th><th>URL</th><th>风险等级</th><th>原因</th><th>时间</th></tr></thead>
+                  <tbody id="recent-security-events-body"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="glass-card risk-banner">
+              <div>
+                <strong>数据说明</strong>
+                <p class="muted">实时风险信息请以最近安全事件与风险日志中的正式记录为准。</p>
+              </div>
+            </div>
+            <div class="quick-cards">
+              <button type="button" class="quick-card" id="quick-risk-scan" data-dash="dash-home"><span>风险扫描</span><small>检测 URL 与页面文本</small></button>
+              <button type="button" class="quick-card" id="quick-shield" disabled title="功能暂未开放，尚未接入正式控制接口"><span>一键防护</span><small>功能暂未开放</small></button>
+              <button type="button" class="quick-card" data-dash="dash-reports"><span>查看安全概览</span><small>累计统计与近 7 天趋势</small></button>
+              <button type="button" class="quick-card" data-dash="dash-modes"><span>模式切换</span><small>儿童 / 老人 / 严格</small></button>
+            </div>
+          </div>
+
+          <!-- 风险日志 -->
+          <div class="dash-page" id="dash-logs" data-dash-page="dash-logs" hidden>
+            <div class="glass-card">
+              <div class="table-toolbar">
+                <h3 class="card-title">风险与广告事件日志</h3>
+                <div class="table-toolbar__right">
+                  <span class="muted">共 <strong id="risk-log-total">0</strong> 条</span>
+                </div>
+              </div>
+              <div id="risk-log-state" class="muted" role="status" hidden>
+                <span id="risk-log-state-text"></span>
+                <button type="button" class="btn btn--outline btn--sm" id="risk-log-retry" hidden>重试</button>
+              </div>
+              <div class="table-scroll">
+                <table class="data-table" id="ad-log-table">
+                  <thead>
+                    <tr>
+                      <th>类型</th>
+                      <th>URL</th>
+                      <th>风险等级</th>
+                      <th>原因</th>
+                      <th>时间</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ad-log-body"></tbody>
+                </table>
+              </div>
+              <div class="pagination" aria-label="分页">
+                <button type="button" class="page-btn" id="risk-log-prev" disabled>上一页</button>
+                <span class="page-info">第 <strong id="risk-log-current-page">1</strong> / <strong id="risk-log-total-pages">0</strong> 页</span>
+                <button type="button" class="page-btn" id="risk-log-next" disabled>下一页</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 报告 -->
+          <div class="dash-page" id="dash-reports" data-dash-page="dash-reports" hidden>
+            <div class="report-layout">
+              <div class="glass-card report-main">
+                <div class="report-head">
+                  <div>
+                    <h3 class="card-title">安全防护概览</h3>
+                    <p class="muted">统计口径：累计数据 · 生成时间 <time id="report-generated-at">—</time></p>
+                  </div>
+                  <button type="button" class="btn btn--primary" id="btn-export-pdf" title="PDF 导出功能开发中，暂未开放" disabled>PDF 导出（开发中）</button>
+                </div>
+                <div class="report-kpis">
+                  <div><span>累计高危事件</span><strong id="report-high-risk">—</strong></div>
+                  <div><span>累计中危事件</span><strong id="report-medium-risk">—</strong></div>
+                  <div><span>累计拦截广告</span><strong id="report-ad-count">—</strong></div>
+                  <div><span>累计 AI 检测</span><strong id="report-ai-count">—</strong></div>
+                </div>
+                <p class="muted small" id="report-summary-status" role="status">报告数据加载中…</p>
+                <div class="report-chart-row">
+                  <div class="chart-box">
+                    <h4 class="card-title">累计防护统计</h4>
+                    <canvas id="chart-report-bar" height="180"></canvas>
+                    <p class="muted small" id="chart-report-bar-status" role="status" hidden></p>
+                  </div>
+                  <div class="pdf-teaser glass-card glass-card--inset">
+                    <div class="pdf-icon" aria-hidden="true">PDF</div>
+                    <p>PDF 导出功能开发中，当前仅展示安全防护概览。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="glass-card">
+                <h3 class="card-title">近期安全记录</h3>
+                <p class="muted small" id="report-risk-records-state" role="status">加载中…</p>
+                <ul class="timeline" id="report-risk-records-list" hidden></ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 家庭管理 -->
+          <div class="dash-page" id="dash-family" data-dash-page="dash-family" hidden>
+            <div class="family-hero glass-card">
+              <div class="family-hero__icon" aria-hidden="true">🏡</div>
+              <div>
+                <h3 class="card-title">家庭数字防线</h3>
+                <p class="muted">为不同成员启用差异化策略，风险事件将同步到家长通知中心。</p>
+              </div>
+            </div>
+            <div class="dash-grid-2">
+              <div class="glass-card">
+                <h3 class="card-title">家庭成员</h3>
+                <ul class="member-list">
+                  <li><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=a" alt="" width="40" height="40" /> 林悦（家长）<span class="tag">管理员</span></li>
+                  <li><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=b" alt="" width="40" height="40" /> 林童<span class="tag tag--child">儿童模式</span></li>
+                  <li><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=c" alt="" width="40" height="40" /> 奶奶<span class="tag tag--elder">老人模式</span></li>
+                </ul>
+                <button type="button" class="btn btn--outline btn--sm">邀请成员</button>
+              </div>
+              <div class="glass-card">
+                <h3 class="card-title">老人模式管理</h3>
+                <label class="switch-row"><span>大字体与简化导航</span><input type="checkbox" class="ui-switch" checked data-toggle="elder-font" /></label>
+                <label class="switch-row"><span>高风险红色强提示</span><input type="checkbox" class="ui-switch" checked /></label>
+                <label class="switch-row"><span>自动隐藏复杂广告位</span><input type="checkbox" class="ui-switch" checked /></label>
+              </div>
+            </div>
+            <div class="dash-grid-2">
+              <div class="glass-card">
+                <h3 class="card-title">儿童模式管理</h3>
+                <label class="switch-row"><span>学习模式优先</span><input type="checkbox" class="ui-switch" checked /></label>
+                <label class="switch-row"><span>娱乐内容限额</span><input type="checkbox" class="ui-switch" checked /></label>
+                <label class="switch-row"><span>浏览时长提醒</span><input type="checkbox" class="ui-switch" checked /></label>
+              </div>
+              <div class="glass-card">
+                <h3 class="card-title">保护与提醒</h3>
+                <label class="switch-row"><span>保护等级 · 高</span><input type="checkbox" class="ui-switch" checked id="switch-protect-level" /></label>
+                <label class="switch-row"><span>风险推送到手机</span><input type="checkbox" class="ui-switch" checked /></label>
+                <p class="muted small">关闭「保护等级」将回到普通模式策略。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 模式选择 -->
+          <div class="dash-page" id="dash-modes" data-dash-page="dash-modes" hidden>
+            <div class="mode-layout">
+              <div class="mode-cards">
+                <button type="button" class="mode-card" data-mode="normal" disabled>
+                  <span class="mode-card__icon">◎</span>
+                  <span class="mode-card__name">普通模式</span>
+                  <span class="mode-card__desc">平衡体验与防护</span>
+                </button>
+                <button type="button" class="mode-card" data-mode="strict" disabled>
+                  <span class="mode-card__icon">⛨</span>
+                  <span class="mode-card__name">严格模式</span>
+                  <span class="mode-card__desc">最大化拦截与提示</span>
+                </button>
+              </div>
+              <div class="mode-detail glass-card" id="mode-detail">
+                <h3 class="card-title">模式说明</h3>
+                <p id="elder-global-banner" class="elder-global-banner" hidden>已开启<strong>全站老人阅读模式</strong>：全页文字放大，可通过老人模式开关关闭。</p>
+                <p id="mode-detail-text">选择左侧模式查看策略说明与界面预览。</p>
+                <p class="muted small">当前保护设置会与浏览器扩展同步；扩展离线时使用最近一次本地设置，网络恢复后会自动同步。</p>
+                <p id="settings-api-state" class="muted" role="status">
+                  <span id="settings-api-state-text">加载设置中</span>
+                  <button type="button" class="btn btn--outline btn--sm" id="settings-api-retry" hidden>重试</button>
+                </p>
+                <form id="security-settings-form" hidden>
+                  <label class="switch-row"><span>老人模式</span><input type="checkbox" class="ui-switch" id="settings-elder-mode" /></label>
+                  <label class="switch-row"><span>儿童模式</span><input type="checkbox" class="ui-switch" id="settings-child-mode" /></label>
+                  <label class="switch-row"><span>暂停防护</span><input type="checkbox" class="ui-switch" id="settings-paused" /></label>
+                  <button type="submit" class="btn btn--primary" id="settings-api-save">保存设置</button>
+                </form>
+                <div id="mode-preview-elder" class="mode-preview mode-preview--elder" hidden>
+                  <div class="elder-preview">
+                    <div class="elder-preview__alert">高风险：可疑转账页面</div>
+                    <p class="elder-preview__title">今日安全概览</p>
+                    <p class="elder-preview__big">已拦截 12 条广告<br />风险提示 1 次</p>
+                    <button type="button" class="elder-preview__cta">一键防护</button>
+                  </div>
+                </div>
+                <div id="mode-preview-child" class="mode-preview mode-preview--child" hidden>
+                  <div class="child-preview">
+                    <div class="child-preview__mascot" aria-hidden="true">🦊</div>
+                    <h4>学习模式已开启</h4>
+                    <p>娱乐站点将在学习时段自动隐藏入口。</p>
+                    <div class="child-timer">
+                      <span>今日剩余浏览</span>
+                      <!-- Future: populate this slot from trusted child status data. -->
+                      <strong id="childRemainingTime">--</strong>
+                    </div>
+                    <p class="muted small">浏览状态等待扩展同步；当前浏览时长保护由浏览器扩展实时执行。</p>
+                    <div class="child-safe-anim" aria-hidden="true"><span></span><span></span><span></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 订阅 -->
+          <div class="dash-page" id="dash-sub" data-dash-page="dash-sub" hidden>
+            <div class="glass-card sub-card">
+              <h3 class="card-title">当前订阅</h3>
+              <p class="sub-plan">家庭版 <span class="badge">生效中</span></p>
+              <p class="muted">续费日：2026-06-01 · 自动续费已开启</p>
+              <div class="sub-actions">
+                <button type="button" class="btn btn--outline">管理账单</button>
+                <button type="button" class="btn btn--primary" data-nav="pricing">升级 / 对比计划</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 数据分析 -->
+          <div class="dash-page" id="dash-analytics" data-dash-page="dash-analytics" hidden>
+            <div class="analytics-grid">
+              <div class="glass-card chart-card">
+                <h3 class="card-title">累计风险分布</h3>
+                <canvas id="chart-risk-pie" height="220"></canvas>
+                <p class="muted small" id="chart-risk-status" role="status" hidden></p>
+              </div>
+              <div class="glass-card chart-card">
+                <h3 class="card-title">AI 识别统计</h3>
+                <canvas id="chart-ai-bar" height="220"></canvas>
+                <p class="muted small" id="chart-ai-status" role="status" hidden></p>
+              </div>
+              <div class="glass-card chart-card span-2">
+                <h3 class="card-title">近 7 天风险与广告趋势</h3>
+                <canvas id="chart-ads-line" height="240"></canvas>
+                <p class="muted small" id="chart-trend-status" role="status" hidden></p>
+              </div>
+              <div class="glass-card chart-card span-2">
+                <h3 class="card-title">近 7 天风险与广告事件分析</h3>
+                <canvas id="chart-report-stack" height="240"></canvas>
+                <p class="muted small" id="chart-report-stack-status" role="status" hidden></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 设置 -->
+          <div class="dash-page" id="dash-settings" data-dash-page="dash-settings" hidden>
+            <div class="glass-card">
+              <h3 class="card-title">个人信息</h3>
+              <p class="muted small">修改头像、昵称与登录密码。头像支持从本机选择图片（演示数据保存在浏览器本地）。</p>
+              <form id="profile-form" class="settings-form settings-form--profile">
+                <div class="profile-avatar-row">
+                  <div class="profile-avatar-preview">
+                    <img id="settings-avatar-preview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=shield" alt="头像预览" width="88" height="88" />
+                  </div>
+                  <div class="profile-avatar-actions">
+                    <input type="file" id="settings-avatar-file" accept="image/*" hidden />
+                    <button type="button" class="btn btn--outline btn--sm" id="settings-avatar-pick">选择本地图片</button>
+                    <p class="muted small">支持 JPG / PNG / WebP，建议小于 1MB。</p>
+                  </div>
+                </div>
+                <label class="field">
+                  <span class="field__label">昵称</span>
+                  <input class="input" id="settings-nickname" type="text" value="林悦" minlength="2" maxlength="20" autocomplete="nickname" />
+                </label>
+                <label class="field">
+                  <span class="field__label">主邮箱</span>
+                  <input class="input" id="settings-email" type="email" value="" placeholder="未设置" autocomplete="email" />
+                </label>
+                <div class="settings-divider">修改密码</div>
+                <label class="field">
+                  <span class="field__label">当前密码</span>
+                  <span class="pwd-wrap">
+                    <input class="input" id="settings-cur-password" type="password" autocomplete="current-password" placeholder="验证身份" />
+                    <button type="button" class="pwd-toggle" data-pwd-toggle="settings-cur-password" aria-label="显示或隐藏密码">👁</button>
+                  </span>
+                </label>
+                <label class="field">
+                  <span class="field__label">新密码</span>
+                  <span class="pwd-wrap">
+                    <input class="input" id="settings-new-password" type="password" autocomplete="new-password" placeholder="至少 8 位" minlength="8" />
+                    <button type="button" class="pwd-toggle" data-pwd-toggle="settings-new-password" aria-label="显示或隐藏密码">👁</button>
+                  </span>
+                </label>
+                <label class="field">
+                  <span class="field__label">确认新密码</span>
+                  <span class="pwd-wrap">
+                    <input class="input" id="settings-new-password2" type="password" autocomplete="new-password" placeholder="再次输入新密码" minlength="8" />
+                    <button type="button" class="pwd-toggle" data-pwd-toggle="settings-new-password2" aria-label="显示或隐藏密码">👁</button>
+                  </span>
+                </label>
+                <label class="switch-row">接收安全周报<input type="checkbox" class="ui-switch" id="settings-weekly" checked /></label>
+                <label class="switch-row">敏感操作二次验证<input type="checkbox" class="ui-switch" id="settings-2fa" checked /></label>
+                <button type="submit" class="btn btn--primary" id="settings-save-btn">保存更改</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+</body>
+</html>

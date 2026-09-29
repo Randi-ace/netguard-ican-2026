@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老人模式测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f7fa;
+        }
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        h1 { color: #1e293b; }
+        h2 { color: #374151; margin-top: 0; }
+        p { line-height: 1.6; color: #4b5563; }
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+        .btn-danger {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .btn-warning {
+            background: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+        .btn-primary {
+            background: #dbeafe;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+        a { color: #3b82f6; }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+        .video-container {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        .sidebar {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h1>👴 老人模式测试页面</h1>
+        <p>此页面用于测试老人模式的各项功能：字体放大、页面简化、风险关键词高亮等。</p>
+    </div>
+
+    <div class="section">
+        <h2>⚠️ 风险关键词测试区域</h2>
+        <p>以下按钮包含风险关键词，老人模式开启后会被高亮显示：</p>
+        
+        <button class="btn btn-danger">🎁 点击领取免费红包</button>
+        <button class="btn btn-danger">🏆 恭喜您中奖了！</button>
+        <button class="btn btn-danger">💳 输入验证码领取</button>
+        <button class="btn btn-danger">💰 转账即可提现</button>
+        <button class="btn btn-danger">🎲 在线赌博赢大奖</button>
+        <button class="btn btn-danger">💼 刷单兼职日结工资</button>
+        <button class="btn btn-warning">👩‍💼 客服退款服务</button>
+        <button class="btn btn-warning">📱 扫码领取优惠</button>
+        
+        <br><br>
+        
+        <a href="#" class="btn btn-danger">🎁 点击领取VIP会员</a>
+        <a href="#" class="btn btn-warning">🏦 投资高收益理财</a>
+        <a href="#" class="btn btn-warning">🎟️ 限时优惠活动</a>
+    </div>
+
+    <div class="section">
+        <h2>📝 输入框测试（不应受影响）</h2>
+        <p>以下输入框在老人模式下应保持正常功能：</p>
+        
+        <label>用户名：</label>
+        <input type="text" placeholder="请输入用户名">
+        
+        <label>密码：</label>
+        <input type="password" placeholder="请输入密码">
+        
+        <label>备注：</label>
+        <textarea placeholder="请输入备注信息..." rows="3"></textarea>
+    </div>
+
+    <div class="section">
+        <h2>🎬 视频区域测试（不应被隐藏）</h2>
+        <div class="video-container">
+            <div style="font-size: 48px; margin-bottom: 12px;">▶️</div>
+            <p>视频播放区域</p>
+            <p style="font-size: 14px; color: #9ca3af;">老人模式不应影响视频播放</p>
+            <button class="btn btn-primary" style="background: #3b82f6; color: white;">播放视频</button>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h3>📌 侧边栏内容</h3>
+        <p>这是侧边栏内容，在页面简化模式下会被隐藏。</p>
+        <ul>
+            <li>链接1</li>
+            <li>链接2</li>
+            <li>链接3</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2024 净网护航 - 老人模式测试页面</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-demo-mode="ads">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>广告拦截演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4338ca;
+            --primary-light: #6366f1;
+            --secondary-color: #8b5cf6;
+            --bg-gradient-start: #eef2ff;
+            --bg-gradient-mid: #e0e7ff;
+            --bg-gradient-end: #c7d2fe;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: rgba(139, 92, 246, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 30%, var(--bg-gradient-end) 60%, #ddd6fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .header h1::before {
+            content: '🛡️';
+            font-size: 36px;
+        }
+
+        .header p {
+            color: var(--primary-light);
+            font-size: 16px;
+        }
+
+        .divider {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-light));
+            border-radius: 2px;
+            margin: 20px auto 0;
+        }
+
+        .status-bar {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px 24px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-text {
+            color: #1f2937;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge.active {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .status-badge.disabled {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .status-badge.strict {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .demo-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: linear-gradient(180deg, var(--secondary-color), var(--primary-light));
+            border-radius: 2px;
+        }
+
+        .demo-marker {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* 横幅展示区 */
+        .demo-banner {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .demo-banner::before {
+            content: '📢';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 28px;
+        }
+
+        .demo-banner h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .demo-banner p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .demo-banner .demo-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 28px;
+            background: #fff;
+            color: #f59e0b;
+            border-radius: 24px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .demo-banner .demo-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 内容区域 */
+        .content-row {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .main-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 28px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-content h2 {
+            color: #1f2937;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .main-content p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        /* 侧边栏区域 */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .demo-sidebar {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 12px;
+            padding: 24px;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            min-height: 120px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .demo-sidebar::before {
+            content: '💡';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+        }
+
+        .demo-sidebar h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .demo-sidebar p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .demo-sidebar .demo-btn {
+            display: block;
+            padding: 8px 20px;
+            background: #fff;
+            color: #3b82f6;
+            border-radius: 18px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: transform 0.2s;
+        }
+
+        .demo-sidebar .demo-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 内嵌展示区 */
+        .demo-embed-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 24px;
+            border: 2px dashed #fbbf24;
+            text-align: center;
+            min-height: 220px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .demo-embed-container::before {
+            content: '🔗 内嵌内容区域';
+            display: block;
+            color: #f59e0b;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .demo-embed {
+            width: 100%;
+            height: 160px;
+            border: 2px solid #fbbf24;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d97706;
+            font-size: 14px;
+        }
+
+        /* 赞助展示区 */
+        .demo-sponsor {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            border-radius: 12px;
+            padding: 24px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            min-height: 100px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 20px;
+        }
+
+        .demo-sponsor::before {
+            content: '💰';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 28px;
+        }
+
+        .sponsor-label {
+            display: inline-block;
+            padding: 4px 14px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .demo-sponsor h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .demo-sponsor p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* 弹窗展示 */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .demo-popup {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #f3f4f6;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+
+        .popup-close:hover {
+            background: #e5e7eb;
+            transform: scale(1.1);
+        }
+
+        .demo-popup .popup-icon {
+            font-size: 52px;
+            margin-bottom: 16px;
+        }
+
+        .demo-popup h3 {
+            color: #1f2937;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .demo-popup p {
+            color: #6b7280;
+            font-size: 15px;
+            margin-bottom: 22px;
+        }
+
+        .demo-popup .popup-btn {
+            display: inline-block;
+            padding: 12px 36px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-light));
+            color: #fff;
+            border-radius: 24px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .demo-popup .popup-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 模式动画 - 普通模式 */
+        .ad-hidden-normal {
+            animation: fadeOutNormal 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeOutNormal {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+                visibility: hidden;
+            }
+        }
+
+        /* 模式动画 - Strict模式 */
+        .ad-hidden-strict {
+            animation: shrinkRemove 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes shrinkRemove {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.6);
+                height: 0;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+        }
+
+        /* 普通模式占位提示 */
+        .ad-placeholder {
+            background: rgba(59, 130, 246, 0.08);
+            border: 2px dashed #3b82f6;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            color: #3b82f6;
+            min-height: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: placeholderFadeIn 0.3s ease;
+        }
+
+        @keyframes placeholderFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .ad-placeholder-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ad-placeholder-icon {
+            font-size: 28px;
+        }
+
+        .ad-placeholder-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .ad-placeholder-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* 统计面板 */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* 规则说明面板 */
+        .rules-panel {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            margin-bottom: 30px;
+        }
+
+        .rules-panel h3 {
+            color: var(--primary-color);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rules-panel h3::before {
+            content: '📋';
+            font-size: 24px;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .rule-card {
+            background: linear-gradient(135deg, rgba(67, 56, 202, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .rule-card h4 {
+            color: var(--primary-color);
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .rule-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .rule-card li {
+            padding: 6px 0;
+            font-size: 13px;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rule-card li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .rule-card.strict {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.1) 100%);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .rule-card.strict h4 {
+            color: #dc2626;
+            border-bottom-color: rgba(239, 68, 68, 0.3);
+        }
+
+        /* 兼容说明 */
+        .compatibility-section {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .compatibility-section h3 {
+            color: #16a34a;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .compatibility-section h3::before {
+            content: '📝';
+            font-size: 24px;
+        }
+
+        .compatibility-section p {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .compatibility-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .compatibility-section li {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            font-size: 13px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .compatibility-section li::before {
+            content: '🔹';
+            color: #3b82f6;
+        }
+
+        .future-plans {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .future-plans h4 {
+            color: var(--primary-color);
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .future-plans ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .future-plans li {
+            padding: 6px 14px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 16px;
+            font-size: 12px;
+            color: var(--primary-color);
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .content-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .stats-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>广告拦截演示</h1>
+            <p>体验净网护航的智能广告拦截功能</p>
+            <div class="divider"></div>
+        </div>
+
+        <div class="status-bar">
+            <span class="status-text">广告拦截状态:</span>
+            <span class="status-badge disabled" id="statusBadge">插件未开启</span>
+        </div>
+
+        <!-- 横幅展示 -->
+        <div class="demo-section">
+            <h2 class="section-title">横幅内容 <span class="demo-marker">DEMO</span></h2>
+            <div class="demo-banner" data-ad-demo="banner">
+                <h3>限时特惠！全场商品5折起</h3>
+                <p>点击立即抢购，数量有限，先到先得</p>
+                <a href="#" class="demo-btn">立即购买 →</a>
+            </div>
+        </div>
+
+        <div class="content-row">
+            <div class="main-content">
+                <h2>网络安全知识</h2>
+                <p>网络安全是指保护计算机网络系统及其数据免受未经授权的访问、使用、泄露、破坏或修改的技术和措施。随着互联网的快速发展，网络安全问题日益突出，各种网络攻击手段层出不穷。</p>
+                <p>为了保护个人信息安全，我们应该养成良好的上网习惯，使用安全的网络连接，定期更新系统和软件，不随意点击不明链接，不下载来源不明的文件。</p>
+                
+                <!-- 赞助展示 -->
+                <div class="demo-sponsor" data-ad-demo="sponsor">
+                    <span class="sponsor-label">SPONSORED</span>
+                    <h4>专业网络安全服务</h4>
+                    <p>企业级安全防护方案，保护您的数字资产</p>
+                </div>
+
+                <p>此外，安装可靠的安全插件也是保护网络安全的重要手段。这些插件可以帮助我们拦截恶意网站、阻止广告追踪、保护个人隐私等。</p>
+
+                <!-- 内嵌展示 -->
+                <div class="demo-embed-container" data-ad-demo="iframe">
+                    <div class="demo-embed">
+                        <div>
+                            <div style="font-size: 28px; margin-bottom: 10px;">📺</div>
+                            <div>视频内容区域</div>
+                            <div style="font-size: 12px; opacity: 0.7;">加载中...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <!-- 侧边栏展示1 -->
+                <div class="demo-sidebar" data-ad-demo="sidebar1">
+                    <h4>VIP会员专享</h4>
+                    <p>开通VIP，畅享无广告体验</p>
+                    <a href="#" class="demo-btn">立即开通</a>
+                </div>
+
+                <!-- 侧边栏展示2 -->
+                <div class="demo-sidebar" data-ad-demo="sidebar2">
+                    <h4>安全软件推荐</h4>
+                    <p>全方位保护您的设备安全</p>
+                    <a href="#" class="demo-btn">了解更多</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计面板 -->
+        <div class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">检测内容数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="blockedCount">0</div>
+                <div class="stat-label">已拦截</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="savedTime">0s</div>
+                <div class="stat-label">节省时间</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="dataSaved">0KB</div>
+                <div class="stat-label">节省流量</div>
+            </div>
+        </div>
+
+        <!-- 规则说明面板 -->
+        <div class="rules-panel">
+            <h3>智能广告识别策略</h3>
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <h4>🎯 演示模式</h4>
+                    <ul>
+                        <li>使用 data-ad-demo 属性</li>
+                        <li>精准识别演示广告</li>
+                        <li>便于比赛演示</li>
+                        <li>可控性强</li>
+                    </ul>
+                </div>
+                
+                <div class="rule-card">
+                    <h4>🌐 真实网站模式</h4>
+                    <ul>
+                        <li>关键词识别（banner, ad-）</li>
+                        <li>赞助内容识别（sponsor）</li>
+                        <li>弹窗广告拦截（popup）</li>
+                        <li>侧边栏广告过滤（sidebar）</li>
+                        <li>iframe广告清除</li>
+                    </ul>
+                </div>
+                
+                <div class="rule-card strict">
+                    <h4>🔥 Strict模式</h4>
+                    <ul>
+                        <li>DOM深度清理</li>
+                        <li>iframe彻底清除</li>
+                        <li>脚本广告过滤</li>
+                        <li>动态DOM监听</li>
+                        <li>极致净化体验</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 兼容说明 -->
+        <div class="compatibility-section">
+            <h3>真实网站兼容说明</h3>
+            <p>由于真实网站结构复杂，比赛版本采用「演示沙盒 + 通用规则」混合方案。插件在真实网站中同样支持：</p>
+            <ul>
+                <li>关键词广告识别</li>
+                <li>iframe过滤</li>
+                <li>动态DOM监听</li>
+                <li>多维度广告拦截</li>
+            </ul>
+            <div class="future-plans">
+                <h4>🔮 后续扩展方向</h4>
+                <ul>
+                    <li>AI广告识别</li>
+                    <li>视觉特征分析</li>
+                    <li>智能白名单机制</li>
+                    <li>误拦截率优化</li>
+                    <li>用户自定义规则</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>净网护航 · 守护您的网络安全</p>
+        </div>
+    </div>
+
+    <!-- 弹窗展示 -->
+    <div class="popup-overlay" id="popupOverlay" data-ad-demo="popup">
+        <div class="demo-popup">
+            <button class="popup-close" id="popupClose">×</button>
+            <div class="popup-icon">🎁</div>
+            <h3>恭喜您获得专属优惠</h3>
+            <p>点击领取您的专属福利大礼包</p>
+            <a href="#" class="popup-btn">立即领取</a>
+        </div>
+    </div>
+
+    <script>
+        const popupClose = document.getElementById('popupClose');
+        const popupOverlay = document.getElementById('popupOverlay');
+        const statusBadge = document.getElementById('statusBadge');
+        const blockedCount = document.getElementById('blockedCount');
+
+        popupClose.addEventListener('click', () => {
+            popupOverlay.classList.remove('active');
+        });
+
+        // 监听插件激活消息
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'NETGUARD_PLUGIN_ACTIVE') {
+                console.log('📡 接收到插件激活消息:', event.data);
+                
+                // 更新状态显示
+                const mode = event.data.mode || 'normal';
+                if (mode === 'strict') {
+                    statusBadge.textContent = 'Strict模式';
+                    statusBadge.className = 'status-badge strict';
+                } else {
+                    statusBadge.textContent = '插件已开启';
+                    statusBadge.className = 'status-badge active';
+                }
+                
+                // 延迟显示拦截统计
+                setTimeout(() => {
+                    // 统计带有data-ad-demo属性的元素数量
+                    const adElements = document.querySelectorAll('[data-ad-demo]');
+                    blockedCount.textContent = adElements.length;
+                }, 1000);
+            }
+        });
+
+        // 检测是否有内容脚本注入（通过检查extensionAPI）
+        function checkPluginStatus() {
+            if (window.extensionAPI) {
+                // 插件已注入
+                statusBadge.textContent = '插件已开启';
+                statusBadge.className = 'status-badge active';
+            }
+        }
+
+        // 页面加载后检查插件状态
+        document.addEventListener('DOMContentLoaded', () => {
+            checkPluginStatus();
+            
+            // 如果3秒后仍未收到消息，显示"插件未开启"
+            setTimeout(() => {
+                if (statusBadge.textContent === '插件未开启') {
+                    console.log('⚠️ 未检测到插件激活消息');
+                }
+            }, 3000);
+        });
+
+        setTimeout(() => {
+            popupOverlay.classList.add('active');
+        }, 3000);
+    </script>
+</body>
+</html>

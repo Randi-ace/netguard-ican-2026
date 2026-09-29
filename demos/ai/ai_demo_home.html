@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI风险检测演示大厅</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #eef2ff 0%, #e0e7ff 30%, #c7d2fe 60%, #ddd6fe 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1f2937;
+            overflow-x: hidden;
+        }
+
+        /* 背景网格 */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 粒子效果 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(139, 92, 246, 0.5);
+            border-radius: 50%;
+            animation: float 12s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* 容器 */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgba(75, 85, 99, 0.8);
+            margin-bottom: 30px;
+        }
+
+        .divider {
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* 风险卡片网格 */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* 风险卡片 */
+        .risk-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 35px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .risk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .risk-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+        }
+
+        .risk-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* 安全卡片 */
+        .safe-card {
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .safe-card::before {
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+        }
+
+        .safe-card:hover {
+            border-color: rgba(34, 197, 94, 0.6);
+            box-shadow: 0 25px 50px rgba(34, 197, 94, 0.2);
+        }
+
+        /* 低风险卡片 */
+        .low-card {
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .low-card::before {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }
+
+        .low-card:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 25px 50px rgba(59, 130, 246, 0.2);
+        }
+
+        /* 中风险卡片 */
+        .medium-card {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .medium-card::before {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        .medium-card:hover {
+            border-color: rgba(245, 158, 11, 0.6);
+            box-shadow: 0 25px 50px rgba(245, 158, 11, 0.2);
+        }
+
+        /* 高风险卡片 */
+        .high-card {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .high-card::before {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+
+        .high-card:hover {
+            border-color: rgba(239, 68, 68, 0.6);
+            box-shadow: 0 25px 50px rgba(239, 68, 68, 0.2);
+        }
+
+        /* 卡片内容 */
+        .card-icon {
+            font-size: 56px;
+            margin-bottom: 25px;
+            transition: transform 0.4s ease;
+        }
+
+        .risk-card:hover .card-icon {
+            transform: scale(1.2);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: rgba(75, 85, 99, 0.7);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            font-size: 12px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            background: rgba(139, 92, 246, 0.1);
+            color: #6366f1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .risk-score {
+            font-size: 12px;
+            color: rgba(75, 85, 99, 0.5);
+        }
+
+        .arrow {
+            font-size: 20px;
+            color: rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .risk-card:hover .arrow {
+            color: #8b5cf6;
+            transform: translateX(5px);
+        }
+
+        /* 底部 */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: rgba(75, 85, 99, 0.5);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .risk-grid {
+                gap: 20px;
+            }
+
+            .risk-card {
+                padding: 25px;
+            }
+
+            .card-icon {
+                font-size: 48px;
+            }
+
+            .card-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景网格 -->
+    <div class="bg-grid"></div>
+    
+    <!-- 粒子效果 -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 25%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 55%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 8s;"></div>
+        <div class="particle" style="left: 85%; animation-delay: 10s;"></div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon">🤖</span>
+                <span class="logo-text">AI风险检测演示大厅</span>
+            </div>
+            <p class="subtitle">基于AI语义分析技术，智能识别网页风险内容</p>
+            <div class="divider"></div>
+        </div>
+
+        <!-- 风险卡片网格 -->
+        <div class="risk-grid">
+            <!-- 安全内容 -->
+            <div class="risk-card safe-card" onclick="navigateTo('safe.html')">
+                <div class="card-icon">✅</div>
+                <h3 class="card-title">安全内容检测</h3>
+                <p class="card-desc">正常的学习、资讯、娱乐内容，无任何风险因素，可放心浏览。</p>
+                <div class="card-tags">
+                    <span class="tag">教育</span>
+                    <span class="tag">资讯</span>
+                    <span class="tag">安全</span>
+                </div>
+                <div class="card-footer">
+                    <span class="risk-score">风险评分: 0-10%</span>
+                    <span class="arrow">→</span>
+                </div>
+            </div>
+
+            <!-- 低风险内容 -->
+            <div class="risk-card low-card" onclick="navigateTo('low.html')">
+                <div class="card-icon">🔵</div>
+                <h3 class="card-title">低风险检测</h3>
+                <p class="card-desc">轻度营销推广内容，可能包含诱导点击，但不涉及诈骗风险。</p>
+                <div class="card-tags">
+                    <span class="tag">营销</span>
+                    <span class="tag">推广</span>
+                    <span class="tag">广告</span>
+                </div>
+                <div class="card-footer">
+                    <span class="risk-score">风险评分: 10-30%</span>
+                    <span class="arrow">→</span>
+                </div>
+            </div>
+
+            <!-- 中风险内容 -->
+            <div class="risk-card medium-card" onclick="navigateTo('medium.html')">
+                <div class="card-icon">⚠️</div>
+                <h3 class="card-title">中风险检测</h3>
+                <p class="card-desc">诱导消费或虚假宣传内容，存在一定的财产安全风险，需谨慎对待。</p>
+                <div class="card-tags">
+                    <span class="tag">诱导</span>
+                    <span class="tag">消费</span>
+                    <span class="tag">理财</span>
+                </div>
+                <div class="card-footer">
+                    <span class="risk-score">风险评分: 30-60%</span>
+                    <span class="arrow">→</span>
+                </div>
+            </div>
+
+            <!-- 高风险内容 -->
+            <div class="risk-card high-card" onclick="navigateTo('high.html')">
+                <div class="card-icon">🚨</div>
+                <h3 class="card-title">高风险诈骗检测</h3>
+                <p class="card-desc">包含中奖、转账、验证码等诈骗特征，存在严重财产安全风险。</p>
+                <div class="card-tags">
+                    <span class="tag">诈骗</span>
+                    <span class="tag">中奖</span>
+                    <span class="tag">转账</span>
+                </div>
+                <div class="card-footer">
+                    <span class="risk-score">风险评分: 60-100%</span>
+                    <span class="arrow">→</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <p class="footer-text">净网护航 · AI风险检测系统</p>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

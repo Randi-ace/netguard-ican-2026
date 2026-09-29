@@ -1,0 +1,13 @@
+/*
+ * 只隐藏 content.js 经过明确广告证据判定后标记的元素。
+ * 禁止使用普通静态资源路径或常规页面元素名作宽泛规则。
+ */
+.ad-hidden-strict {
+  display: none !important;
+}
+
+.ad-hidden-normal {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

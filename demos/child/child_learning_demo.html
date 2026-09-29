@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 学习网站演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+            min-height: 100vh;
+        }
+
+        /* 顶部安全提示 */
+        .safe-banner {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(22, 163, 74, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .safe-banner-content {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .safe-icon {
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* 模拟学习网站界面 */
+        .simulated-site {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        /* 网站头部 */
+        .site-header {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            padding: 25px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .site-logo {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .site-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        /* 课程导航 */
+        .site-nav {
+            background: rgba(34, 197, 94, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            background: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #166534;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(22, 163, 74, 0.1);
+            border-color: #16a34a;
+        }
+
+        .nav-item.active {
+            background: #22c55e;
+            color: white;
+        }
+
+        /* 课程卡片区域 */
+        .courses-section {
+            padding: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-badge {
+            background: rgba(34, 197, 94, 0.15);
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #166534;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* 课程卡片 */
+        .course-card {
+            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(34, 197, 94, 0.15);
+            border-color: #22c55e;
+        }
+
+        .course-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .course-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .course-tag {
+            padding: 4px 10px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 8px;
+            font-size: 11px;
+            color: #166534;
+        }
+
+        /* 学习进度 */
+        .progress-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .progress-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .progress-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #16a34a;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* 返回按钮 */
+        .back-section {
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.15);
+            transform: translateX(-5px);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .site-nav {
+                gap: 12px;
+            }
+
+            .nav-item {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部安全提示 -->
+    <div class="safe-banner">
+        <div class="safe-banner-content">
+            <span class="safe-icon">✅</span>
+            <span>儿童模式：学习内容已放行</span>
+            <span style="opacity: 0.7;">· 安全访问中</span>
+        </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 模拟学习网站界面 -->
+        <div class="simulated-site">
+            <!-- 网站头部 -->
+            <div class="site-header">
+                <div class="site-logo">📚</div>
+                <div class="site-title">智慧学堂 - 在线学习平台</div>
+            </div>
+
+            <!-- 导航栏 -->
+            <div class="site-nav">
+                <span class="nav-item active">推荐课程</span>
+                <span class="nav-item">数学</span>
+                <span class="nav-item">语文</span>
+                <span class="nav-item">英语</span>
+                <span class="nav-item">科学</span>
+                <span class="nav-item">艺术</span>
+            </div>
+
+            <!-- 课程区域 -->
+            <div class="courses-section">
+                <div class="section-header">
+                    <span class="section-title">
+                        <span>🔥</span>
+                        <span>热门课程</span>
+                    </span>
+                    <span class="section-badge">儿童友好 · 安全认证</span>
+                </div>
+                
+                <div class="courses-grid">
+                    <div class="course-card">
+                        <div class="course-image">🧮</div>
+                        <div class="course-title">趣味数学王国</div>
+                        <div class="course-meta">
+                            <span>👨‍🏫 李老师</span>
+                            <span>📊 5000+ 学员</span>
+                        </div>
+                        <div class="course-tags">
+                            <span class="course-tag">数学思维</span>
+                            <span class="course-tag">趣味学习</span>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-image">📖</div>
+                        <div class="course-title">经典名著阅读</div>
+                        <div class="course-meta">
+                            <span>👩‍🏫 王老师</span>
+                            <span>📊 8000+ 学员</span>
+                        </div>
+                        <div class="course-tags">
+                            <span class="course-tag">阅读理解</span>
+                            <span class="course-tag">文学素养</span>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-image">🔤</div>
+                        <div class="course-title">英语启蒙乐园</div>
+                        <div class="course-meta">
+                            <span>👨‍🏫 张老师</span>
+                            <span>📊 12000+ 学员</span>
+                        </div>
+                        <div class="course-tags">
+                            <span class="course-tag">英语启蒙</span>
+                            <span class="course-tag">口语练习</span>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-image">🔬</div>
+                        <div class="course-title">科学小实验</div>
+                        <div class="course-meta">
+                            <span>👩‍🏫 陈老师</span>
+                            <span>📊 6000+ 学员</span>
+                        </div>
+                        <div class="course-tags">
+                            <span class="course-tag">科学探索</span>
+                            <span class="course-tag">动手实践</span>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-image">🎨</div>
+                        <div class="course-title">创意美术课</div>
+                        <div class="course-meta">
+                            <span>👨‍🏫 刘老师</span>
+                            <span>📊 4500+ 学员</span>
+                        </div>
+                        <div class="course-tags">
+                            <span class="course-tag">绘画基础</span>
+                            <span class="course-tag">创造力</span>
+                        </div>
+                    </div>
+
+                    <div class="course-card">
+                        <div class="course-image">🎵</div>
+                        <div class="course-title">音乐启蒙</div>
+                        <div class="course-meta">
+                            <span>👩‍🏫 赵老师</span>
+                            <span>📊 3800+ 学员</span>
+                        </div>
+                        <div class="course-tags">
+                            <span class="course-tag">音乐欣赏</span>
+                            <span class="course-tag">节奏感</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 学习进度 -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <div class="progress-icon">📈</div>
+                <div class="progress-title">我的学习进度</div>
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-card">
+                    <div class="stat-value">28</div>
+                    <div class="stat-label">已完成课程</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">126</div>
+                    <div class="stat-label">学习时长(分钟)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">完成率</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">🎖️</div>
+                    <div class="stat-label">学习之星</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 返回按钮 -->
+        <div class="back-section">
+        <a href="child_demo_home.html" class="back-btn">
+                <span>←</span>
+                <span>返回演示大厅</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

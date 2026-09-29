@@ -1,0 +1,261 @@
+{
+  "model_name": "SmartGuard text risk classifier",
+  "model_version": "tfidf-logreg-v2-char",
+  "created_at": "2026-09-25T02:31:02.587865Z",
+  "dataset_version": "ai-text-dataset-v2-f6-340",
+  "dataset_sha256": "a46692ad3e4816021d875a836319feb0ad6ffdb5f2718308a5b88a877b148218",
+  "dataset_source_commit": "6521c9241e1a8371671a1333086a0aa34b308e8e",
+  "training_code_commit": "6cbaa0da5ac147e93d8ca19ffd67e0ba99729fc1",
+  "artifact": {
+    "path": "models/ai/tfidf-logreg-v2-char.joblib",
+    "sha256": "fd305f1c81c5b7a689cf212107a7ff6547a85d8abcd8db23e37d45585a9c0fde",
+    "type": "sklearn.pipeline.Pipeline",
+    "pipeline_steps": [
+      "tfidf",
+      "classifier"
+    ]
+  },
+  "dataset": {
+    "path": "tests/samples/ai-text-dataset.csv",
+    "training_split": "train",
+    "training_samples": 250,
+    "validation_split": "val",
+    "validation_samples": 45,
+    "test_split_used": false
+  },
+  "classes": [
+    "adult",
+    "gambling",
+    "malicious",
+    "normal",
+    "phishing",
+    "scam"
+  ],
+  "model_params": {
+    "feature_combination": "single char TF-IDF",
+    "char_vectorizer": {
+      "analyzer": "char",
+      "ngram_range": [
+        2,
+        5
+      ],
+      "min_df": 1,
+      "sublinear_tf": true
+    },
+    "classifier": {
+      "C": 4.0,
+      "class_weight": "balanced",
+      "max_iter": 2000,
+      "random_state": 42,
+      "solver": "lbfgs"
+    }
+  },
+  "prediction_contract": {
+    "ai_score": "1 - P(normal)",
+    "ai_category": "argmax(probability)",
+    "ai_confidence": "max(probability)",
+    "binary_label": "not_risk when ai_category == normal, otherwise risk"
+  },
+  "versions": {
+    "python": "3.12.10",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "validation_metrics": {
+    "sample_count": 45,
+    "binary": {
+      "positive_class": "risk",
+      "accuracy": 0.9777777777777777,
+      "precision": 1.0,
+      "recall": 0.9666666666666667,
+      "f1": 0.9830508474576272,
+      "confusion_matrix_labels": [
+        "not_risk",
+        "risk"
+      ],
+      "confusion_matrix": [
+        [
+          15,
+          0
+        ],
+        [
+          1,
+          29
+        ]
+      ],
+      "tn": 15,
+      "fp": 0,
+      "fn": 1,
+      "tp": 29
+    },
+    "category": {
+      "accuracy": 0.9777777777777777,
+      "macro_f1": 0.9794721407624634,
+      "per_class": {
+        "adult": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 6
+        },
+        "gambling": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 6
+        },
+        "malicious": {
+          "precision": 1.0,
+          "recall": 0.8333333333333334,
+          "f1": 0.9090909090909091,
+          "support": 6
+        },
+        "normal": {
+          "precision": 0.9375,
+          "recall": 1.0,
+          "f1": 0.967741935483871,
+          "support": 15
+        },
+        "phishing": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 6
+        },
+        "scam": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 6
+        }
+      },
+      "confusion_matrix_labels": [
+        "adult",
+        "gambling",
+        "malicious",
+        "normal",
+        "phishing",
+        "scam"
+      ],
+      "confusion_matrix": [
+        [
+          6,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          15,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ]
+      ]
+    },
+    "error_count": 1,
+    "errors": [
+      {
+        "id": "AI-0296",
+        "true_label": "risk",
+        "predicted_label": "not_risk",
+        "true_category": "malicious",
+        "ai_category": "normal",
+        "ai_score": 0.7497381428691452,
+        "ai_confidence": 0.25026185713085475
+      }
+    ],
+    "confidence": {
+      "min": 0.22970117891648612,
+      "max": 0.7611641356484494,
+      "mean": 0.38489058792551417,
+      "median": 0.37204920124744917
+    },
+    "f5_cases": [
+      {
+        "id": "AI-0069",
+        "true_label": "risk",
+        "true_category": "scam",
+        "predicted_category": "scam",
+        "ai_score": 0.8121459964530471,
+        "confidence": 0.4199031122743585,
+        "correct": true
+      },
+      {
+        "id": "AI-0070",
+        "true_label": "risk",
+        "true_category": "scam",
+        "predicted_category": "scam",
+        "ai_score": 0.8326428757214707,
+        "confidence": 0.4808840498527507,
+        "correct": true
+      },
+      {
+        "id": "AI-0223",
+        "true_label": "risk",
+        "true_category": "scam",
+        "predicted_category": "scam",
+        "ai_score": 0.7795742754827536,
+        "confidence": 0.3375330590208603,
+        "correct": true
+      },
+      {
+        "id": "AI-0163",
+        "true_label": "not_risk",
+        "true_category": "normal",
+        "predicted_category": "normal",
+        "ai_score": 0.6374490447680756,
+        "confidence": 0.3625509552319244,
+        "correct": true
+      },
+      {
+        "id": "AI-0169",
+        "true_label": "not_risk",
+        "true_category": "normal",
+        "predicted_category": "normal",
+        "ai_score": 0.6204159199299906,
+        "confidence": 0.37958408007000943,
+        "correct": true
+      }
+    ],
+    "normal_hard_negative_false_positives": [],
+    "scam_false_positives": []
+  },
+  "test_macro_f1": null,
+  "test_split_used": false
+}

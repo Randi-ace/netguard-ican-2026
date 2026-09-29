@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成人娱乐 - 成人内容</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 50%, #0f0f1a 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+        .age-verification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .age-content {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+        }
+        .age-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .age-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #ff6b9d;
+        }
+        .age-desc {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .age-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .age-btn {
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        .age-btn.confirm {
+            background: linear-gradient(90deg, #ff6b9d, #c084fc);
+            color: #fff;
+        }
+        .age-btn.confirm:hover { transform: scale(1.05); }
+        .age-btn.reject {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff6b9d;
+        }
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 50px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            color: #fff;
+        }
+        .user-actions {
+            display: flex;
+            gap: 20px;
+        }
+        .user-btn {
+            padding: 8px 20px;
+            background: linear-gradient(90deg, #ff6b9d, #c084fc);
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        .category-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 25px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab:hover, .tab.active {
+            background: linear-gradient(90deg, #ff6b9d, #c084fc);
+            border-color: transparent;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+        .content-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .content-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255,107,157,0.3);
+        }
+        .content-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #ff6b9d, #c084fc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            position: relative;
+        }
+        .duration-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .content-info {
+            padding: 12px;
+        }
+        .content-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .content-meta {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+        .featured-section {
+            margin-bottom: 40px;
+        }
+        .featured-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ff6b9d;
+        }
+        .featured-banner {
+            background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(192,132,252,0.2));
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,107,157,0.3);
+        }
+        .featured-text {
+            flex: 1;
+        }
+        .featured-headline {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .featured-desc {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 20px;
+        }
+        .featured-button {
+            background: linear-gradient(90deg, #ff6b9d, #c084fc);
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .featured-image {
+            width: 200px;
+            height: 150px;
+            background: rgba(255,107,157,0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.4);
+            font-size: 12px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="age-verification" id="ageCheck">
+        <div class="age-content">
+            <div class="age-icon">🔞</div>
+            <h2 class="age-title">成人内容验证</h2>
+            <p class="age-desc">本网站包含成人内容，仅限18岁以上人士访问。请确认您已年满18周岁。</p>
+            <div class="age-buttons">
+                <button class="age-btn confirm" onclick="enterSite()">我已年满18岁</button>
+                <button class="age-btn reject" onclick="leaveSite()">返回</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="header" id="mainHeader" style="display: none;">
+        <div class="logo">🔞 VIP成人娱乐</div>
+        <input type="text" class="search-bar" placeholder="搜索内容...">
+        <div class="user-actions">
+            <button class="user-btn">登录</button>
+            <button class="user-btn">注册VIP</button>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent" style="display: none;">
+        <div class="featured-section">
+            <h2 class="featured-title">🔥 热门推荐</h2>
+            <div class="featured-banner">
+                <div class="featured-text">
+                    <div class="featured-headline">🎬 本周精选</div>
+                    <div class="featured-desc">最新高清内容，独家首发</div>
+                    <button class="featured-button">立即观看</button>
+                </div>
+                <div class="featured-image">🎥</div>
+            </div>
+        </div>
+
+        <div class="category-tabs">
+            <div class="tab active">全部</div>
+            <div class="tab">热门</div>
+            <div class="tab">最新</div>
+            <div class="tab">精选</div>
+            <div class="tab">HD高清</div>
+            <div class="tab">VR专区</div>
+        </div>
+
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="content-thumbnail">👩</div>
+                <div class="content-info">
+                    <div class="content-title">精选视频 #12345</div>
+                    <div class="content-meta">1080p HD · 25分钟</div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="content-thumbnail">👨</div>
+                <div class="content-info">
+                    <div class="content-title">独家发布 #8877</div>
+                    <div class="content-meta">4K UHD · 45分钟</div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="content-thumbnail">💋</div>
+                <div class="content-info">
+                    <div class="content-title">热门合集 #6655</div>
+                    <div class="content-meta">1080p HD · 60分钟</div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="content-thumbnail">🔥</div>
+                <div class="content-info">
+                    <div class="content-title">新上线 #2233</div>
+                    <div class="content-meta">1080p HD · 30分钟</div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="content-thumbnail">⭐</div>
+                <div class="content-info">
+                    <div class="content-title">精选推荐 #9988</div>
+                    <div class="content-meta">4K UHD · 50分钟</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer" id="mainFooter" style="display: none;">
+        <p>本网站仅供成人娱乐使用</p>
+        <p>请合理安排时间，适度娱乐</p>
+    </div>
+
+    <script>
+        function enterSite() {
+            document.getElementById('ageCheck').style.display = 'none';
+            document.getElementById('mainHeader').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('mainFooter').style.display = 'block';
+        }
+        function leaveSite() {
+            window.location.href = 'https://www.baidu.com';
+        }
+    </script>
+</body>
+</html>

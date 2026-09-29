@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>净网护航风险弹窗测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .test-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        .test-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .test-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
+        }
+        .test-card.high-risk {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        .test-card.medium-risk {
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+        .test-card.safe {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        .test-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .test-desc {
+            color: #64748b;
+            font-size: 14px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .badge.high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .badge.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .badge.safe {
+            background: #d1fae5;
+            color: #059669;
+        }
+        .info-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h1>🔒 净网护航风险弹窗测试</h1>
+        <p class="subtitle">测试不同风险级别的弹窗显示效果</p>
+        
+        <div class="info-box">
+            <strong>测试说明：</strong><br>
+            1. 确保 Flask 后端服务正在运行<br>
+            2. 确保插件已安装并启用<br>
+            3. 打开浏览器控制台查看调试日志<br>
+            4. 等待约2秒后AI检测完成
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 测试内容</h2>
+        
+        <div class="test-card high-risk">
+            <span class="badge high">高风险</span>
+            <div class="test-title">赌博相关内容</div>
+            <div class="test-desc">欢迎来到我们的在线赌博网站，赌球赢大奖，注册即送100元！</div>
+        </div>
+
+        <div class="test-card high-risk">
+            <span class="badge high">高风险</span>
+            <div class="test-title">诈骗相关内容</div>
+            <div class="test-desc">您的账户存在异常，请点击链接进行安全验证，需要您的验证码。</div>
+        </div>
+
+        <div class="test-card high-risk">
+            <span class="badge high">高风险</span>
+            <div class="test-title">刷单诈骗内容</div>
+            <div class="test-desc">在家兼职赚钱，日结工资，轻松刷单，简单任务，无需押金。</div>
+        </div>
+
+        <div class="test-card medium-risk">
+            <span class="badge medium">中风险</span>
+            <div class="test-title">金融投资内容</div>
+            <div class="test-desc">高收益理财项目，年化收益率高达30%，投资有风险，入市需谨慎。</div>
+        </div>
+
+        <div class="test-card medium-risk">
+            <span class="badge medium">中风险</span>
+            <div class="test-title">促销优惠内容</div>
+            <div class="test-desc">限时红包领取，点击立即获得优惠券，先到先得！</div>
+        </div>
+
+        <div class="test-card safe">
+            <span class="badge safe">安全</span>
+            <div class="test-title">正常内容</div>
+            <div class="test-desc">这是一段正常的文本内容，关于天气、新闻和科技资讯。</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 测试步骤</h2>
+        <ol style="color: #475569; line-height: 1.8;">
+            <li>确保 Flask 服务运行在 http://127.0.0.1:5000</li>
+            <li>在 Edge 浏览器中打开此测试页面</li>
+            <li>打开开发者工具 (F12)</li>
+            <li>查看 Console 面板中的调试日志</li>
+            <li>等待约2秒后，高/中风险内容会触发弹窗</li>
+            <li>测试弹窗的关闭功能（手动关闭和自动关闭）</li>
+        </ol>
+    </div>
+</body>
+</html>

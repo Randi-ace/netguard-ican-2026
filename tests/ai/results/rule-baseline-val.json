@@ -1,0 +1,400 @@
+{
+  "evaluation_name": "first-stage-rule-baseline-validation",
+  "evaluation_version": "rule-baseline-v1",
+  "evaluated_at": "2026-09-21T05:29:45.054297Z",
+  "git_commit": "756f9a97975d883025261b0e952cadfa00b7e70b",
+  "dataset_path": "tests/samples/ai-text-dataset.csv",
+  "dataset_sha256": "e8ad00385193e701f12f394ec2776b2d728dcfafa8d1f760f1b6c54602d8fec3",
+  "dataset_split": "val",
+  "sample_count": 45,
+  "positive_class": "risk",
+  "rule_engine": "backend.services.ai_service.AIService.analyze_text",
+  "rule_input": "text",
+  "prediction_mapping": {
+    "safe": "not_risk",
+    "low": "risk",
+    "medium": "risk",
+    "high": "risk"
+  },
+  "accuracy": 0.4444444444444444,
+  "precision": 0.6086956521739131,
+  "recall": 0.4666666666666667,
+  "f1": 0.5283018867924527,
+  "confusion_matrix": [
+    [
+      6,
+      9
+    ],
+    [
+      16,
+      14
+    ]
+  ],
+  "tn": 6,
+  "fp": 9,
+  "fn": 16,
+  "tp": 14,
+  "positive_support": 30,
+  "negative_support": 15,
+  "category_breakdown": {
+    "normal": {
+      "sample_count": 15,
+      "correct": 6,
+      "incorrect": 9
+    },
+    "phishing": {
+      "sample_count": 6,
+      "correct": 3,
+      "incorrect": 3
+    },
+    "scam": {
+      "sample_count": 6,
+      "correct": 4,
+      "incorrect": 2
+    },
+    "gambling": {
+      "sample_count": 6,
+      "correct": 1,
+      "incorrect": 5
+    },
+    "adult": {
+      "sample_count": 6,
+      "correct": 5,
+      "incorrect": 1
+    },
+    "malicious": {
+      "sample_count": 6,
+      "correct": 1,
+      "incorrect": 5
+    }
+  },
+  "false_positives": [
+    {
+      "id": "AI-0029",
+      "title": "商城退款进度说明",
+      "text": "商城服务条款说明，退款进度可在原订单中查询，款项只会退回付款账户。平台客服不会发送二维码要求重新认证。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "medium",
+      "rule_score": 0.65,
+      "rule_reason": "检测到客服相关内容，需谨慎",
+      "category": "normal",
+      "group_id": "normal-ecommerce-refund-002",
+      "note": "normal-service-policy"
+    },
+    {
+      "id": "AI-0030",
+      "title": "订单取消与退款时限",
+      "text": "消费者取消订单后，系统将在审核完成时发送站内通知。任何要求提供验证码才能退款的私信都不属于官方处理流程。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到敏感信息请求",
+      "category": "normal",
+      "group_id": "normal-ecommerce-refund-002",
+      "note": "normal-service-policy"
+    },
+    {
+      "id": "AI-0031",
+      "title": "网络警务安全公开课",
+      "text": "网警公开课提醒公众不要下载陌生人发送的办案软件，公安机关不会在线检查个人银行卡余额，也不会远程操作群众设备。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到可疑转账请求",
+      "category": "normal",
+      "group_id": "normal-cyberpolice-warning-002",
+      "note": "hard-negative-police-alert"
+    },
+    {
+      "id": "AI-0032",
+      "title": "冒充公职人员案例通报",
+      "text": "安全通报分析冒充公职人员的常见流程，强调接到冻结账户威胁时应使用公开渠道核验，而不是按来电者要求转账。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到可疑转账请求",
+      "category": "normal",
+      "group_id": "normal-cyberpolice-warning-002",
+      "note": "hard-negative-police-alert"
+    },
+    {
+      "id": "AI-0163",
+      "title": "企业钓鱼邮件识别演练",
+      "text": "公司安全演练邮件模拟账号到期通知，正文明确标注培训用途，并要求员工只在演练平台选择可疑点而不输入密码。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到敏感信息请求",
+      "category": "normal",
+      "group_id": "normal-enterprise-drill-v2-001",
+      "note": "hard-negative-phishing-education"
+    },
+    {
+      "id": "AI-0166",
+      "title": "社区转账安全咨询日",
+      "text": "社区银行联合举办转账安全咨询，工作人员现场演示如何核对收款人，不接受居民提供银行卡密码。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到可疑转账请求",
+      "category": "normal",
+      "group_id": "normal-community-transfer-v2-001",
+      "note": "hard-negative-payment-safety"
+    },
+    {
+      "id": "AI-0167",
+      "title": "老年人汇款核验课堂",
+      "text": "老年课堂提醒，亲友通过新号码借钱时应先拨打原号码或当面确认，不能只听语音消息就转账。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到可疑转账请求",
+      "category": "normal",
+      "group_id": "normal-community-transfer-v2-001",
+      "note": "hard-negative-antifraud"
+    },
+    {
+      "id": "AI-0168",
+      "title": "居民资金安全手册",
+      "text": "志愿者发放支付安全手册，说明客服、警察和银行都不会要求把存款转入个人名下的安全账户。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到可疑转账请求",
+      "category": "normal",
+      "group_id": "normal-community-transfer-v2-001",
+      "note": "hard-negative-antifraud"
+    },
+    {
+      "id": "AI-0170",
+      "title": "应用内容审核政策",
+      "text": "应用商店规则禁止以私密聊天为名引流色情服务，开发者可在政策中心查看审核标准和申诉方式。",
+      "true_label": "not_risk",
+      "predicted_label": "risk",
+      "rule_level": "high",
+      "rule_score": 0.95,
+      "rule_reason": "检测到色情相关内容",
+      "category": "normal",
+      "group_id": "normal-platform-governance-v2-001",
+      "note": "hard-negative-content-governance"
+    }
+  ],
+  "false_negatives": [
+    {
+      "id": "AI-0054",
+      "title": "个人主页限制解除",
+      "text": "页面伪装成社区服务团队，以恢复被限制的个人主页为由索取账号凭据，并要求用户在十五分钟内提交。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "phishing",
+      "group_id": "phishing-social-appeal-001",
+      "note": "phishing-credential-harvest"
+    },
+    {
+      "id": "AI-0070",
+      "title": "演出门票快速成交",
+      "text": "二手票务帖子要求买家先付全款到个人收款码，卖家承诺稍后发票，却不允许使用平台担保交易。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "scam",
+      "group_id": "scam-ticket-privatepay-001",
+      "note": "scam-private-payment"
+    },
+    {
+      "id": "AI-0085",
+      "title": "彩票开奖内部预测",
+      "text": "所谓预测大师出售彩票开奖内部号码，声称付费加入会员后可以持续获得必中组合，并引导用户参与投注。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "gambling",
+      "group_id": "gambling-lottery-prediction-001",
+      "note": "gambling-lottery"
+    },
+    {
+      "id": "AI-0101",
+      "title": "成人内容弹窗推广",
+      "text": "影视页面弹出成人内容广告，关闭按钮会跳转到限制级站点，弹窗还反复提示开通付费会员。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "adult",
+      "group_id": "adult-popup-redirect-001",
+      "note": "adult-content-promotion"
+    },
+    {
+      "id": "AI-0117",
+      "title": "远程办公客户端升级",
+      "text": "远程办公通知要求安装一个陌生控制工具并授予无人值守权限，下载地址不属于公司软件中心。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "malicious",
+      "group_id": "malicious-remote-tool-001",
+      "note": "malware-download"
+    },
+    {
+      "id": "AI-0118",
+      "title": "技术支持远程维护",
+      "text": "页面冒充内部技术支持，要求员工运行外部远程程序并提供永久访问权限，以便所谓工程师夜间维护电脑。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "malicious",
+      "group_id": "malicious-remote-tool-001",
+      "note": "malicious-remote-access"
+    },
+    {
+      "id": "AI-0198",
+      "title": "信用卡风险交易确认",
+      "text": "仿冒信用卡中心的页面提示风险交易待确认，诱导持卡人填写登录口令和动态验证信息。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "phishing",
+      "group_id": "phishing-bank-freeze-v2-001",
+      "note": "phishing-financial-credential"
+    },
+    {
+      "id": "AI-0199",
+      "title": "保密会议议程查阅",
+      "text": "会议邀请邮件要求员工登录外部站点读取保密议程，页面复制公司单点登录样式并保存输入凭据。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "phishing",
+      "group_id": "phishing-meeting-doc-v2-001",
+      "note": "phishing-corp-login"
+    },
+    {
+      "id": "AI-0224",
+      "title": "免抵押额度确认",
+      "text": "所谓信贷经理称额度已经批准，但必须向私人收款码缴纳担保费才能签署合同。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "scam",
+      "group_id": "scam-loan-fee-v2-001",
+      "note": "scam-loan"
+    },
+    {
+      "id": "AI-0245",
+      "title": "轮盘新客充值加倍",
+      "text": "轮盘娱乐平台宣称新用户充值翻倍，下注满指定流水即可申请提款，并提供全天候代充。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "gambling",
+      "group_id": "gambling-casino-wheel-v2-001",
+      "note": "gambling-casino"
+    },
+    {
+      "id": "AI-0246",
+      "title": "真人轮盘试玩大厅",
+      "text": "网页以试玩名义赠送少量筹码，获得收益后必须充值解锁真人轮盘和现金提现。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "gambling",
+      "group_id": "gambling-casino-wheel-v2-001",
+      "note": "gambling-casino"
+    },
+    {
+      "id": "AI-0247",
+      "title": "赛马内部消息推荐",
+      "text": "赛马资讯账号发布赔率和下注链接，承诺充值即可跟随内部消息押注当日热门场次。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "gambling",
+      "group_id": "gambling-racing-v2-001",
+      "note": "gambling-sports-betting"
+    },
+    {
+      "id": "AI-0248",
+      "title": "马术赛事竞猜社区",
+      "text": "所谓马术交流社区实际组织现金竞猜，管理员按场次收取赌注并在群内公布输赢。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "gambling",
+      "group_id": "gambling-racing-v2-001",
+      "note": "gambling-underground-platform"
+    },
+    {
+      "id": "AI-0293",
+      "title": "远程会议客户端",
+      "text": "压缩包内的会议客户端没有数字签名，启动后静默下载木马并创建计划任务保持运行。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "malicious",
+      "group_id": "malicious-meeting-client-v2-001",
+      "note": "malware-download"
+    },
+    {
+      "id": "AI-0294",
+      "title": "会议软件升级程序",
+      "text": "仿冒会议软件安装器要求管理员权限，安装界面结束后仍有未知进程连接外部控制服务器。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "malicious",
+      "group_id": "malicious-meeting-client-v2-001",
+      "note": "malware-download"
+    },
+    {
+      "id": "AI-0296",
+      "title": "商家订单管理助手",
+      "text": "卖家提供的订单管理软件要求关闭防护后安装，并在后台上传本机文档和登录凭据。",
+      "true_label": "risk",
+      "predicted_label": "not_risk",
+      "rule_level": "safe",
+      "rule_score": 0.05,
+      "rule_reason": "未发现风险内容",
+      "category": "malicious",
+      "group_id": "malicious-tracking-tool-v2-001",
+      "note": "malicious-information-stealer"
+    }
+  ]
+}

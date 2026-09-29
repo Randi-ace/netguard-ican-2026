@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老人模式测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        h2 {
+            color: #374151;
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mode-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            min-width: 140px;
+        }
+        .btn-enable {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .btn-enable:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+        }
+        .btn-disable {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+        }
+        .btn-disable:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(107, 114, 128, 0.4);
+        }
+        .info-box {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 13px;
+            color: #4b5563;
+            margin-top: 16px;
+        }
+        .test-content {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .test-content p {
+            margin: 0 0 12px 0;
+            color: #374151;
+            line-height: 1.6;
+        }
+        .test-content p:last-child {
+            margin-bottom: 0;
+        }
+        .sidebar {
+            float: right;
+            width: 250px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        .sidebar h3 {
+            margin-top: 0;
+            color: #64748b;
+        }
+        .comment-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fffbeb;
+            border-radius: 8px;
+            border: 1px dashed #f59e0b;
+        }
+        .input-test {
+            margin-top: 16px;
+            padding: 16px;
+            background: #eff6ff;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+        .input-group {
+            margin-bottom: 12px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+        }
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .risk-links {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fee2e2;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+        }
+        .risk-links a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            background: white;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #374151;
+        }
+        .status-panel {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f0fdf4;
+            border-radius: 8px;
+            border: 1px solid #bbf7d0;
+        }
+        .status-title {
+            font-weight: 600;
+            color: #16a34a;
+            margin-bottom: 12px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dcfce7;
+        }
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        .status-label {
+            color: #4ade80;
+        }
+        .status-value {
+            color: #166534;
+            font-weight: 500;
+        }
+        iframe {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>👴 净网护航 - 老人模式测试</h1>
+
+    <div class="test-section">
+        <h2>⚙️ 老人模式控制</h2>
+        <button class="mode-btn btn-enable" onclick="enableElderMode()">启用老人模式</button>
+        <button class="mode-btn btn-disable" onclick="disableElderMode()">关闭老人模式</button>
+        
+        <div class="info-box">
+            <strong>老人模式功能：</strong><br>
+            - 🔍 字体放大（默认1.35倍）<br>
+            - 🧹 页面简化（隐藏侧边栏、评论等）<br>
+            - ⚠️ 风险关键词高亮<br>
+            - 💡 风险提示增强
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h3>📌 侧边栏内容</h3>
+        <p>这是侧边栏内容，在页面简化模式下应该被隐藏。</p>
+        <ul>
+            <li>相关链接 1</li>
+            <li>相关链接 2</li>
+            <li>相关链接 3</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📝 文本阅读测试</h2>
+        <div class="test-content">
+            <h3>文章标题示例</h3>
+            <p>这是一段测试文本，用于验证老人模式下的字体放大效果。老人模式会增大字体大小、增加行间距，使阅读更加舒适。</p>
+            <p>在老人模式下，所有文本内容都会被放大，包括段落、列表、表格等。同时，链接会变得更加醒目，按钮也会更大更易点击。</p>
+            <ul>
+                <li>列表项 1：测试字体放大效果</li>
+                <li>列表项 2：测试行间距增加</li>
+                <li>列表项 3：测试整体可读性</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📧 表单输入测试</h2>
+        <div class="input-test">
+            <p><strong>输入框测试（不应被风险高亮影响）：</strong></p>
+            <div class="input-group">
+                <label>用户名：</label>
+                <input type="text" placeholder="请输入用户名">
+            </div>
+            <div class="input-group">
+                <label>密码：</label>
+                <input type="password" placeholder="请输入密码">
+            </div>
+            <div class="input-group">
+                <label>验证码：</label>
+                <input type="text" placeholder="请输入验证码">
+            </div>
+            <div class="input-group">
+                <label>留言：</label>
+                <textarea rows="3" placeholder="请输入留言内容"></textarea>
+            </div>
+            <button style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                提交
+            </button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>⚠️ 风险链接测试</h2>
+        <div class="risk-links">
+            <p><strong>包含风险关键词的链接（应被红色高亮）：</strong></p>
+            <a href="#" onclick="alert('测试链接')">🎁 免费领取红包</a>
+            <a href="#" onclick="alert('测试链接')">💰 立即转账</a>
+            <a href="#" onclick="alert('测试链接')">📞 客服中心</a>
+            <a href="#" onclick="alert('测试链接')">🎮 赌博游戏</a>
+            <a href="#" onclick="alert('测试链接')">💸 高收益投资</a>
+            <a href="#" onclick="alert('测试链接')">📱 扫码领取</a>
+        </div>
+    </div>
+
+    <div class="comment-section">
+        <h3>💬 评论区（页面简化模式下应隐藏）</h3>
+        <p><strong>用户评论 1：</strong>这是一条测试评论内容。</p>
+        <p><strong>用户评论 2：</strong>这是另一条测试评论内容。</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 当前状态</h2>
+        <div class="status-panel" id="statusPanel">
+            <div class="status-title">🔄 点击按钮查看状态</div>
+        </div>
+    </div>
+
+    <script>
+        function enableElderMode() {
+            if (chrome && chrome.storage && chrome.storage.local) {
+                const settings = {
+                    enabled: true,
+                    fontScale: 1.35,
+                    riskHighlight: true,
+                    pageSimplify: true
+                };
+                chrome.storage.local.set({ elderSettings: settings }, () => {
+                    alert('已启用老人模式');
+                    checkStatus();
+                });
+            } else {
+                alert('插件存储不可用，请确保插件已安装');
+            }
+        }
+
+        function disableElderMode() {
+            if (chrome && chrome.storage && chrome.storage.local) {
+                const settings = {
+                    enabled: false,
+                    fontScale: 1.35,
+                    riskHighlight: true,
+                    pageSimplify: false
+                };
+                chrome.storage.local.set({ elderSettings: settings }, () => {
+                    alert('已关闭老人模式');
+                    checkStatus();
+                });
+            } else {
+                alert('插件存储不可用');
+            }
+        }
+
+        function checkStatus() {
+            if (chrome && chrome.storage && chrome.storage.local) {
+                chrome.storage.local.get('elderSettings', (res) => {
+                    const settings = res.elderSettings || {};
+                    
+                    const panel = document.getElementById('statusPanel');
+                    panel.innerHTML = `
+                        <div class="status-title">✅ 当前状态</div>
+                        <div class="status-item">
+                            <span class="status-label">老人模式：</span>
+                            <span class="status-value">${settings.enabled ? '已启用' : '已关闭'}</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">字体缩放：</span>
+                            <span class="status-value">${settings.fontScale || 1.35}x</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">风险高亮：</span>
+                            <span class="status-value">${settings.riskHighlight ? '开启' : '关闭'}</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">页面简化：</span>
+                            <span class="status-value">${settings.pageSimplify ? '开启' : '关闭'}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                alert('插件存储不可用');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkStatus();
+        });
+    </script>
+</body>
+</html>

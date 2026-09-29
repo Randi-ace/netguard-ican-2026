@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="净网护航 PageContext、AI 与 Fusion 安全演示页面入口。">
+  <title>AI 上下文专项演示</title>
+  <link rel="stylesheet" href="context-demo.css">
+</head>
+<body>
+  <header>
+    <div class="eyebrow">SmartGuard · Safe Local Demo</div>
+    <h1>AI 上下文专项演示</h1>
+    <p>用于验证 PageContext、语义识别、Fusion、插件提示与规则降级。</p>
+  </header>
+  <main>
+    <div class="notice safe">所有页面均为本地虚构内容，不连接外部服务，也不提交任何表单。</div>
+    <section class="scenario-grid" aria-label="演示场景">
+      <a href="normal.html"><strong>普通网页</strong><br><span class="muted">预期正常放行</span></a>
+      <a href="anti_fraud_education.html"><strong>反诈宣传</strong><br><span class="muted">风险词存在，但语义安全</span></a>
+      <a href="fake_refund.html"><strong>虚假退款</strong><br><span class="muted">预期 Fusion high</span></a>
+      <a href="fake_prize.html"><strong>虚假中奖</strong><br><span class="muted">奖励诱导与限时操作</span></a>
+      <a href="phishing.html"><strong>钓鱼验证</strong><br><span class="muted">同时验证隐私区域过滤</span></a>
+    </section>
+  </main>
+  <footer>建议通过 http://127.0.0.1:8080/demos/ai/context/ 打开并使用 Edge DevTools 取证。</footer>
+</body>
+</html>
+

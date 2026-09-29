@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中风险内容 - AI风险检测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #eef2ff 0%, #e0e7ff 30%, #c7d2fe 60%, #ddd6fe 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(75, 85, 99, 0.7);
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .card-content {
+            font-size: 15px;
+            color: rgba(75, 85, 99, 0.9);
+            line-height: 1.8;
+        }
+
+        .card-content p {
+            margin-bottom: 15px;
+        }
+
+        /* 诱导内容卡片 */
+        .induce-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .induce-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #fbbf24;
+        }
+
+        .induce-highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .induce-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            border-radius: 30px;
+            color: #1f2937;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .induce-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        /* 风险警告 */
+        .risk-warning {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: rgba(245, 158, 11, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .warning-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            font-size: 14px;
+            color: rgba(75, 85, 99, 0.9);
+        }
+
+        .warning-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #f59e0b;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 28px;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="risk-badge">⚠️ 中风险</div>
+            <h1 class="title">理财投资专区</h1>
+            <p class="subtitle">AI检测结果：中风险 | 风险评分：55%</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title">💰 高收益投资机会</h2>
+            <div class="card-content">
+                <p>把握财富增长机会，让您的钱生钱！</p>
+            </div>
+
+            <div class="induce-box">
+                <div class="induce-title">🚀 限时特惠 · 年化收益高达 <span class="induce-highlight">15%</span></div>
+                <p style="color: #374151; margin-top: 10px; line-height: 1.6;">
+                    专业理财团队，精选优质项目，<span class="induce-highlight">保本保息</span>，安全可靠！
+                </p>
+                <ul style="margin-left: 20px; margin-top: 15px; color: #4B5563; line-height: 1.8;">
+                    <li>最低起投：<span class="induce-highlight">100元</span></li>
+                    <li>投资周期：<span class="induce-highlight">30天</span></li>
+                    <li>预期收益：<span class="induce-highlight">12%-15%</span></li>
+                </ul>
+                <a href="#" class="induce-btn">立即投资 →</a>
+            </div>
+
+            <div class="induce-box">
+                <div class="induce-title">💎 VIP专属理财计划</div>
+                <p style="color: #374151; margin-top: 10px; line-height: 1.6;">
+                    专属理财顾问一对一服务，<span class="induce-highlight">定制投资方案</span>，让您的财富快速增值！
+                </p>
+                <a href="#" class="induce-btn">了解详情 →</a>
+            </div>
+
+            <div class="risk-warning">
+                <span class="warning-icon">⚠️</span>
+                <div class="warning-content">
+                    <div class="warning-title">风险警告</div>
+                    <p>此页面包含诱导投资内容，高收益往往伴随着高风险。请谨慎评估投资风险，不要轻信"保本保息"等承诺。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title">📊 投资指南</h2>
+            <div class="card-content">
+                <p>投资有风险，入市需谨慎。以下是投资前需要了解的几点：</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>了解产品风险等级</li>
+                    <li>评估自身风险承受能力</li>
+                    <li>不要将全部资金投入单一产品</li>
+                    <li>选择正规金融机构</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="ai_demo_home.html" class="back-btn">
+            ← 返回演示大厅
+        </a>
+    </div>
+</body>
+</html>

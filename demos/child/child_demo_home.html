@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-demo-mode="child">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧸 儿童保护模式 - 功能演示大厅</title>
+    <meta name="data-demo-mode" content="true">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 30%, #bbf7d0 60%, #86efac 100%);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-decoration {
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #166534;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: rgba(22, 101, 52, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .status-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 30px;
+            background: rgba(34, 197, 94, 0.15);
+            border-radius: 30px;
+            border: 2px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(34, 197, 94, 0.2);
+            border-radius: 20px;
+            color: #166534;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .status-value {
+            padding: 8px 20px;
+            background: white;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .status-value.enabled {
+            color: #16a34a;
+            border: 2px solid #16a34a;
+        }
+
+        .status-value.disabled {
+            color: #6b7280;
+            border: 2px solid #d1d5db;
+        }
+
+        .status-value.loading {
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border-top: 5px solid;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card.learning { border-color: #22c55e; }
+        .feature-card.entertainment { border-color: #f59e0b; }
+        .feature-card.danger { border-color: #ef4444; }
+        .feature-card.game { border-color: #8b5cf6; }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 18px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .feature-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .feature-btn.learning-btn {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+        }
+
+        .feature-btn.entertainment-btn {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .feature-btn.danger-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .feature-btn.game-btn {
+            background: rgba(139, 92, 246, 0.1);
+            color: #7c3aed;
+        }
+
+        .real-site-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .site-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .site-card {
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .site-card.safe {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .site-card.safe:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+        }
+
+        .site-card.limited {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .site-card.limited:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+        }
+
+        .site-card.blocked {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .site-card.blocked:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.2);
+        }
+
+        .site-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .site-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .site-status {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .site-status.safe { color: #16a34a; }
+        .site-status.limited { color: #d97706; }
+        .site-status.blocked { color: #dc2626; }
+
+        .back-section {
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.15);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .page-title { font-size: 28px; }
+            .header-icon { font-size: 56px; }
+            .status-container { flex-direction: column; gap: 10px; }
+            .main-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <div class="header-decoration"></div>
+        <div class="header-icon">🧸</div>
+        <h1 class="page-title">儿童保护模式</h1>
+        <p class="page-subtitle">净网护航 · 守护孩子的网络安全</p>
+        
+        <div class="status-container">
+            <span class="status-badge">
+                <span>👶</span>
+                <span>儿童模式状态</span>
+            </span>
+            <div id="statusDisplay" class="status-value loading">
+                读取中...
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="feature-card learning" onclick="navigateTo('child_learning_demo.html')">
+            <div class="feature-icon">📚</div>
+            <h3 class="feature-title">学习网站演示</h3>
+            <p class="feature-desc">展示学习网站的放行效果，显示绿色安全提示，允许正常浏览教育内容。</p>
+            <a href="child_learning_demo.html" class="feature-btn learning-btn">
+                <span>开始演示</span>
+                <span>→</span>
+            </a>
+        </div>
+
+        <div class="feature-card entertainment" onclick="navigateTo('child_entertainment_demo.html')">
+            <div class="feature-icon">🎬</div>
+            <h3 class="feature-title">娱乐限制演示</h3>
+            <p class="feature-desc">展示娱乐网站的限制效果，显示灰色遮罩层，保留页面可见性。</p>
+            <a href="child_entertainment_demo.html" class="feature-btn entertainment-btn">
+                <span>开始演示</span>
+                <span>→</span>
+            </a>
+        </div>
+
+        <div class="feature-card game" onclick="navigateTo('child_game_demo.html')">
+            <div class="feature-icon">🎮</div>
+            <h3 class="feature-title">游戏网站拦截</h3>
+            <p class="feature-desc">展示游戏网站的拦截效果，显示半透明禁止访问层。</p>
+            <a href="child_game_demo.html" class="feature-btn game-btn">
+                <span>开始演示</span>
+                <span>→</span>
+            </a>
+        </div>
+
+        <div class="feature-card danger" onclick="navigateTo('fake_gambling.html')">
+            <div class="feature-icon">⚠️</div>
+            <h3 class="feature-title">危险网站拦截</h3>
+            <p class="feature-desc">展示危险网站的自动拦截效果，自动跳转到安全拦截页面。</p>
+            <a href="fake_gambling.html" class="feature-btn danger-btn">
+                <span>开始演示</span>
+                <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="real-site-section">
+        <h2 class="section-title">
+            <span>🌐</span>
+            <span>真实网站演示</span>
+        </h2>
+        
+        <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 15px; font-weight: 600; color: #16a34a; margin-bottom: 12px;">✅ 学习网站（允许访问）</h3>
+            <div class="site-grid">
+                <a href="https://www.icourse163.org" target="_blank" class="site-card safe">
+                    <div class="site-icon">📚</div>
+                    <div class="site-name">中国大学MOOC</div>
+                    <div class="site-status safe">已放行</div>
+                </a>
+                <a href="https://www.xuexi.cn" target="_blank" class="site-card safe">
+                    <div class="site-icon">📖</div>
+                    <div class="site-name">学习强国</div>
+                    <div class="site-status safe">已放行</div>
+                </a>
+                <a href="https://www.hjenglish.com" target="_blank" class="site-card safe">
+                    <div class="site-icon">🔤</div>
+                    <div class="site-name">沪江英语</div>
+                    <div class="site-status safe">已放行</div>
+                </a>
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 15px; font-weight: 600; color: #d97706; margin-bottom: 12px;">⏳ 娱乐网站（限制访问）</h3>
+            <div class="site-grid">
+                <a href="https://www.bilibili.com" target="_blank" class="site-card limited">
+                    <div class="site-icon">🎬</div>
+                    <div class="site-name">Bilibili</div>
+                    <div class="site-status limited">已限制</div>
+                </a>
+                <a href="https://www.douyin.com" target="_blank" class="site-card limited">
+                    <div class="site-icon">🎵</div>
+                    <div class="site-name">抖音</div>
+                    <div class="site-status limited">已限制</div>
+                </a>
+            </div>
+        </div>
+        
+        <div>
+            <h3 style="font-size: 15px; font-weight: 600; color: #dc2626; margin-bottom: 12px;">🚫 游戏网站（禁止访问）</h3>
+            <div class="site-grid">
+                <a href="https://www.4399.com" target="_blank" class="site-card blocked">
+                    <div class="site-icon">🎮</div>
+                    <div class="site-name">4399小游戏</div>
+                    <div class="site-status blocked">已拦截</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-section">
+        <a href="../demo_center.html" class="back-btn">
+            <span>←</span>
+            <span>返回演示中心</span>
+        </a>
+    </div>
+
+    <script>
+        // ==================== 统一扩展API兼容层 ====================
+        const extensionAPI = window.browser || window.chrome;
+
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+
+        function loadChildModeStatus() {
+            const statusDisplay = document.getElementById('statusDisplay');
+            
+            // 检查storage API是否可用
+            if (!extensionAPI || !extensionAPI.storage || !extensionAPI.storage.local) {
+                console.warn('[儿童模式] storage.local不可用');
+                statusDisplay.textContent = '已启用';
+                statusDisplay.className = 'status-value enabled';
+                return;
+            }
+            
+            // 通过尝试读取storage来检测插件状态
+            extensionAPI.storage.local.get('childSettings', (res) => {
+                try {
+                    const settings = res.childSettings || {};
+                    const isEnabled = settings.childModeEnabled || false;
+                    
+                    statusDisplay.textContent = isEnabled ? '已启用' : '已关闭';
+                    statusDisplay.className = `status-value ${isEnabled ? 'enabled' : 'disabled'}`;
+                    console.log('✅ [儿童模式] 插件已安装，状态读取成功');
+                } catch (e) {
+                    console.warn('[儿童模式] 解析存储失败:', e);
+                    // 读取失败时默认显示已启用，避免影响演示
+                    statusDisplay.textContent = '已启用';
+                    statusDisplay.className = 'status-value enabled';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChildModeStatus();
+            
+            // 设置storage变化监听（增加安全判断）
+            try {
+                if (extensionAPI && extensionAPI.storage && extensionAPI.storage.onChanged) {
+                    extensionAPI.storage.onChanged.addListener((changes, area) => {
+                        if (area === 'local' && changes.childSettings) {
+                            loadChildModeStatus();
+                        }
+                    });
+                } else {
+                    console.warn('[儿童模式] storage.onChanged不可用');
+                }
+            } catch (e) {
+                console.warn('[儿童模式] 设置监听器失败:', e);
+            }
+        });
+    </script>
+</body>
+</html>

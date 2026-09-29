@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国工商银行 - 网上银行</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f5f5;
+            font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+        }
+        .header {
+            background: linear-gradient(90deg, #d22128, #e53935);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .bank-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #d22128;
+        }
+        .bank-name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .header-right {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+        }
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .security-banner {
+            background: linear-gradient(90deg, #fef3c7, #fde68a);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #f59e0b;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .security-icon {
+            font-size: 24px;
+        }
+        .security-text {
+            color: #92400e;
+            font-weight: 500;
+        }
+        .login-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .card-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .card-title {
+            font-size: 28px;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        .card-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: #d22128;
+            box-shadow: 0 0 0 3px rgba(210,33,40,0.1);
+        }
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+        .captcha-row {
+            display: flex;
+            gap: 15px;
+        }
+        .captcha-input {
+            flex: 1;
+        }
+        .captcha-img {
+            width: 150px;
+            height: 52px;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #d22128, #e53935);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(210,33,40,0.3);
+        }
+        .forgot-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .forgot-link a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .forgot-link a:hover {
+            text-decoration: underline;
+        }
+        .alert-section {
+            background: linear-gradient(90deg, #fee2e2, #fecaca);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            border-left: 4px solid #dc2626;
+        }
+        .alert-title {
+            font-weight: bold;
+            color: #991b1b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .alert-icon {
+            font-size: 20px;
+        }
+        .alert-list {
+            margin-left: 20px;
+            color: #b91c1c;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .alert-list li {
+            margin-bottom: 8px;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 40px;
+        }
+        .footer-links a {
+            color: #6b7280;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer-links a:hover {
+            color: #d22128;
+        }
+        .fake-notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-left: 4px solid #dc2626;
+            max-width: 320px;
+            animation: slideIn 0.3s ease;
+            z-index: 100;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        .notification-title {
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .notification-content {
+            color: #374151;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .notification-btn {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="bank-logo">
+            <div class="logo-icon">ICBC</div>
+            <div class="bank-name">中国工商银行</div>
+        </div>
+        <div class="header-right">客服热线：95588</div>
+    </div>
+
+    <div class="fake-notification">
+        <div class="notification-title">⚠️ 账户安全提醒</div>
+        <div class="notification-content">
+            您的账户于2024-01-15 14:30在异地登录，为确保账户安全，请立即验证身份！
+        </div>
+        <button class="notification-btn" onclick="this.parentElement.style.display='none'">我知道了</button>
+    </div>
+
+    <div class="main-container">
+        <div class="security-banner">
+            <span class="security-icon">🔒</span>
+            <span class="security-text">您正在访问中国工商银行官方网上银行，请确保网络环境安全</span>
+        </div>
+
+        <div class="login-card">
+            <div class="card-header">
+                <h1 class="card-title">个人网上银行登录</h1>
+                <p class="card-subtitle">请使用您的账户信息登录</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">📱 用户名 / 手机号 / 银行卡号</label>
+                <input type="text" class="form-input" placeholder="请输入用户名、手机号或银行卡号">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">🔑 登录密码</label>
+                <input type="password" class="form-input" placeholder="请输入您的登录密码">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">🔢 验证码</label>
+                <div class="captcha-row">
+                    <input type="text" class="form-input captcha-input" placeholder="请输入验证码">
+                    <div class="captcha-img" onclick="this.textContent=generateCaptcha()">8X9K</div>
+                </div>
+            </div>
+
+            <button class="login-btn">登录</button>
+
+            <div class="forgot-link">
+                <a href="#">忘记密码？</a> | <a href="#">注册账户</a> | <a href="#">开通网银</a>
+            </div>
+        </div>
+
+        <div class="alert-section">
+            <div class="alert-title">
+                <span class="alert-icon">⚠️</span>
+                重要安全提示
+            </div>
+            <ul class="alert-list">
+                <li>近期发现有不法分子冒充银行发送虚假短信，请提高警惕</li>
+                <li>请勿向陌生人泄露您的银行卡密码、短信验证码</li>
+                <li>如遇账户异常，请立即拨打客服热线95588</li>
+                <li>建议开启账户变动短信通知服务</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-links">
+            <a href="#">关于我们</a> | 
+            <a href="#">服务条款</a> | 
+            <a href="#">隐私政策</a> | 
+            <a href="#">帮助中心</a>
+        </div>
+        <p style="margin-top: 10px;">© 2024 中国工商银行 版权所有</p>
+    </div>
+
+    <script>
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 4; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>

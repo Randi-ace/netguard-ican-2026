@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高风险内容 - AI风险检测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #eef2ff 0%, #e0e7ff 30%, #c7d2fe 60%, #ddd6fe 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 危险警告横幅 */
+        .danger-banner {
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+            animation: pulse-warning 2s infinite;
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% { box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 4px 30px rgba(239, 68, 68, 0.6); }
+        }
+
+        .danger-banner h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(75, 85, 99, 0.7);
+        }
+
+        /* 诈骗卡片 */
+        .scam-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .scam-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+        }
+
+        .scam-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fca5a5;
+        }
+
+        .scam-content {
+            font-size: 15px;
+            color: rgba(75, 85, 99, 0.9);
+            line-height: 1.8;
+        }
+
+        .scam-content p {
+            margin-bottom: 15px;
+        }
+
+        /* 中奖诈骗 */
+        .prize-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .prize-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .prize-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+
+        .prize-subtitle {
+            font-size: 16px;
+            color: #f59e0b;
+            margin-bottom: 20px;
+        }
+
+        .prize-highlight {
+            color: #dc2626;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        /* 表单区域 */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: rgba(75, 85, 99, 0.7);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #1f2937;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: #ef4444;
+        }
+
+        .scam-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .scam-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        /* 严重警告 */
+        .severe-warning {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 2px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .severe-icon {
+            font-size: 36px;
+            flex-shrink: 0;
+        }
+
+        .severe-content {
+            font-size: 14px;
+            color: rgba(75, 85, 99, 0.9);
+        }
+
+        .severe-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #dc2626;
+            font-size: 16px;
+        }
+
+        .severe-list {
+            margin-left: 15px;
+            margin-top: 10px;
+        }
+
+        .severe-list li {
+            margin-bottom: 8px;
+            color: rgba(75, 85, 99, 0.9);
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 28px;
+            }
+
+            .scam-card {
+                padding: 25px;
+            }
+
+            .prize-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 危险警告横幅 -->
+        <div class="danger-banner">
+            <h3>🚨 AI检测到高风险诈骗内容，请注意财产安全！</h3>
+        </div>
+
+        <div class="header">
+            <div class="risk-badge">🚨 高风险</div>
+            <h1 class="title">虚假中奖诈骗</h1>
+            <p class="subtitle">AI检测结果：高风险 | 风险评分：95%</p>
+        </div>
+
+        <div class="scam-card">
+            <h2 class="scam-title">🎁 恭喜您中奖了！</h2>
+            <div class="scam-content">
+                <div class="prize-box">
+                    <div class="prize-icon">🎉</div>
+                    <div class="prize-title">恭喜您成为幸运用户！</div>
+                    <div class="prize-subtitle">您已被选为我们的<span class="prize-highlight">第8888位幸运用户</span></div>
+                    <p style="color: #374151; font-size: 15px; margin-top: 10px;">
+                        奖品包含：<span class="prize-highlight">iPhone 15 Pro + 1000元现金红包</span>
+                    </p>
+                </div>
+
+                <p>尊敬的用户，您已被选为我们的幸运用户！请立即填写以下信息领取您的专属奖品：</p>
+
+                <div class="form-group">
+                    <label class="form-label">📱 手机号码</label>
+                    <input type="tel" class="form-input" placeholder="请输入您的手机号码">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">💳 银行卡号</label>
+                    <input type="text" class="form-input" placeholder="请输入您的银行卡号">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🔑 验证码</label>
+                    <input type="text" class="form-input" placeholder="请输入验证码">
+                    <p style="font-size: 12px; color: rgba(75, 85, 99, 0.6); margin-top: 5px;">验证码已发送至您的手机</p>
+                </div>
+
+                <button class="scam-btn">立即领取奖品 →</button>
+            </div>
+
+            <div class="severe-warning">
+                <span class="severe-icon">⚠️</span>
+                <div class="severe-content">
+                    <div class="severe-title">⚠️ 严重安全警告</div>
+                    <p>此页面包含典型的诈骗特征，请立即关闭！</p>
+                    <ul class="severe-list">
+                        <li>❌ 虚假中奖信息诱导</li>
+                        <li>❌ 要求提供银行卡信息</li>
+                        <li>❌ 要求提供验证码</li>
+                        <li>❌ 高风险转账诈骗</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #fca5a5; font-weight: 600;">
+                        请不要填写任何个人信息，更不要进行任何转账操作！
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="scam-card">
+            <h2 class="scam-title">🏦 紧急通知：账户安全</h2>
+            <div class="scam-content">
+                <p style="color: #fca5a5; font-weight: 600;">紧急通知：您的账户存在异常！</p>
+                <p>尊敬的客户，您的银行账户已被冻结，请立即处理！</p>
+                <p>为了您的账户安全，<span style="color: #fbbf24;">请在30分钟内完成转账验证</span>，否则账户将永久冻结！</p>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(239, 68, 68, 0.15); border-radius: 10px;">
+                    <p style="font-weight: 600; margin-bottom: 10px;">📌 安全账户信息：</p>
+                    <p>账户名：张三</p>
+                    <p>账号：6222 8888 1234 5678</p>
+                    <p>开户行：中国工商银行</p>
+                </div>
+
+                <button class="scam-btn" style="margin-top: 15px;">立即转账 →</button>
+            </div>
+        </div>
+
+        <a href="ai_demo_home.html" class="back-btn">
+            ← 返回演示大厅
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>低风险内容 - AI风险检测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #eef2ff 0%, #e0e7ff 30%, #c7d2fe 60%, #ddd6fe 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(75, 85, 99, 0.7);
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .card-content {
+            font-size: 15px;
+            color: rgba(75, 85, 99, 0.9);
+            line-height: 1.8;
+        }
+
+        .card-content p {
+            margin-bottom: 15px;
+        }
+
+        /* 营销卡片 */
+        .marketing-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .marketing-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #60a5fa;
+        }
+
+        .marketing-btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .marketing-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* 风险提示 */
+        .risk-notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .notice-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .notice-content {
+            font-size: 14px;
+            color: rgba(75, 85, 99, 0.9);
+        }
+
+        .notice-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #3b82f6;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 28px;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="risk-badge">🔵 低风险</div>
+            <h1 class="title">产品推荐页面</h1>
+            <p class="subtitle">AI检测结果：低风险 | 风险评分：25%</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title">🎁 限时特惠活动</h2>
+            <div class="card-content">
+                <p>欢迎来到我们的特惠专区！这里有精选好物等着您：</p>
+            </div>
+
+            <div class="marketing-box">
+                <div class="marketing-title">✨ 新品上市 · 限时折扣</div>
+                <p style="color: #374151; line-height: 1.6;">精选数码产品，全场8折起！</p>
+                <ul style="margin-left: 20px; margin-top: 10px; color: #4B5563; line-height: 1.8;">
+                    <li>蓝牙耳机 - 原价299元，现价199元</li>
+                    <li>智能手表 - 原价599元，现价449元</li>
+                    <li>便携充电宝 - 原价159元，现价99元</li>
+                </ul>
+                <a href="#" class="marketing-btn">点击查看详情 →</a>
+            </div>
+
+            <div class="marketing-box">
+                <div class="marketing-title">🎯 会员专享福利</div>
+                <p style="color: #374151; line-height: 1.6;">开通会员，享受更多优惠特权！</p>
+                <a href="#" class="marketing-btn">立即开通会员 →</a>
+            </div>
+
+            <div class="risk-notice">
+                <span class="notice-icon">ℹ️</span>
+                <div class="notice-content">
+                    <div class="notice-title">风险提示</div>
+                    <p>此页面包含营销推广内容，建议谨慎点击广告链接，避免不必要的消费。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title">📌 热门推荐</h2>
+            <div class="card-content">
+                <p>根据您的浏览记录，为您推荐以下商品：</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>学习资料包 - 点击领取</li>
+                    <li>在线课程优惠 - 查看详情</li>
+                    <li>会员订阅服务 - 了解更多</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="ai_demo_home.html" class="back-btn">
+            ← 返回演示大厅
+        </a>
+    </div>
+</body>
+</html>

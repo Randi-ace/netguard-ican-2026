@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI风险检测演示 - 净网护航</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #1e3a5f, #2d4a6f);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 14px; }
+        .demo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-left: 4px solid;
+        }
+        .demo-card.high { border-left-color: #dc3545; }
+        .demo-card.medium { border-left-color: #f59e0b; }
+        .demo-card.low { border-left-color: #3b82f6; }
+        .demo-card.safe { border-left-color: #28a745; }
+        .demo-card h2 {
+            color: #1e3a5f;
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .risk-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        .risk-badge.high { background: #dc3545; }
+        .risk-badge.medium { background: #f59e0b; }
+        .risk-badge.low { background: #3b82f6; }
+        .risk-badge.safe { background: #28a745; }
+        .scam-content {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #ffeeba;
+        }
+        .scam-content.high-risk { background: #f8d7da; border-color: #f5c6cb; }
+        .scam-content.medium-risk { background: #fff3cd; border-color: #ffeeba; }
+        .scam-content.low-risk { background: #e7f3ff; border-color: #b6d4fe; }
+        .scam-content.safe { background: #d4edda; border-color: #c3e6cb; }
+        .keyword-highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #856404;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .test-section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .tips-box {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .tips-box h4 { color: #0c63e4; margin-bottom: 8px; }
+        .tips-box ul { margin-left: 20px; font-size: 14px; color: #495057; }
+        .compare-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .risk-level {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .risk-level.high { border-top: 4px solid #dc3545; }
+        .risk-level.medium { border-top: 4px solid #f59e0b; }
+        .risk-level.low { border-top: 4px solid #3b82f6; }
+        .risk-level.safe { border-top: 4px solid #28a745; }
+        .risk-icon { font-size: 36px; margin-bottom: 10px; }
+        .risk-title { font-weight: bold; color: #333; }
+        .risk-desc { font-size: 12px; color: #666; margin-top: 5px; }
+        .demo-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin: 10px 5px;
+        }
+        .demo-button:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4); }
+        .demo-button.primary { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .demo-button.danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .demo-steps {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .demo-steps ol { margin-left: 20px; }
+        .demo-steps li { padding: 10px 0; border-bottom: 1px dashed #eee; }
+        .demo-steps li:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="container content">
+        <div class="header">
+            <h1>🤖 净网护航 - AI风险检测演示</h1>
+            <p>智能识别网页诈骗内容，自动弹出风险警告</p>
+            <div style="margin-top: 15px;">
+                <button id="detect-all-btn" style="padding: 10px 30px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                    🔍 检测全部内容
+                </button>
+                <button id="detect-high-btn" style="padding: 10px 20px; background: #dc2626; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                    🚨 仅检测高风险
+                </button>
+                <button id="detect-medium-btn" style="padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                    ⚠️ 仅检测中风险
+                </button>
+                <button id="clear-alerts-btn" style="padding: 10px 20px; background: #6b7280; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    🗑️ 清除提示
+                </button>
+            </div>
+        </div>
+
+        <!-- 风险等级说明 -->
+        <div class="compare-grid">
+            <div class="risk-level safe">
+                <div class="risk-icon">✅</div>
+                <div class="risk-title">安全</div>
+                <div class="risk-desc">无风险内容</div>
+            </div>
+            <div class="risk-level low">
+                <div class="risk-icon">🔵</div>
+                <div class="risk-title">低风险</div>
+                <div class="risk-desc">轻微诱导内容</div>
+            </div>
+            <div class="risk-level medium">
+                <div class="risk-icon">🟡</div>
+                <div class="risk-title">中风险</div>
+                <div class="risk-desc">需要谨慎对待</div>
+            </div>
+            <div class="risk-level high">
+                <div class="risk-icon">🔴</div>
+                <div class="risk-title">高风险</div>
+                <div class="risk-desc">涉嫌诈骗内容</div>
+            </div>
+        </div>
+
+        <!-- 高风险内容 -->
+        <div class="demo-card high">
+            <h2>
+                <span class="risk-badge high">🔴 高风险</span>
+                虚假中奖诈骗
+            </h2>
+            <div class="scam-content high-risk">
+                <p style="font-size: 20px; font-weight: bold; color: #dc3545; margin-bottom: 15px;">🎉 <span class="keyword-highlight">恭喜您中奖了！</span></p>
+                <p>尊敬的用户，您已被选为我们的幸运用户！</p>
+                <p>请立即 <span class="keyword-highlight">点击领取</span> 您的专属奖品！</p>
+                <p>奖品包含：iPhone 15 Pro + 1000元现金红包</p>
+                <p>请填写您的 <span class="keyword-highlight">银行卡</span> 信息以便发放奖品：</p>
+                <input type="text" placeholder="银行卡号" style="padding: 8px; margin: 10px 0; width: 250px;">
+                <p>验证码已发送至您的手机，请输入 <span class="keyword-highlight">验证码</span>：</p>
+                <input type="text" placeholder="验证码" style="padding: 8px; margin: 10px 0; width: 150px;">
+                <button style="padding: 10px 30px; background: #dc3545; color: white; border: none; border-radius: 5px; font-weight: bold;">立即领取</button>
+            </div>
+        </div>
+
+        <!-- 转账诈骗 -->
+        <div class="demo-card high">
+            <h2>
+                <span class="risk-badge high">🔴 高风险</span>
+                转账诈骗
+            </h2>
+            <div class="scam-content high-risk">
+                <p style="color: #dc3545; font-weight: bold; margin-bottom: 15px;">⚠️ 紧急通知：您的账户存在异常！</p>
+                <p>尊敬的客户，您的银行账户已被冻结，请立即处理！</p>
+                <p>为了您的账户安全，请将资金转移到安全账户：</p>
+                <p><strong>户名：</strong>张三</p>
+                <p><strong>账号：</strong><span class="keyword-highlight">6222 8888 1234 5678</span></p>
+                <p><strong>开户行：</strong>中国工商银行</p>
+                <p>请在30分钟内完成 <span class="keyword-highlight">转账</span>，否则账户将永久冻结！</p>
+                <button style="padding: 10px 30px; background: #dc3545; color: white; border: none; border-radius: 5px; font-weight: bold;">立即转账</button>
+            </div>
+        </div>
+
+        <!-- 刷单诈骗 -->
+        <div class="demo-card high">
+            <h2>
+                <span class="risk-badge high">🔴 高风险</span>
+                刷单兼职诈骗
+            </h2>
+            <div class="scam-content high-risk">
+                <p style="font-size: 18px; font-weight: bold; color: #28a745; margin-bottom: 15px;">💻 <span class="keyword-highlight">刷单兼职</span>，轻松日入300！</p>
+                <p>无需经验，无需押金，在家轻松赚钱！</p>
+                <p>工作内容：简单 <span class="keyword-highlight">刷单</span>，一单一结！</p>
+                <p>日赚300-500元，多劳多得！</p>
+                <p>联系 <span class="keyword-highlight">客服</span>：QQ 123456789</p>
+                <p><span class="keyword-highlight">客服电话</span>：400-888-8888</p>
+                <button style="padding: 10px 30px; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold;">立即加入</button>
+            </div>
+        </div>
+
+        <!-- 投资理财诈骗 -->
+        <div class="demo-card high">
+            <h2>
+                <span class="risk-badge high">🔴 高风险</span>
+                高收益投资诈骗
+            </h2>
+            <div class="scam-content high-risk">
+                <p style="font-size: 20px; font-weight: bold; color: #f59e0b; margin-bottom: 15px;">💰 <span class="keyword-highlight">高收益</span>投资，稳赚不赔！</p>
+                <p>年化收益率高达300%，投资1万，月赚3万！</p>
+                <p><span class="keyword-highlight">稳赚不赔</span>，随时提现！</p>
+                <p>已有10万人加入，累计收益超过10亿！</p>
+                <p>限时优惠，前100名用户额外赠送10%收益！</p>
+                <button style="padding: 10px 30px; background: #f59e0b; color: white; border: none; border-radius: 5px; font-weight: bold;">立即投资</button>
+            </div>
+        </div>
+
+        <!-- 中风险内容 -->
+        <div class="demo-card medium">
+            <h2>
+                <span class="risk-badge medium">🟡 中风险</span>
+                客服退款
+            </h2>
+            <div class="scam-content medium-risk">
+                <p>您好，我是XX平台 <span class="keyword-highlight">客服</span>。</p>
+                <p>您购买的商品存在质量问题，我们将为您办理 <span class="keyword-highlight">退款</span>。</p>
+                <p>请提供您的账户信息以便处理退款。</p>
+                <input type="text" placeholder="账户名称" style="padding: 8px; margin: 10px 0; width: 250px;">
+                <button style="padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 5px;">确认退款</button>
+            </div>
+        </div>
+
+        <!-- 低风险内容 -->
+        <div class="demo-card low">
+            <h2>
+                <span class="risk-badge low">🔵 低风险</span>
+                诱导点击
+            </h2>
+            <div class="scam-content low-risk">
+                <p>想要了解更多优惠信息？</p>
+                <p><span class="keyword-highlight">点击</span>这里 <span class="keyword-highlight">查看</span>详情！</p>
+                <p><span class="keyword-highlight">领取</span>您的专属优惠券！</p>
+                <button style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 5px;">立即查看</button>
+            </div>
+        </div>
+
+        <!-- 安全内容 -->
+        <div class="demo-card safe">
+            <h2>
+                <span class="risk-badge safe">✅ 安全</span>
+                正常内容
+            </h2>
+            <div class="scam-content safe">
+                <p>欢迎访问我们的网站！</p>
+                <p>这是一段正常的网页内容，不包含任何风险信息。</p>
+                <p>净网护航致力于为您提供安全、纯净的上网环境。</p>
+            </div>
+        </div>
+
+        <div class="tips-box">
+            <h4>📌 AI检测原理</h4>
+            <ul>
+                <li><strong>关键词匹配：</strong>检测赌博、刷单、转账、验证码等风险关键词</li>
+                <li><strong>四级风险评估：</strong>安全、低风险、中风险、高风险</li>
+                <li><strong>自动弹窗警告：</strong>检测到风险内容自动弹出警告</li>
+                <li><strong>后台记录：</strong>所有检测结果记录到数据库</li>
+            </ul>
+        </div>
+
+        <div class="demo-steps">
+            <h3>🎯 演示步骤</h3>
+            <ol>
+                <li>确保Flask后端运行：http://127.0.0.1:5000</li>
+                <li>确保Edge插件已加载并启用</li>
+                <li>打开此页面，等待3-5秒</li>
+                <li>AI检测到风险内容，自动弹出风险警告弹窗</li>
+                <li>查看浏览器控制台日志</li>
+                <li>查看后台统计数据：../../UI/index.html</li>
+            </ol>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="../../UI/index.html" target="_blank" class="demo-button primary">📊 查看后台统计</a>
+            <a href="#" class="demo-button" onclick="location.reload()">🔄 重新检测</a>
+            <a href="../ads/demo_ads.html" target="_blank" class="demo-button danger">📢 广告拦截演示</a>
+        </div>
+    </div>
+
+    <script>
+        console.log('🤖 AI风险检测演示页面已加载');
+        console.log('等待插件进行AI检测...');
+    </script>
+</body>
+</html>

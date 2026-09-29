@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全内容 - AI风险检测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #eef2ff 0%, #e0e7ff 30%, #c7d2fe 60%, #ddd6fe 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 头部 */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+            color: white;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(75, 85, 99, 0.7);
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 4px solid #22c55e;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .card-content {
+            font-size: 15px;
+            color: rgba(75, 85, 99, 0.9);
+            line-height: 1.8;
+        }
+
+        .card-content p {
+            margin-bottom: 15px;
+        }
+
+        .card-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .card-content li {
+            margin-bottom: 8px;
+        }
+
+        /* 安全标识 */
+        .safety-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 20px;
+        }
+
+        .safety-icon {
+            font-size: 32px;
+        }
+
+        .safety-text {
+            font-size: 14px;
+            color: #22c55e;
+            font-weight: 500;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 28px;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="risk-badge">✅ 安全内容</div>
+            <h1 class="title">学习资源中心</h1>
+            <p class="subtitle">AI检测结果：安全 | 风险评分：0%</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title">📚 今日学习推荐</h2>
+            <div class="card-content">
+                <p>欢迎来到学习资源中心！这里为您精选了优质的学习内容：</p>
+                <ul>
+                    <li><strong>高等数学入门教程</strong> - 深入浅出讲解微积分基础知识</li>
+                    <li><strong>Python编程基础</strong> - 从零开始学习编程</li>
+                    <li><strong>英语四级备考指南</strong> - 高效备考策略分享</li>
+                    <li><strong>数据结构与算法</strong> - 提升编程能力必备</li>
+                </ul>
+                <p>建议每天学习1-2小时，坚持下去一定会有所收获！</p>
+            </div>
+            <div class="safety-indicator">
+                <span class="safety-icon">🛡️</span>
+                <span class="safety-text">内容安全可靠，可放心浏览学习</span>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title">📖 阅读推荐</h2>
+            <div class="card-content">
+                <p>以下是本周热门书籍推荐：</p>
+                <ul>
+                    <li>《人类简史》- 尤瓦尔·赫拉利</li>
+                    <li>《活着》- 余华</li>
+                    <li>《百年孤独》- 加西亚·马尔克斯</li>
+                    <li>《三体》- 刘慈欣</li>
+                </ul>
+                <p>阅读可以开阔视野，丰富知识储备，培养独立思考能力。</p>
+            </div>
+            <div class="safety-indicator">
+                <span class="safety-icon">📚</span>
+                <span class="safety-text">教育类内容，安全无风险</span>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="card-title">🎯 学习计划</h2>
+            <div class="card-content">
+                <p>制定合理的学习计划有助于提高学习效率：</p>
+                <ol>
+                    <li>设定明确的学习目标</li>
+                    <li>合理分配学习时间</li>
+                    <li>选择适合自己的学习方法</li>
+                    <li>定期复习和总结</li>
+                    <li>保持良好的学习习惯</li>
+                </ol>
+            </div>
+        </div>
+
+        <a href="ai_demo_home.html" class="back-btn">
+            ← 返回演示大厅
+        </a>
+    </div>
+</body>
+</html>

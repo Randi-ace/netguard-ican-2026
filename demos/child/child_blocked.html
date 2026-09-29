@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚫 网站已拦截</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 30%, #fecaca 60%, #fca5a5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .block-container {
+            background: white;
+            border-radius: 24px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(239, 68, 68, 0.2);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .block-icon {
+            font-size: 80px;
+            margin-bottom: 25px;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .block-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .block-desc {
+            font-size: 16px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .block-reasons {
+            background: rgba(239, 68, 68, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .reason-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reason-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .reason-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .reason-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .block-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-safe {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .btn-safe:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-report {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+            border: 2px solid rgba(107, 114, 128, 0.2);
+        }
+
+        .btn-report:hover {
+            background: rgba(107, 114, 128, 0.2);
+        }
+
+        /* 装饰元素 */
+        .decoration {
+            position: fixed;
+            pointer-events: none;
+        }
+
+        .decoration-1 {
+            top: 20px;
+            right: 30px;
+            font-size: 48px;
+            opacity: 0.1;
+        }
+
+        .decoration-2 {
+            bottom: 30px;
+            left: 20px;
+            font-size: 36px;
+            opacity: 0.1;
+        }
+
+        .decoration-3 {
+            top: 50%;
+            right: 10px;
+            font-size: 24px;
+            opacity: 0.05;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .block-container {
+                padding: 40px 25px;
+            }
+
+            .block-title {
+                font-size: 26px;
+            }
+
+            .block-icon {
+                font-size: 64px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 装饰元素 -->
+    <div class="decoration decoration-1">🚫</div>
+    <div class="decoration decoration-2">⚠️</div>
+    <div class="decoration decoration-3">🔒</div>
+
+    <div class="block-container">
+        <div class="block-icon">🚫</div>
+        <h2 class="block-title">网站已拦截</h2>
+        <p class="block-desc">儿童保护模式已阻止访问该危险网站。为了您的安全，请远离此类内容。</p>
+
+        <div class="block-reasons">
+            <div class="reason-title">
+                <span>🛡️</span>
+                <span>拦截原因</span>
+            </div>
+            <div class="reason-list">
+                <div class="reason-item">
+                    <span class="reason-icon">🔞</span>
+                    <span>包含不适宜未成年人的内容</span>
+                </div>
+                <div class="reason-item">
+                    <span class="reason-icon">⚠️</span>
+                    <span>可能存在安全风险</span>
+                </div>
+                <div class="reason-item">
+                    <span class="reason-icon">🔒</span>
+                    <span>已被家长监护系统阻止</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="block-actions">
+            <a href="child_demo_home.html" class="action-btn btn-safe">
+                <span>🏠</span>
+                <span>返回安全页面</span>
+            </a>
+            <a href="#" class="action-btn btn-report">
+                <span>📝</span>
+                <span>报告误拦截</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

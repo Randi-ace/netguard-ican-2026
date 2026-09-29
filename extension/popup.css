@@ -1,0 +1,542 @@
+/* popup.css - 净网护航风险提示样式 */
+
+.netguard-risk-popup,
+.netguard-risk-popup * {
+  box-sizing: border-box;
+}
+
+.netguard-risk-popup {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  bottom: auto !important;
+  z-index: 2147483646 !important;
+
+  width: 380px !important;
+  max-width: calc(100vw - 40px) !important;
+  max-height: calc(100vh - 40px) !important;
+  margin: 0 !important;
+  padding: 20px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+
+  border: 1px solid rgba(147, 197, 253, 0.3) !important;
+  border-radius: 16px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.96) 0%,
+      rgba(15, 23, 42, 0.98) 100%
+    ) !important;
+
+  color: #f1f5f9 !important;
+
+  box-shadow:
+    0 0 40px rgba(59, 130, 246, 0.15),
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif !important;
+
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  text-align: left !important;
+
+  isolation: isolate !important;
+  contain: layout style paint !important;
+  color-scheme: dark !important;
+  pointer-events: auto !important;
+
+  -webkit-font-smoothing: antialiased;
+  backdrop-filter: blur(20px);
+  animation:
+    netguardSlideIn 0.4s
+    cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.netguard-risk-popup[hidden] {
+  display: none !important;
+}
+
+.netguard-popup-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+
+  margin: 0 0 16px !important;
+  padding: 0 34px 12px 0 !important;
+
+  border: none !important;
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.1) !important;
+
+  background: transparent !important;
+}
+
+.netguard-risk-icon {
+  display: flex !important;
+  flex: 0 0 44px !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 44px !important;
+  height: 44px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: none !important;
+  border-radius: 12px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #1d4ed8
+    ) !important;
+
+  box-shadow:
+    0 4px 20px
+    rgba(59, 130, 246, 0.4) !important;
+
+  font-size: 22px !important;
+}
+
+.netguard-risk-icon.high {
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      #b91c1c
+    ) !important;
+
+  box-shadow:
+    0 4px 20px
+    rgba(239, 68, 68, 0.4) !important;
+}
+
+.netguard-risk-icon.medium {
+  background:
+    linear-gradient(
+      135deg,
+      #f59e0b,
+      #d97706
+    ) !important;
+
+  box-shadow:
+    0 4px 20px
+    rgba(245, 158, 11, 0.4) !important;
+}
+
+.netguard-risk-icon.low {
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #2563eb
+    ) !important;
+}
+
+.netguard-risk-icon.safe {
+  background:
+    linear-gradient(
+      135deg,
+      #22c55e,
+      #15803d
+    ) !important;
+}
+
+.netguard-title-area {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.netguard-popup-title {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: #f1f5f9 !important;
+  background: transparent !important;
+
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+}
+
+.netguard-risk-badge {
+  display: inline-block !important;
+  padding: 2px 8px !important;
+
+  border: none !important;
+  border-radius: 12px !important;
+
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  text-transform: uppercase !important;
+}
+
+.netguard-risk-badge.high {
+  background:
+    rgba(239, 68, 68, 0.2) !important;
+  color: #fca5a5 !important;
+}
+
+.netguard-risk-badge.medium {
+  background:
+    rgba(245, 158, 11, 0.2) !important;
+  color: #fcd34d !important;
+}
+
+.netguard-risk-badge.low {
+  background:
+    rgba(59, 130, 246, 0.2) !important;
+  color: #93c5fd !important;
+}
+
+.netguard-risk-badge.safe {
+  background:
+    rgba(34, 197, 94, 0.2) !important;
+  color: #86efac !important;
+}
+
+.netguard-source-tag {
+  display: inline-block !important;
+  margin: 4px 0 0 !important;
+  padding: 3px 8px !important;
+
+  border: none !important;
+  border-radius: 6px !important;
+
+  background:
+    rgba(148, 163, 184, 0.1) !important;
+  color: #94a3b8 !important;
+
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+.netguard-popup-content {
+  display: block !important;
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.netguard-risk-reason {
+  margin: 0 !important;
+  padding: 0 !important;
+
+  color: #cbd5e1 !important;
+  background: transparent !important;
+
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.netguard-details-card {
+  display: block !important;
+  margin: 0 0 16px !important;
+  padding: 12px !important;
+
+  border: none !important;
+  border-radius: 10px !important;
+
+  background:
+    rgba(255, 255, 255, 0.04) !important;
+}
+
+.netguard-detail-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+
+  margin: 0 !important;
+  padding: 6px 0 !important;
+
+  border: none !important;
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.netguard-detail-row:last-child {
+  border-bottom: none !important;
+}
+
+.netguard-detail-label {
+  color: #94a3b8 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+.netguard-detail-value {
+  color: #f1f5f9 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.netguard-score-bar {
+  width: 100% !important;
+  height: 4px !important;
+  margin: 4px 0 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+
+  border: none !important;
+  border-radius: 2px !important;
+
+  background:
+    rgba(255, 255, 255, 0.1) !important;
+}
+
+.netguard-score-fill {
+  display: block !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+
+  border-radius: 2px !important;
+
+  background:
+    linear-gradient(
+      90deg,
+      #3b82f6,
+      #10b981
+    ) !important;
+
+  transition: width 0.5s ease !important;
+}
+
+.netguard-score-fill.high {
+  background:
+    linear-gradient(
+      90deg,
+      #ef4444,
+      #dc2626
+    ) !important;
+}
+
+.netguard-score-fill.medium {
+  background:
+    linear-gradient(
+      90deg,
+      #f59e0b,
+      #d97706
+    ) !important;
+}
+
+.netguard-score-fill.low {
+  background:
+    linear-gradient(
+      90deg,
+      #3b82f6,
+      #2563eb
+    ) !important;
+}
+
+.netguard-score-fill.safe {
+  background:
+    linear-gradient(
+      90deg,
+      #22c55e,
+      #15803d
+    ) !important;
+}
+
+.netguard-popup-actions {
+  display: flex !important;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.netguard-btn {
+  flex: 1 1 0 !important;
+  min-height: 40px !important;
+  margin: 0 !important;
+  padding: 10px 16px !important;
+
+  border: none !important;
+  border-radius: 8px !important;
+
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+  text-decoration: none !important;
+
+  cursor: pointer !important;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease !important;
+}
+
+.netguard-btn-primary {
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #2563eb
+    ) !important;
+
+  color: #ffffff !important;
+
+  box-shadow:
+    0 4px 14px
+    rgba(59, 130, 246, 0.4) !important;
+}
+
+.netguard-btn-primary:hover {
+  transform: translateY(-1px) !important;
+
+  box-shadow:
+    0 6px 20px
+    rgba(59, 130, 246, 0.5) !important;
+}
+
+.netguard-btn-secondary {
+  background:
+    rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+}
+
+.netguard-btn-secondary:hover {
+  background:
+    rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+}
+
+.netguard-btn:focus-visible,
+.netguard-popup-close:focus-visible {
+  outline: 2px solid #93c5fd !important;
+  outline-offset: 2px !important;
+}
+
+.netguard-popup-close {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: none !important;
+  border-radius: 8px !important;
+
+  background:
+    rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+
+  font-family: inherit !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+
+  cursor: pointer !important;
+}
+
+.netguard-popup-close:hover {
+  background:
+    rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.netguard-popup-footer {
+  margin: 8px 0 0 !important;
+  padding: 12px 0 0 !important;
+
+  border: none !important;
+  border-top:
+    1px solid rgba(255, 255, 255, 0.05) !important;
+
+  color: #64748b !important;
+  background: transparent !important;
+
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+}
+
+.netguard-risk-popup.closing {
+  pointer-events: none !important;
+  animation:
+    netguardSlideOut 0.3s ease
+    forwards !important;
+}
+
+@keyframes netguardSlideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes netguardSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .netguard-risk-popup {
+    top: 10px !important;
+    right: 10px !important;
+    left: 10px !important;
+
+    width: auto !important;
+    max-width: none !important;
+    max-height: calc(100vh - 20px) !important;
+
+    padding: 16px !important;
+  }
+
+  .netguard-popup-actions {
+    flex-direction: column !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .netguard-risk-popup,
+  .netguard-risk-popup.closing,
+  .netguard-score-fill,
+  .netguard-btn {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

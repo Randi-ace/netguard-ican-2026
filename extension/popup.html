@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+  <title>净网护航</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 360px;
+      max-height: 600px;
+      margin: 0;
+      padding: 16px;
+      overflow-y: auto;
+      background: #ffffff;
+      color: #1f2937;
+      font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    .header {
+      margin-bottom: 18px;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      color: #111827;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .header-description {
+      margin: 6px 0 0;
+      color: #6b7280;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .section:last-of-type {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .section-description {
+      margin: 8px 0 0;
+      color: #6b7280;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 9px 0;
+      border: none;
+      border-radius: 7px;
+      background: #f3f4f6;
+      color: #1f2937;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .btn:hover,
+    .action-btn:hover {
+      opacity: 0.86;
+    }
+
+    .btn:active,
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-normal {
+      background: #e5e7eb;
+    }
+
+    .btn-strong {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .btn.active {
+      outline: 2px solid #1e293b;
+      outline-offset: 1px;
+    }
+
+    .switch-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 12px 0;
+      font-size: 13px;
+    }
+
+    .switch-label {
+      flex: 1;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      margin: 0;
+      accent-color: #3b82f6;
+      cursor: pointer;
+    }
+
+    input[type="number"] {
+      width: 74px;
+      padding: 6px 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #ffffff;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      margin-top: 6px;
+      padding: 7px;
+      resize: vertical;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #ffffff;
+      font-family: monospace;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    textarea:focus,
+    input:focus,
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 1px;
+    }
+
+    details {
+      margin-top: 12px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      background: #f9fafb;
+    }
+
+    summary {
+      color: #2563eb;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .field-label {
+      display: block;
+      margin-top: 10px;
+      color: #374151;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .field-help {
+      display: block;
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 8px 4px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background: #f3f4f6;
+      color: #1f2937;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .action-btn.primary {
+      border: none;
+      background: #3b82f6;
+      color: #ffffff;
+    }
+
+    .pause-card {
+      padding: 10px 12px;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      background: #fffbeb;
+    }
+
+    .pause-card .switch-item {
+      margin: 0;
+    }
+
+    .warning-text {
+      margin: 8px 0 0;
+      color: #92400e;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .whitelist-note {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .status {
+      display: none;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      margin-top: 12px;
+      padding: 8px;
+      border: 1px solid #bbf7d0;
+      border-radius: 6px;
+      background: #f0fdf4;
+      color: #15803d;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .icon {
+      font-size: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <h1 class="header-title">
+      <span>🛡️</span>
+      净网护航
+    </h1>
+
+    <p class="header-description">
+      广告过滤、风险检测、老人模式与儿童安全保护
+    </p>
+  </header>
+
+  <!-- 暂停保护 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">⏸️</span>
+      保护状态
+    </div>
+
+    <div class="pause-card">
+      <div class="switch-item">
+        <label
+          for="pausedToggle"
+          class="switch-label"
+        >
+          暂停网站保护
+        </label>
+
+        <input
+          type="checkbox"
+          id="pausedToggle"
+        >
+      </div>
+
+      <p class="warning-text">
+        暂停后不执行广告过滤、URL 检测、AI
+        检测、儿童限制和老人模式增强。
+      </p>
+    </div>
+  </section>
+
+  <!-- 广告拦截模式 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🚫</span>
+      广告拦截模式
+    </div>
+
+    <div class="button-group">
+      <button
+        type="button"
+        id="btnModeNormal"
+        class="btn btn-normal"
+      >
+        普通模式
+      </button>
+
+      <button
+        type="button"
+        id="btnModeStrict"
+        class="btn btn-strong"
+      >
+        严格模式
+      </button>
+    </div>
+
+    <p class="section-description">
+      <strong>普通模式：</strong>
+      只隐藏明确识别出的广告元素。
+      <br>
+      <strong>严格模式：</strong>
+      增强动态广告检测，但不会无条件隐藏所有 iframe。
+    </p>
+  </section>
+
+  <!-- 老人模式 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">👴</span>
+      老人模式
+    </div>
+
+    <div class="switch-item">
+      <label
+        for="elderModeToggle"
+        class="switch-label"
+      >
+        启用老人模式
+      </label>
+
+      <input
+        type="checkbox"
+        id="elderModeToggle"
+      >
+    </div>
+
+    <details>
+      <summary>高级调整</summary>
+
+      <div class="switch-item">
+        <label
+          for="fontScale"
+          class="switch-label"
+        >
+          字体放大比例
+        </label>
+
+        <input
+          type="number"
+          id="fontScale"
+          min="1"
+          max="2"
+          step="0.05"
+          value="1.35"
+        >
+      </div>
+
+      <div class="switch-item">
+        <label
+          for="riskHighlight"
+          class="switch-label"
+        >
+          风险链接突出显示
+        </label>
+
+        <input
+          type="checkbox"
+          id="riskHighlight"
+          checked
+        >
+      </div>
+
+      <div class="switch-item">
+        <label
+          for="pageSimplify"
+          class="switch-label"
+        >
+          页面简化
+        </label>
+
+        <input
+          type="checkbox"
+          id="pageSimplify"
+        >
+      </div>
+    </details>
+
+    <div class="action-buttons">
+      <button
+        type="button"
+        id="saveElderBtn"
+        class="action-btn primary"
+      >
+        保存老人设置
+      </button>
+
+      <button
+        type="button"
+        id="resetElderBtn"
+        class="action-btn"
+      >
+        恢复默认
+      </button>
+    </div>
+  </section>
+
+  <!-- 儿童模式 -->
+  <section class="section">
+    <div class="section-title">
+      <span class="icon">🧸</span>
+      儿童安全模式
+    </div>
+
+    <div class="switch-item">
+      <label
+        for="childModeToggle"
+        class="switch-label"
+      >
+        启用儿童模式
+      </label>
+
+      <input
+        type="checkbox"
+        id="childModeToggle"
+      >
+    </div>
+
+    <div class="switch-item">
+      <label
+        for="dangerousFilter"
+        class="switch-label"
+      >
+        危险内容过滤
+      </label>
+
+      <input
+        type="checkbox"
+        id="dangerousFilter"
+      >
+    </div>
+
+    <div class="switch-item">
+      <label
+        for="entertainmentLimit"
+        class="switch-label"
+      >
+        娱乐内容限制
+      </label>
+
+      <input
+        type="checkbox"
+        id="entertainmentLimit"
+      >
+    </div>
+
+    <div class="switch-item">
+      <label
+        for="learningMode"
+        class="switch-label"
+      >
+        学习模式
+      </label>
+
+      <input
+        type="checkbox"
+        id="learningMode"
+      >
+    </div>
+
+    <div class="switch-item">
+      <label
+        for="reminderMinutes"
+        class="switch-label"
+      >
+        浏览提醒间隔（分钟）
+      </label>
+
+      <input
+        type="number"
+        id="reminderMinutes"
+        min="5"
+        max="120"
+        step="5"
+        value="15"
+      >
+    </div>
+
+    <div class="switch-item">
+      <label
+        for="dailyLimitMinutes"
+        class="switch-label"
+      >
+        每日浏览上限（分钟）
+      </label>
+
+      <input
+        type="number"
+        id="dailyLimitMinutes"
+        min="5"
+        max="1440"
+        step="5"
+        value="60"
+      >
+    </div>
+
+    <details>
+      <summary>自定义规则和白名单</summary>
+
+      <label
+        for="dangerList"
+        class="field-label"
+      >
+        危险关键词
+      </label>
+
+      <textarea
+        id="dangerList"
+        rows="3"
+        spellcheck="false"
+        placeholder="porn&#10;gambling&#10;phishing"
+      ></textarea>
+
+      <label
+        for="entertainList"
+        class="field-label"
+      >
+        娱乐网站黑名单
+      </label>
+
+      <textarea
+        id="entertainList"
+        rows="3"
+        spellcheck="false"
+        placeholder="youtube.com&#10;tiktok.com"
+      ></textarea>
+
+      <label
+        for="whitelist"
+        class="field-label"
+      >
+        Child 网站白名单
+      </label>
+
+      <span class="field-help">
+        每行填写一个域名，不要填写页面标题。
+      </span>
+
+      <textarea
+        id="whitelist"
+        rows="4"
+        spellcheck="false"
+        placeholder="khanacademy.org&#10;coursera.org"
+      ></textarea>
+
+      <div class="whitelist-note">
+        仅绕过儿童模式的网站限制；不会关闭广告过滤或风险检测。
+      </div>
+    </details>
+
+    <div class="action-buttons">
+      <button
+        type="button"
+        id="saveChildBtn"
+        class="action-btn primary"
+      >
+        保存儿童设置
+      </button>
+
+      <button
+        type="button"
+        id="resetChildBtn"
+        class="action-btn"
+      >
+        恢复默认
+      </button>
+    </div>
+  </section>
+
+  <div
+    id="status"
+    class="status"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+  <script src="api-config.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

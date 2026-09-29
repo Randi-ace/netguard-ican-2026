@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="虚构账号安全验证页面，用于钓鱼识别和隐私过滤测试。">
+  <title>账户异常：立即完成安全验证</title>
+  <link rel="stylesheet" href="context-demo.css">
+</head>
+<body>
+  <header><div class="eyebrow">Scenario E · Simulated Phishing</div><h1>账户存在异常登录</h1></header>
+  <main>
+    <article>
+      <div class="notice danger">安全演示：不要输入任何真实账号或密码。</div>
+      <p>您的账户将在十分钟后停用。请立即完成身份验证，以恢复账户访问权限。</p>
+      <p>验证需要输入账号密码和短信验证码。逾期未完成将永久冻结账户。</p>
+      <label for="demo-password">密码区域（PageContext 应过滤）</label>
+      <input id="demo-password" type="password" value="DEMO_SECRET_MUST_NOT_LEAK" disabled>
+      <label for="demo-note">备注区域（PageContext 应过滤）</label>
+      <textarea id="demo-note" disabled>DEMO_TEXTAREA_SECRET_MUST_NOT_LEAK</textarea>
+      <label>可编辑区域（PageContext 应过滤）</label>
+      <div contenteditable="true">DEMO_EDITABLE_SECRET_MUST_NOT_LEAK</div>
+      <div class="notice danger">预期：请求包含页面风险语义，但不包含三个 DEMO_*_SECRET 标记。</div>
+    </article>
+    <div class="actions"><a href="index.html" class="secondary">返回场景列表</a></div>
+  </main>
+  <footer>仅用于本地安全测试，页面不会提交数据。</footer>
+</body>
+</html>
+

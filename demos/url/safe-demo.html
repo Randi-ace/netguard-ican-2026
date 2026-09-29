@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全导航 - 净网护航演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(180deg, #eef2ff 0%, #e0e7ff 30%, #c7d2fe 60%, #ddd6fe 100%);
+            min-height: 100vh;
+        }
+        
+        /* 顶部导航栏 */
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4338ca;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-links a {
+            color: #6366f1;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: #4338ca;
+        }
+        
+        /* 搜索区域 */
+        .search-section {
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .search-title {
+            color: #4338ca;
+            font-size: 42px;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+        
+        .search-subtitle {
+            color: #6366f1;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 50px 0 20px;
+            font-size: 16px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1f2937;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+        
+        .search-tags {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .search-tag {
+            padding: 6px 14px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 16px;
+            color: #6366f1;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .search-tag:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: #4338ca;
+        }
+        
+        /* 内容区域 */
+        .content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+        
+        /* 新闻卡片 */
+        .news-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            color: #4338ca;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #8b5cf6, #6366f1);
+            border-radius: 2px;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .news-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
+        }
+        
+        .news-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+        
+        .news-content {
+            padding: 16px;
+        }
+        
+        .news-title {
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .news-desc {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+        
+        /* 学习内容区域 */
+        .learning-section {
+            margin-bottom: 40px;
+        }
+        
+        .learning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .learning-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .learning-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .learning-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .learning-title {
+            color: #1f2937;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .learning-desc {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        /* 文章内容区域 */
+        .article-section {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+        }
+        
+        .article-main {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        
+        .article-title {
+            color: #1f2937;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+        
+        .article-content {
+            color: #4b5563;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .article-content p {
+            margin-bottom: 16px;
+        }
+        
+        .article-content h3 {
+            color: #4338ca;
+            font-size: 18px;
+            margin: 24px 0 12px;
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        
+        .sidebar-title {
+            color: #4338ca;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .sidebar-list {
+            list-style: none;
+        }
+        
+        .sidebar-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        
+        .sidebar-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .sidebar-list a {
+            color: #6366f1;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        
+        .sidebar-list a:hover {
+            color: #4338ca;
+        }
+        
+        /* 图片展示区域 */
+        .image-showcase {
+            margin-bottom: 40px;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .image-item {
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .image-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+        }
+        
+        /* 页脚 */
+        .footer {
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(139, 92, 246, 0.1);
+            padding: 32px 20px;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-text {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .footer-links a {
+            color: #6366f1;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: #4338ca;
+        }
+        
+        /* 搜索结果弹窗 */
+        .search-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+        
+        .search-modal.active {
+            display: block;
+        }
+        
+        .search-result-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-result-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .search-result-back {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .search-result-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-result-input {
+            flex: 1;
+            height: 40px;
+            padding: 0 16px;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.8);
+            color: #fff;
+            outline: none;
+        }
+        
+        .search-result-item {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+        
+        .search-result-item:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .search-result-title {
+            color: #3b82f6;
+            font-size: 15px;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+        
+        .search-result-title:hover {
+            text-decoration: underline;
+        }
+        
+        .search-result-url {
+            color: #22c55e;
+            font-size: 12px;
+            font-family: monospace;
+            margin-bottom: 6px;
+        }
+        
+        .search-result-desc {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .article-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-title {
+                font-size: 28px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🔍</div>
+                <span>安全导航</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#">首页</a>
+                <a href="#">新闻</a>
+                <a href="#">学习</a>
+                <a href="#">视频</a>
+                <a href="#">更多</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 搜索区域 -->
+    <section class="search-section">
+        <h1 class="search-title">安全搜索</h1>
+        <p class="search-subtitle">净网护航 · 守护您的网络安全</p>
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="输入搜索关键词...">
+            <button class="search-btn" id="searchBtn">🔍</button>
+        </div>
+        <div class="search-tags">
+            <span class="search-tag">网络安全</span>
+            <span class="search-tag">人工智能</span>
+            <span class="search-tag">科技新闻</span>
+            <span class="search-tag">学习资源</span>
+            <span class="search-tag">健康生活</span>
+        </div>
+    </section>
+
+    <!-- 内容区域 -->
+    <main class="content-section">
+        <!-- 新闻卡片 -->
+        <section class="news-section">
+            <h2 class="section-title">今日热点</h2>
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-image">📰</div>
+                    <div class="news-content">
+                        <h3 class="news-title">2024年网络安全大会在北京召开</h3>
+                        <p class="news-desc">大会汇聚了国内外顶尖安全专家，共同探讨网络安全最新技术和发展趋势。</p>
+                        <div class="news-meta">
+                            <span>安全资讯</span>
+                            <span>2小时前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-image">💻</div>
+                    <div class="news-content">
+                        <h3 class="news-title">人工智能技术突破：新一代AI模型发布</h3>
+                        <p class="news-desc">全新AI模型在多项基准测试中取得突破，展现出更强的理解和生成能力。</p>
+                        <div class="news-meta">
+                            <span>科技前沿</span>
+                            <span>5小时前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-image">🔒</div>
+                    <div class="news-content">
+                        <h3 class="news-title">专家提醒：警惕新型网络诈骗手段</h3>
+                        <p class="news-desc">近期出现多种新型诈骗方式，专家建议用户提高防范意识。</p>
+                        <div class="news-meta">
+                            <span>安全提醒</span>
+                            <span>1天前</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 图片展示区域 -->
+        <section class="image-showcase">
+            <h2 class="section-title">精选图片</h2>
+            <div class="image-grid">
+                <div class="image-item">🌐</div>
+                <div class="image-item">🔐</div>
+                <div class="image-item">💡</div>
+                <div class="image-item">🚀</div>
+                <div class="image-item">🔍</div>
+                <div class="image-item">🛡️</div>
+            </div>
+        </section>
+
+        <!-- 学习内容区域 -->
+        <section class="learning-section">
+            <h2 class="section-title">学习推荐</h2>
+            <div class="learning-grid">
+                <div class="learning-card">
+                    <div class="learning-icon">📚</div>
+                    <h3 class="learning-title">网络安全入门</h3>
+                    <p class="learning-desc">从零开始学习网络安全基础知识，保护个人信息安全。</p>
+                </div>
+                <div class="learning-card">
+                    <div class="learning-icon">💻</div>
+                    <h3 class="learning-title">编程教程</h3>
+                    <p class="learning-desc">Python、Java、JavaScript等热门编程语言学习资源。</p>
+                </div>
+                <div class="learning-card">
+                    <div class="learning-icon">🤖</div>
+                    <h3 class="learning-title">AI学习指南</h3>
+                    <p class="learning-desc">人工智能基础知识与实践项目，开启AI学习之旅。</p>
+                </div>
+                <div class="learning-card">
+                    <div class="learning-icon">📊</div>
+                    <h3 class="learning-title">数据分析入门</h3>
+                    <p class="learning-desc">数据处理、可视化与分析方法，提升数据素养。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 文章内容区域 -->
+        <section class="article-section">
+            <article class="article-main">
+                <h2 class="article-title">网络安全防护指南：保护您的数字生活</h2>
+                <div class="article-meta">
+                    <span>作者：安全专家</span>
+                    <span>发布时间：2024年1月15日</span>
+                    <span>阅读量：12,580</span>
+                </div>
+                <div class="article-content">
+                    <p>在当今数字化时代，网络安全已经成为每个人都需要关注的重要话题。随着互联网的普及和信息技术的发展，我们的生活越来越依赖网络，但同时也面临着各种安全威胁。</p>
+                    
+                    <h3>一、常见的网络安全威胁</h3>
+                    <p>网络安全威胁多种多样，包括病毒攻击、钓鱼诈骗、恶意软件、数据泄露等。这些威胁不仅会影响个人用户，也会对企业和组织造成严重损失。</p>
+                    
+                    <h3>二、如何保护个人信息安全</h3>
+                    <p>保护个人信息是网络安全的基础。建议用户定期更换密码，使用强密码组合，避免在不安全的网络环境下进行敏感操作，同时谨慎对待不明来源的邮件和链接。</p>
+                    
+                    <h3>三、使用安全防护工具</h3>
+                    <p>安装可靠的杀毒软件和防火墙是保护设备安全的重要手段。此外，使用浏览器安全扩展可以有效拦截恶意网站和广告，提升浏览安全性。</p>
+                    
+                    <h3>四、保持警惕，提高安全意识</h3>
+                    <p>网络安全不仅仅是技术问题，更是意识问题。保持警惕，不轻易相信陌生人，不泄露个人敏感信息，是防范网络诈骗的关键。</p>
+                </div>
+            </article>
+            
+            <aside class="sidebar">
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">热门搜索</h3>
+                    <ul class="sidebar-list">
+                        <li><a href="#">网络安全</a></li>
+                        <li><a href="#">人工智能</a></li>
+                        <li><a href="#">大数据</a></li>
+                        <li><a href="#">云计算</a></li>
+                        <li><a href="#">区块链</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">安全提示</h3>
+                    <ul class="sidebar-list">
+                        <li><a href="#">如何识别钓鱼网站</a></li>
+                        <li><a href="#">密码安全设置指南</a></li>
+                        <li><a href="#">防范恶意软件攻击</a></li>
+                        <li><a href="#">个人信息保护技巧</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">安全导航 · 净网护航演示系统</p>
+            <div class="footer-links">
+                <a href="#">关于我们</a>
+                <a href="#">使用帮助</a>
+                <a href="#">隐私政策</a>
+                <a href="#">服务条款</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 搜索结果弹窗 -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-result-container">
+            <div class="search-result-header">
+                <div class="search-result-back" id="searchBack">←</div>
+                <input type="text" class="search-result-input" id="searchResultInput" placeholder="搜索...">
+            </div>
+            <div id="searchResults">
+                <!-- 搜索结果将在这里显示 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchModal = document.getElementById('searchModal');
+        const searchBack = document.getElementById('searchBack');
+        const searchResultInput = document.getElementById('searchResultInput');
+        const searchResults = document.getElementById('searchResults');
+
+        // 模拟搜索数据
+        const mockSearchData = [
+            { title: '网络安全基础知识', url: '#', desc: '学习网络安全的入门指南，了解基本概念和防护措施。' },
+            { title: '如何防范网络诈骗', url: '#', desc: '识别常见的网络诈骗手段，保护个人财产安全。' },
+            { title: '密码安全最佳实践', url: '#', desc: '创建强密码的技巧，保护您的账户安全。' },
+            { title: '安全浏览指南', url: '#', desc: '如何安全地浏览互联网，避免恶意网站。' },
+            { title: '数据隐私保护', url: '#', desc: '保护个人数据隐私的方法和工具推荐。' },
+            { title: '净网护航插件介绍', url: '#', desc: '了解净网护航浏览器扩展的功能和使用方法。' },
+        ];
+
+        function performSearch(query) {
+            searchModal.classList.add('active');
+            searchResultInput.value = query;
+            
+            const filteredResults = mockSearchData.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.desc.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            displayResults(filteredResults.length > 0 ? filteredResults : mockSearchData);
+        }
+
+        function displayResults(results) {
+            searchResults.innerHTML = results.map(item => `
+                <div class="search-result-item">
+                    <div class="search-result-title">${item.title}</div>
+                    <div class="search-result-url">${item.url}</div>
+                    <div class="search-result-desc">${item.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        searchBtn.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                performSearch(query);
+            }
+        });
+
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query) {
+                    performSearch(query);
+                }
+            }
+        });
+
+        searchBack.addEventListener('click', () => {
+            searchModal.classList.remove('active');
+        });
+
+        searchResultInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchResultInput.value.trim();
+                if (query) {
+                    const filteredResults = mockSearchData.filter(item => 
+                        item.title.toLowerCase().includes(query.toLowerCase()) ||
+                        item.desc.toLowerCase().includes(query.toLowerCase())
+                    );
+                    displayResults(filteredResults.length > 0 ? filteredResults : mockSearchData);
+                }
+            }
+        });
+
+        // 点击标签搜索
+        document.querySelectorAll('.search-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                searchInput.value = tag.textContent;
+                performSearch(tag.textContent);
+            });
+        });
+
+        // 返回演示中心链接
+        document.addEventListener('DOMContentLoaded', () => {
+            const footer = document.querySelector('.footer-content');
+            const backLink = document.createElement('p');
+            backLink.style.cssText = `
+                margin-top: 16px;
+                padding-top: 16px;
+                border-top: 1px solid rgba(255,255,255,0.05);
+            `;
+                    backLink.innerHTML = `<a href="url_demo.html" style="color: #22c55e; text-decoration: none; font-size: 13px;">← 返回 URL风险检测演示</a>`;
+            footer.appendChild(backLink);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚠️ 危险网站拦截演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-content {
+            text-align: center;
+            padding: 40px;
+            animation: fadeOut 2s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        .warning-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            animation: pulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .warning-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ef4444;
+            margin-bottom: 15px;
+        }
+
+        .warning-desc {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .redirect-info {
+            margin-top: 30px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-content">
+        <div class="warning-icon">⚠️</div>
+        <h2 class="warning-title">危险网站检测中...</h2>
+        <p class="warning-desc">系统正在识别网站内容安全等级</p>
+        <div class="redirect-info">即将跳转到安全拦截页面...</div>
+    </div>
+
+    <script>
+        // 延迟2秒后跳转到拦截页面
+        setTimeout(() => {
+            window.location.href = 'child_blocked.html';
+        }, 2000);
+    </script>
+</body>
+</html>

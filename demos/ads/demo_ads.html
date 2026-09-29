@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>广告拦截演示 - 净网护航</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a5f, #2d4a6f);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .demo-area {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .demo-area h2 {
+            color: #1e3a5f;
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .ad-banner {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            animation: pulse 2s infinite;
+        }
+        .ad-banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .ad-sidebar {
+            background: linear-gradient(135deg, #4ecdc4, #44a3a0);
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+        }
+        .ad-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 9999;
+            text-align: center;
+            border: 2px solid #f59e0b;
+        }
+        .ad-popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        .iframe-ad-container {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ffeeba;
+        }
+        .iframe-ad-container iframe {
+            width: 100%;
+            height: 250px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .sponsor-box {
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            padding: 25px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .fake-ad-container {
+            background: #f8f9fa;
+            border: 1px dashed #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .fake-ad-container .ad-content {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            padding: 20px;
+            border-radius: 6px;
+            color: white;
+            text-align: center;
+        }
+        .content-area {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            line-height: 1.8;
+            color: #333;
+        }
+        .content-area h3 {
+            color: #2d4a6f;
+            margin-bottom: 15px;
+        }
+        .content-area p {
+            margin-bottom: 10px;
+        }
+        .tips-box {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .tips-box h4 {
+            color: #0c63e4;
+            margin-bottom: 8px;
+        }
+        .tips-box ul {
+            margin-left: 20px;
+            font-size: 14px;
+            color: #495057;
+        }
+        .compare-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .compare-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .compare-card.before {
+            border-top: 4px solid #dc3545;
+        }
+        .compare-card.after {
+            border-top: 4px solid #28a745;
+        }
+        .compare-card h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .compare-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .feature-list {
+            text-align: left;
+            font-size: 14px;
+            color: #666;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .ad-label {
+            background: #dc3545;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .test-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+        }
+        .test-button.danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        .test-button.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ 净网护航 - 广告拦截演示</h1>
+            <p>开启插件前 vs 开启插件后，见证广告消失的奇迹！</p>
+        </div>
+
+        <div class="demo-area">
+            <h2><span class="ad-label">广告区域</span>📢 Banner 广告（顶部横幅）</h2>
+            <div class="ad-banner ad-container">
+                <img src="https://via.placeholder.com/728x90?text=广告横幅+Ad+Banner+广告" alt="Banner广告">
+                <p>🔥 限时特惠！全场5折起！点击立即抢购 →</p>
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h2><span class="ad-label">广告区域</span>📊 侧边栏广告</h2>
+            <div class="compare-section">
+                <div>
+                    <div class="ad-sidebar ad-container">
+                        <p>💎 钻石会员专享</p>
+                        <p>开通VIP，享受专属服务</p>
+                        <p style="font-size: 24px; margin: 10px 0;">¥99/月</p>
+                        <button style="padding: 10px 20px; background: white; color: #4ecdc4; border: none; border-radius: 5px; font-weight: bold; margin-top: 10px;">立即开通</button>
+                    </div>
+                </div>
+                <div class="content-area">
+                    <h3>📝 正常内容区域</h3>
+                    <p>这是一段正常的网页内容，展示网站的主要信息。广告拦截器会智能识别并过滤广告内容，保留正常的页面内容。</p>
+                    <p>净网护航采用先进的AI算法，能够精准识别各种类型的广告，包括横幅广告、弹窗广告、侧边栏广告等。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h2><span class="ad-label">广告区域</span>🖼️ iframe 广告</h2>
+            <div class="iframe-ad-container ad-container">
+                <p style="color: #856404; margin-bottom: 10px; font-weight: bold;">📺 视频广告区域</p>
+                <iframe src="https://example.com/ad" frameborder="0" class="ads-iframe"></iframe>
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h2><span class="ad-label">广告区域</span>🏆 Sponsor 赞助广告</h2>
+            <div class="sponsor-box sponsor-container">
+                <p>🌟 本内容由以下品牌赞助</p>
+                <p style="font-size: 20px; margin: 10px 0;">【赞助商名称】</p>
+                <p>感谢赞助商对我们的支持！</p>
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h2><span class="ad-label">广告区域</span>📦 伪装广告容器</h2>
+            <div class="fake-ad-container">
+                <div class="ad-content" id="ad-slot-1">
+                    <p>🎁 免费领取礼品！</p>
+                    <p>填写信息即可获得精美礼品一份！</p>
+                    <input type="text" placeholder="请输入手机号" style="padding: 8px; margin: 10px 0; border: none; border-radius: 4px; width: 200px;">
+                    <button style="padding: 8px 20px; background: white; color: #f59e0b; border: none; border-radius: 4px; font-weight: bold;">立即领取</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-area">
+            <h2><span class="ad-label">广告区域</span>💬 弹窗广告</h2>
+            <div class="ad-popup" id="popup-ad">
+                <div class="close-btn" onclick="document.getElementById('popup-ad').style.display='none'">&times;</div>
+                <p style="color: #f59e0b; font-size: 24px; margin-bottom: 10px;">🎉</p>
+                <p style="font-size: 18px; font-weight: bold; color: #333;">恭喜您获得专属优惠！</p>
+                <p style="color: #666; margin: 10px 0;">点击下方按钮领取您的专属福利</p>
+                <button style="padding: 12px 30px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 15px;">立即领取</button>
+            </div>
+        </div>
+
+        <div class="tips-box">
+            <h4>📌 演示说明</h4>
+            <ul>
+                <li><strong>开启插件前：</strong>所有广告区域都会显示</li>
+                <li><strong>开启普通模式后：</strong>广告被隐藏（visibility:hidden）</li>
+                <li><strong>开启严格模式后：</strong>广告DOM被处理 + iframe被清除</li>
+                <li>广告检测关键词：advertisement, sponsor, ad-, ads-, banner, popup 等</li>
+            </ul>
+        </div>
+
+        <div class="compare-section">
+            <div class="compare-card before">
+                <div class="compare-icon">❌</div>
+                <h3>开启插件前</h3>
+                <ul class="feature-list">
+                    <li>页面充满广告</li>
+                    <li>弹窗广告骚扰</li>
+                    <li>视频广告等待</li>
+                    <li>加载速度慢</li>
+                </ul>
+            </div>
+            <div class="compare-card after">
+                <div class="compare-icon">✅</div>
+                <h3>开启插件后</h3>
+                <ul class="feature-list">
+                    <li>广告自动隐藏</li>
+                    <li>弹窗广告拦截</li>
+                    <li>视频广告跳过</li>
+                    <li>页面加载更快</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="#" class="test-button danger" onclick="alert('请在Edge浏览器中加载插件后测试')">🚫 禁用插件</a>
+            <a href="#" class="test-button" onclick="alert('请在插件弹窗中切换到普通模式')">⚡ 普通模式</a>
+            <a href="#" class="test-button warning" onclick="alert('请在插件弹窗中切换到严格模式')">🔒 严格模式</a>
+        </div>
+    </div>
+
+    <script>
+        // 模拟广告行为
+        setTimeout(() => {
+            const popup = document.getElementById('popup-ad');
+            if (popup) {
+                popup.style.display = 'block';
+            }
+        }, 3000);
+
+        // 添加更多广告元素
+        setTimeout(() => {
+            const container = document.querySelector('.container');
+            const floatingAd = document.createElement('div');
+            floatingAd.className = 'ad-container';
+            floatingAd.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+                padding: 20px;
+                border-radius: 8px;
+                color: white;
+                z-index: 1000;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            `;
+            floatingAd.innerHTML = `
+                <p style="font-weight: bold;">📢 热点资讯</p>
+                <p style="font-size: 12px;">点击查看详情 →</p>
+            `;
+            container.appendChild(floatingAd);
+        }, 5000);
+    </script>
+</body>
+</html>

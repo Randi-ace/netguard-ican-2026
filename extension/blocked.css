@@ -1,0 +1,293 @@
+/* 拦截页面样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 50%, #fee2e2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.blocked-container {
+    width: 100%;
+    max-width: 480px;
+}
+
+.blocked-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px 32px;
+    box-shadow: 
+        0 25px 50px -12px rgba(239, 68, 68, 0.25),
+        0 0 0 1px rgba(239, 68, 68, 0.1);
+    text-align: center;
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 图标区域 */
+.icon-section {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+}
+
+.icon-section.danger {
+    background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%);
+}
+
+.icon-section.entertainment {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.icon-section.learning {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.icon {
+    font-size: 48px;
+}
+
+/* 标题 */
+.blocked-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 16px;
+}
+
+/* 原因区域 */
+.reason-section {
+    margin-bottom: 20px;
+}
+
+.reason-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.reason-badge.danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.reason-badge.entertainment {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.reason-badge.learning {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.reason-text {
+    font-size: 15px;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+/* URL区域 */
+.url-section {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.url-label {
+    font-size: 13px;
+    color: #9ca3af;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.url-value {
+    font-size: 14px;
+    color: #374151;
+    font-family: 'Monaco', 'Consolas', monospace;
+    word-break: break-all;
+}
+
+/* 保护提示 */
+.protection-hint {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.1) 100%);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hint-icon {
+    font-size: 28px;
+}
+
+.protection-hint p {
+    font-size: 14px;
+    color: #dc2626;
+    font-weight: 500;
+    flex: 1;
+    text-align: left;
+}
+
+/* 按钮区域 */
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+/* 家长提示 */
+.parent-tip {
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.parent-tip p {
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+/* 娱乐模式样式 */
+.entertainment .icon-section {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.entertainment .reason-badge {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.entertainment .protection-hint {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.1) 100%);
+}
+
+.entertainment .protection-hint p {
+    color: #d97706;
+}
+
+.entertainment .btn-primary {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+/* 推荐学习网站 */
+.recommend-section {
+    background: #f0f9ff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.recommend-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 12px;
+}
+
+.recommend-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.recommend-link {
+    padding: 8px 14px;
+    background: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 13px;
+    color: #1e40af;
+    font-weight: 500;
+    border: 1px solid #bfdbfe;
+    transition: all 0.2s ease;
+}
+
+.recommend-link:hover {
+    background: #dbeafe;
+    transform: translateY(-2px);
+}
+
+/* 学习模式样式 */
+.learning .icon-section {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.learning .reason-badge {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.learning .protection-hint {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.1) 100%);
+}
+
+.learning .protection-hint p {
+    color: #2563eb;
+}
+
+.learning .btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}

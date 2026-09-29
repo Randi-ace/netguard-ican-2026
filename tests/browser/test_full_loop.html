@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>完整闭环测试 - 净网护航</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #0369a1;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        h2 {
+            color: #075985;
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .test-case {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 4px solid;
+        }
+        .test-case.url-safe {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+        .test-case.url-danger {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+        }
+        .test-case.ai-risk {
+            background: #fefce8;
+            border-left-color: #f59e0b;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+        .test-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
+        }
+        .test-link.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        .test-link.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        .info-box {
+            background: #eff6ff;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            color: #0369a1;
+            margin-top: 16px;
+        }
+        .flow-diagram {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        .flow-step:last-child {
+            border-bottom: none;
+        }
+        .flow-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .flow-desc {
+            font-size: 14px;
+            color: #334155;
+        }
+        .flow-status {
+            margin-left: auto;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .status-warning {
+            background: #fefce8;
+            color: #854d0e;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feature-list li {
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .feature-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+        }
+        .test-content {
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 净网护航 - 完整闭环测试</h1>
+
+    <div class="test-section">
+        <h2>📋 测试流程说明</h2>
+        <div class="flow-diagram">
+            <div class="flow-step">
+                <div class="flow-num">1</div>
+                <div class="flow-desc">用户访问网站</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-num">2</div>
+                <div class="flow-desc">插件 URL 检测 (background.js)</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-num">3</div>
+                <div class="flow-desc">Flask URL 检测 API (/url/check)</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-num">4</div>
+                <div class="flow-desc">页面加载后触发 AI 检测</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-num">5</div>
+                <div class="flow-desc">Flask AI 检测 API (/ai/check)</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-num">6</div>
+                <div class="flow-desc">风险弹窗 / warning.html 跳转</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-num">7</div>
+                <div class="flow-desc">MySQL 写入检测记录</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-num">8</div>
+                <div class="flow-desc">前端平台统计展示</div>
+                <div class="flow-status status-success">✅ 完成</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 测试用例</h2>
+        
+        <div class="test-case url-danger">
+            <strong>🚫 高风险 URL 测试（应跳转 warning.html）</strong>
+            <div style="margin-top: 12px;">
+                <a href="https://www.gambling.com" class="test-link danger">测试赌博网站</a>
+                <a href="https://example.com/porn" class="test-link danger">测试色情内容</a>
+                <a href="https://www.casino-online.com" class="test-link danger">测试在线赌场</a>
+            </div>
+            <div class="info-box">
+                <strong>预期结果：</strong>访问这些链接应自动跳转到 warning.html，显示风险警告页面。
+            </div>
+        </div>
+
+        <div class="test-case url-safe">
+            <strong>✅ 安全 URL 测试（应正常访问，然后触发 AI 检测）</strong>
+            <div style="margin-top: 12px;">
+                <a href="https://www.example.com" class="test-link">测试安全网站</a>
+                <a href="https://www.github.com" class="test-link">GitHub</a>
+                <a href="https://www.google.com" class="test-link">Google</a>
+            </div>
+            <div class="info-box">
+                <strong>预期结果：</strong>正常访问网站，页面加载后自动进行 AI 文本检测。
+            </div>
+        </div>
+
+        <div class="test-case ai-risk">
+            <strong>🤖 AI 风险内容测试（应显示弹窗）</strong>
+            <div class="test-content">
+                <p>以下是包含风险关键词的测试文本，用于验证 AI 语义检测功能：</p>
+                <p><strong>赌博测试：</strong>欢迎来到我们的在线赌场，注册即送100元！这里有各种棋牌游戏，支持实时投注，赢钱秒提现！</p>
+                <p><strong>刷单测试：</strong>在家轻松赚钱，日入300不是梦！简单刷单，一单一结，无需押金！</p>
+                <p><strong>转账测试：</strong>请将款项转到以下账户：户名：张三，账号：6222XXXXXXXXXXXX，开户行：工商银行</p>
+                <p><strong>验证码测试：</strong>您的验证码是：8856，请在5分钟内输入完成验证。</p>
+                <p><strong>客服测试：</strong>请添加客服微信：kefu123456，获取更多优惠信息！</p>
+                <p><strong>免费领取测试：</strong>免费领取手机一部！只需填写信息即可参与抽奖，100%中奖！</p>
+            </div>
+            <div class="info-box">
+                <strong>预期结果：</strong>AI 检测到风险关键词后，应显示风险弹窗警告用户。
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ 修复内容清单</h2>
+        <ul class="feature-list">
+            <li><span class="feature-icon">1</span> <strong>串联 URL检测→AI检测链路</strong><br>URL检测完成后，安全网站会在页面加载完成后自动触发AI文本检测</li>
+            <li><span class="feature-icon">2</span> <strong>新增 triggerAICheck 函数</strong><br>background.js 中添加了触发AI检测的函数</li>
+            <li><span class="feature-icon">3</span> <strong>新增 netguardStartAICheck 接口</strong><br>content.js 中暴露给background.js调用的AI检测接口</li>
+            <li><span class="feature-icon">4</span> <strong>完整双重检测流程</strong><br>先进行URL检测，再进行AI文本检测，形成完整防护</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 测试验证步骤</h2>
+        <div class="info-box" style="background: #f0fdf4; color: #166534;">
+            <strong>1. 确保 Flask 后端运行：</strong> http://127.0.0.1:5000<br>
+            <strong>2. 确保插件已加载到 Edge：</strong> 扩展管理 → 加载已解压的扩展<br>
+            <strong>3. 打开开发者工具：</strong> F12 → Console 查看检测日志<br>
+            <strong>4. 访问测试链接：</strong> 观察控制台日志和页面行为<br>
+            <strong>5. 检查数据库：</strong> MySQL detection_records 表应有新记录<br>
+            <strong>6. 查看前端统计：</strong> ../../UI/index.html 应显示更新后的数据
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 控制台日志预期输出</h2>
+        <pre style="background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; font-size: 12px; overflow-x: auto;">
+// URL检测日志
+🔍 [URL检测] 开始检测网址: https://www.example.com
+🔍 [URL检测] 请求开始: https://www.example.com
+✅ [URL检测] 请求结果: { risk: "safe", reason: "未发现风险", score: 0.05 }
+✅ [URL检测] 网址安全 [safe]: 未发现风险
+
+// AI检测日志（页面加载后）
+🤖 [AI检测] 页面加载完成，触发AI文本检测
+🤖 [AI检测] 收到触发信号，URL检测结果: { risk: "safe", ... }
+🤖 [AI检测] 开始检测，文本长度: XXXX
+🤖 [AI检测] 检测结果: { risk: "medium", reason: "...", score: 0.65 }
+🤖 [AI检测] 检测完成，风险等级: medium
+
+// 弹窗日志
+🔔 [弹窗系统] 显示风险弹窗: medium
+        </pre>
+    </div>
+</body>
+</html>

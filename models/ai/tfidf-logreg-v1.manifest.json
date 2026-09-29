@@ -1,0 +1,180 @@
+{
+  "model_name": "SmartGuard text risk classifier",
+  "model_version": "tfidf-logreg-v1",
+  "created_at": "2026-09-21T06:02:50.804732Z",
+  "git_commit": "9b616e4ec0eef5e860ae273526f16b0ecfa353c0",
+  "artifact": {
+    "path": "models/ai/tfidf-logreg-v1.joblib",
+    "sha256": "807aa18183c1a80ffebcedf35338be2817098ab66a19451f2e4d84011a66fb55",
+    "type": "sklearn.pipeline.Pipeline",
+    "pipeline_steps": [
+      "tfidf",
+      "classifier"
+    ]
+  },
+  "dataset": {
+    "path": "tests/samples/ai-text-dataset.csv",
+    "sha256": "e8ad00385193e701f12f394ec2776b2d728dcfafa8d1f760f1b6c54602d8fec3",
+    "training_split": "train",
+    "training_samples": 210,
+    "validation_split": "val",
+    "validation_samples": 45,
+    "test_split_used": false
+  },
+  "model_parameters": {
+    "tfidf": {
+      "analyzer": "char",
+      "ngram_range": [
+        2,
+        5
+      ],
+      "min_df": 1,
+      "sublinear_tf": true
+    },
+    "logistic_regression": {
+      "C": 4.0,
+      "class_weight": "balanced",
+      "max_iter": 2000,
+      "random_state": 42,
+      "solver": "lbfgs"
+    }
+  },
+  "classes": [
+    "adult",
+    "gambling",
+    "malicious",
+    "normal",
+    "phishing",
+    "scam"
+  ],
+  "test_macro_f1": null,
+  "prediction_contract": {
+    "ai_score": "1 - P(normal)",
+    "ai_category": "argmax(probability)",
+    "ai_confidence": "max(probability)",
+    "binary_label": "not_risk when ai_category == normal, otherwise risk"
+  },
+  "versions": {
+    "python": "3.12.10",
+    "scikit_learn": "1.9.1",
+    "joblib": "1.6.0"
+  },
+  "validation_metrics": {
+    "sample_count": 45,
+    "binary": {
+      "positive_class": "risk",
+      "accuracy": 0.8888888888888888,
+      "precision": 0.9310344827586207,
+      "recall": 0.9,
+      "f1": 0.9152542372881356,
+      "confusion_matrix_labels": [
+        "not_risk",
+        "risk"
+      ],
+      "confusion_matrix": [
+        [
+          13,
+          2
+        ],
+        [
+          3,
+          27
+        ]
+      ],
+      "tn": 13,
+      "fp": 2,
+      "fn": 3,
+      "tp": 27
+    },
+    "category": {
+      "accuracy": 0.8888888888888888,
+      "macro_f1": 0.8919216983733115,
+      "per_class": {
+        "adult": {
+          "precision": 0.8571428571428571,
+          "recall": 1.0,
+          "f1": 0.9230769230769231,
+          "support": 6
+        },
+        "gambling": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 6
+        },
+        "malicious": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 6
+        },
+        "normal": {
+          "precision": 0.8125,
+          "recall": 0.8666666666666667,
+          "f1": 0.8387096774193549,
+          "support": 15
+        },
+        "phishing": {
+          "precision": 0.8571428571428571,
+          "recall": 1.0,
+          "f1": 0.9230769230769231,
+          "support": 6
+        },
+        "scam": {
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6666666666666666,
+          "support": 6
+        }
+      }
+    },
+    "error_count": 5,
+    "errors": [
+      {
+        "id": "AI-0069",
+        "true_label": "risk",
+        "predicted_label": "not_risk",
+        "true_category": "scam",
+        "ai_category": "normal",
+        "ai_score": 0.7605906676931945,
+        "ai_confidence": 0.23940933230680553
+      },
+      {
+        "id": "AI-0070",
+        "true_label": "risk",
+        "predicted_label": "not_risk",
+        "true_category": "scam",
+        "ai_category": "normal",
+        "ai_score": 0.7556863092381442,
+        "ai_confidence": 0.2443136907618558
+      },
+      {
+        "id": "AI-0163",
+        "true_label": "not_risk",
+        "predicted_label": "risk",
+        "true_category": "normal",
+        "ai_category": "phishing",
+        "ai_score": 0.7222604752147972,
+        "ai_confidence": 0.28162795705672017
+      },
+      {
+        "id": "AI-0169",
+        "true_label": "not_risk",
+        "predicted_label": "risk",
+        "true_category": "normal",
+        "ai_category": "adult",
+        "ai_score": 0.7321282417775792,
+        "ai_confidence": 0.29719933697097484
+      },
+      {
+        "id": "AI-0223",
+        "true_label": "risk",
+        "predicted_label": "not_risk",
+        "true_category": "scam",
+        "ai_category": "normal",
+        "ai_score": 0.754840282543354,
+        "ai_confidence": 0.245159717456646
+      }
+    ]
+  }
+}

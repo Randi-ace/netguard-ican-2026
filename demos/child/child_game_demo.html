@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 游戏网站演示</title>
+    <meta name="data-demo-mode" content="true">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .game-logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .game-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .game-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .game-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .game-card-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .game-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .game-card-players {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-logo">🎮</div>
+        <h1 class="game-title">游戏乐园</h1>
+        <p class="game-subtitle">精彩游戏，畅玩不停</p>
+        
+        <div class="game-cards">
+            <div class="game-card">
+                <div class="game-card-icon">🏀</div>
+                <div class="game-card-title">篮球大作战</div>
+                <div class="game-card-players">12,580 在线</div>
+            </div>
+            <div class="game-card">
+                <div class="game-card-icon">🚗</div>
+                <div class="game-card-title">极速飞车</div>
+                <div class="game-card-players">8,920 在线</div>
+            </div>
+            <div class="game-card">
+                <div class="game-card-icon">⚔️</div>
+                <div class="game-card-title">王者对决</div>
+                <div class="game-card-players">25,340 在线</div>
+            </div>
+            <div class="game-card">
+                <div class="game-card-icon">🧩</div>
+                <div class="game-card-title">益智拼图</div>
+                <div class="game-card-players">5,670 在线</div>
+            </div>
+        </div>
+
+        <a href="child_demo_home.html" class="back-btn">
+            <span>←</span>
+            <span>返回演示大厅</span>
+        </a>
+    </div>
+</body>
+</html>

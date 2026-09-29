@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模式测试页面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1f2937;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        h2 {
+            color: #374151;
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mode-btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            min-width: 140px;
+        }
+        .btn-normal {
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+            color: #374151;
+        }
+        .btn-normal:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(156, 163, 175, 0.4);
+        }
+        .btn-strict {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        .btn-strict:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+        }
+        .btn-refresh {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
+        .btn-refresh:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+        }
+        .info-box {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 13px;
+            color: #4b5563;
+            margin-top: 16px;
+        }
+        .iframe-test {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+        }
+        iframe {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+        .ad-simulation {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fffbeb;
+            border-radius: 8px;
+            border: 1px dashed #f59e0b;
+        }
+        .ad-box {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            margin: 4px;
+        }
+        .status-panel {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f0fdf4;
+            border-radius: 8px;
+            border: 1px solid #bbf7d0;
+        }
+        .status-title {
+            font-weight: 600;
+            color: #16a34a;
+            margin-bottom: 12px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dcfce7;
+        }
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        .status-label {
+            color: #4ade80;
+        }
+        .status-value {
+            color: #166534;
+            font-weight: 500;
+        }
+        .script-test {
+            margin-top: 16px;
+            padding: 16px;
+            background: #fee2e2;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 净网护航 - 模式测试</h1>
+
+    <div class="test-section">
+        <h2>🔒 安全模式切换</h2>
+        <button class="mode-btn btn-normal" onclick="setMode('normal')">普通模式</button>
+        <button class="mode-btn btn-strict" onclick="setMode('strict')">严格模式</button>
+        <button class="mode-btn btn-refresh" onclick="checkMode()">检查当前模式</button>
+        
+        <div class="info-box">
+            <strong>模式说明：</strong><br>
+            - <strong>普通模式</strong>：基础广告拦截 + URL检测 + AI检测<br>
+            - <strong>严格模式</strong>：强力拦截 + iframe清理 + 实时风险监控
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📦 iframe 测试（严格模式下应被隐藏）</h2>
+        <div class="iframe-test">
+            <p><strong>测试 iframe：</strong></p>
+            <iframe src="https://example.com" title="测试iframe"></iframe>
+            <iframe src="https://www.w3schools.com" title="学习网站"></iframe>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🪧 广告模拟测试</h2>
+        <div class="ad-simulation">
+            <p><strong>模拟广告元素（应被拦截）：</strong></p>
+            <div class="ad-box ad-container">广告容器 1</div>
+            <div class="ad-box ad-wrapper">广告容器 2</div>
+            <div class="ad-box sponsor">赞助内容</div>
+            <div class="ad-box advertisement">广告位</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📜 脚本测试（严格模式下应被清理）</h2>
+        <div class="script-test">
+            <p><strong>可疑脚本区域：</strong></p>
+            <script type="text/javascript" src="https://example.com/ad-script.js"></script>
+            <script type="text/javascript">
+                // 模拟广告脚本
+                console.log('广告脚本加载');
+            </script>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 当前状态</h2>
+        <div class="status-panel" id="statusPanel">
+            <div class="status-title">🔄 点击「检查当前模式」获取状态</div>
+        </div>
+    </div>
+
+    <script>
+        function setMode(mode) {
+            if (chrome && chrome.storage && chrome.storage.local) {
+                chrome.storage.local.set({ mode: mode }, () => {
+                    alert(`已切换到 ${mode === 'normal' ? '普通' : '严格'} 模式`);
+                    checkMode();
+                });
+            } else {
+                alert('插件存储不可用，请确保插件已安装');
+            }
+        }
+
+        function checkMode() {
+            if (chrome && chrome.storage && chrome.storage.local) {
+                chrome.storage.local.get(['mode', 'blockType'], (res) => {
+                    const mode = res.mode || 'normal';
+                    const blockType = res.blockType || 'normal';
+                    
+                    const panel = document.getElementById('statusPanel');
+                    panel.innerHTML = `
+                        <div class="status-title">✅ 当前状态</div>
+                        <div class="status-item">
+                            <span class="status-label">安全模式：</span>
+                            <span class="status-value">${mode === 'normal' ? '普通模式' : '严格模式'}</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">拦截强度：</span>
+                            <span class="status-value">${blockType === 'normal' ? '普通拦截' : '强力拦截'}</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">预期行为：</span>
+                            <span class="status-value">${mode === 'strict' ? 'iframe应被隐藏' : '正常显示'}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                alert('插件存储不可用');
+            }
+        }
+
+        // 页面加载时检查模式
+        document.addEventListener('DOMContentLoaded', () => {
+            checkMode();
+        });
+    </script>
+</body>
+</html>

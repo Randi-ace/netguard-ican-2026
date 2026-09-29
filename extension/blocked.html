@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站访问被拦截</title>
+    <link rel="stylesheet" href="blocked.css">
+</head>
+<body>
+    <div class="blocked-container">
+        <div class="blocked-card">
+            <!-- 图标区域 -->
+            <div class="icon-section danger">
+                <div class="icon">🛡️</div>
+            </div>
+
+            <!-- 标题区域 -->
+            <h1 class="blocked-title">网站访问被拦截</h1>
+            
+            <!-- 原因说明 -->
+            <div class="reason-section">
+                <div class="reason-badge danger">
+                    ⚠️ 危险网站
+                </div>
+                <p class="reason-text">
+                    您访问的网站包含不适宜内容，已被儿童安全模式阻止。
+                </p>
+            </div>
+
+            <!-- 被拦截的网址 -->
+            <div class="url-section">
+                <span class="url-label">被拦截的网址：</span>
+                <span class="url-value" id="blocked-url">...</span>
+            </div>
+
+            <!-- 保护提示 -->
+            <div class="protection-hint">
+                <div class="hint-icon">👧</div>
+                <p>儿童模式保护已开启，为孩子营造健康的上网环境</p>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="go-back">
+                    ← 返回上一页
+                </button>
+                <button class="btn btn-secondary" id="go-home">
+                    🏠 前往首页
+                </button>
+            </div>
+
+            <!-- 家长提示 -->
+            <div class="parent-tip">
+                <p>💡 家长可在插件设置中调整儿童模式过滤规则</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="blocked.js"></script>
+</body>
+</html>

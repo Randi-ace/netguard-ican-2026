@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏳ 娱乐网站限制演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1f2937;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 限制遮罩层 */
+        .block-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to {
+                opacity: 1;
+                backdrop-filter: blur(8px);
+            }
+        }
+
+        .block-content {
+            text-align: center;
+            padding: 40px 50px;
+            background: white;
+            border-radius: 24px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .block-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .block-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 15px;
+        }
+
+        .block-desc {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .block-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-request {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .btn-request:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-back {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+            border: 2px solid rgba(107, 114, 128, 0.2);
+        }
+
+        .btn-back:hover {
+            background: rgba(107, 114, 128, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 模拟娱乐网站背景 */
+        .entertainment-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            opacity: 0.5;
+        }
+
+        /* 模拟视频界面 */
+        .video-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #111;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .play-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            opacity: 0.5;
+        }
+
+        .video-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 16px;
+        }
+
+        /* 模拟视频信息栏 */
+        .video-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        }
+
+        .video-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        /* 模拟侧边栏 */
+        .sidebar {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-thumb {
+            width: 100px;
+            height: 60px;
+            background: linear-gradient(135deg, #374151, #1f2937);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar-title {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-channel {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .block-content {
+                padding: 30px 25px;
+                margin: 20px;
+            }
+
+            .block-title {
+                font-size: 22px;
+            }
+
+            .block-icon {
+                font-size: 52px;
+            }
+
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 模拟娱乐网站背景 -->
+    <div class="entertainment-bg"></div>
+
+    <!-- 模拟视频界面 -->
+    <div class="video-container">
+        <div class="video-placeholder">
+            <div class="play-icon">▶️</div>
+            <div class="video-title">精彩视频内容...</div>
+        </div>
+        <div class="video-info">
+            <div class="video-meta">
+                <span>🎬 热门视频</span>
+                <span>👁️ 128.5万</span>
+                <span>💬 3.2万评论</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模拟侧边栏 -->
+    <div class="sidebar">
+        <div class="sidebar-item">
+            <div class="sidebar-thumb"></div>
+            <div class="sidebar-info">
+                <div class="sidebar-title">精彩动画视频</div>
+                <div class="sidebar-channel">儿童动画频道</div>
+            </div>
+        </div>
+        <div class="sidebar-item">
+            <div class="sidebar-thumb"></div>
+            <div class="sidebar-info">
+                <div class="sidebar-title">游戏精彩时刻</div>
+                <div class="sidebar-channel">游戏达人</div>
+            </div>
+        </div>
+        <div class="sidebar-item">
+            <div class="sidebar-thumb"></div>
+            <div class="sidebar-info">
+                <div class="sidebar-title">搞笑短视频合集</div>
+                <div class="sidebar-channel">快乐分享</div>
+            </div>
+        </div>
+        <div class="sidebar-item">
+            <div class="sidebar-thumb"></div>
+            <div class="sidebar-info">
+                <div class="sidebar-title">热门影视片段</div>
+                <div class="sidebar-channel">影视剪辑</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 限制遮罩层 -->
+    <div class="block-overlay">
+        <div class="block-content">
+            <div class="block-icon">⏳</div>
+            <h2 class="block-title">儿童模式已限制娱乐内容</h2>
+            <p class="block-desc">当前处于儿童保护模式，娱乐网站已被限制访问。请先完成学习任务，或向家长申请临时访问权限。</p>
+            <div class="block-actions">
+                <a href="#" class="action-btn btn-request" onclick="showRequestModal()">
+                    <span>📝</span>
+                    <span>申请继续访问</span>
+                </a>
+        <a href="child_demo_home.html" class="action-btn btn-back">
+                    <span>🏠</span>
+                    <span>返回学习</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 申请对话框 -->
+    <div id="requestModal" style="display: none;">
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; display: flex; align-items: center; justify-content: center;">
+            <div style="background: white; border-radius: 20px; padding: 30px; max-width: 420px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                <h3 style="font-size: 20px; font-weight: 700; color: #1f2937; margin-bottom: 15px; text-align: center;">申请访问权限</h3>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 20px; text-align: center;">请输入家长密码或选择访问时长申请</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px;">访问时长</label>
+                    <select style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; background: white;">
+                        <option>15分钟</option>
+                        <option>30分钟</option>
+                        <option>1小时</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px;">申请理由（选填）</label>
+                    <textarea style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 80px; resize: none;" placeholder="请说明访问理由..."></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 15px;">
+                    <button style="flex: 1; padding: 12px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-weight: 600; color: #6b7280; background: white; cursor: pointer;" onclick="closeRequestModal()">取消</button>
+                    <button style="flex: 1; padding: 12px; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; color: white; background: linear-gradient(135deg, #f59e0b, #d97706); cursor: pointer;" onclick="submitRequest()">提交申请</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showRequestModal() {
+            document.getElementById('requestModal').style.display = 'block';
+        }
+
+        function closeRequestModal() {
+            document.getElementById('requestModal').style.display = 'none';
+        }
+
+        function submitRequest() {
+            alert('申请已提交！请等待家长审批。');
+            closeRequestModal();
+        }
+    </script>
+</body>
+</html>
